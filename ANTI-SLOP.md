@@ -224,6 +224,22 @@ Personal-brand decorative chrome (cyberpunk telemetry panels, custom cursor with
 
 ---
 
+## Contrast on dark surfaces
+
+### 25. Never copy a reference's muted-text lightness without checking it clears 4.5:1 for app body text.
+
+A marketing site's muted body color (Linear's `oklch(62%)` on near-black, for example) reads as designed because the marketing site is not gating on WCAG and its body text is at 14-16px. An app shell IS gating on WCAG (per ANTI-SLOP rule 20 + APP-ADAPTATION's a11y=100 gate) and contains 11-13px labels. Copying the reference's L value 1:1 will silently fail the a11y gate.
+
+**Why:** The DevNeural Hub design pass on 2026-05-03 lifted Linear's `oklch(62% 0.012 258)` muted directly. Lighthouse caught four `text-txt3` instances at 3.1-3.2:1 against `oklch(11.5%)` bg. Token bumped to `oklch(70% 0.014 258)` to clear 4.5:1. Caught only because the gate ran; could have shipped.
+
+**How to apply:**
+- Floor for muted text on dark canvas (oklch L < 20%): `--c-fg-muted` ≥ oklch(70%).
+- Floor for muted text on light canvas (oklch L > 90%): `--c-fg-muted` ≤ oklch(40%).
+- Always run the contrast check **before** authoring the token, not as a post-hoc fix. The reference's L is a starting point, not a target.
+- If a reference's restraint genuinely depends on a sub-floor muted (e.g., decorative ornament), put it on a separate token (`--c-fg-ornament` or similar) and never use it for body or label text.
+
+---
+
 ## How to add to this file
 
 When a slop pattern slips through (you noticed it in delivered work, or the user flagged it):

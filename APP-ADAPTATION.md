@@ -37,6 +37,7 @@ Adds these questions to the relevant intake:
 6. **Required states** — loading, empty, error, partial-data, offline. Each must be designed.
 7. **Browser/device targets** — desktop-only fine, mobile required, specific OS?
 8. **Existing system consistency** — does it sit alongside other internal tools? Match a design system?
+9. **Locked stack** — list any framework, library, or platform choices that are non-negotiable upstream of design synthesis (e.g., "Next.js 15 locked by spec", "Tailwind v4 + shadcn locked", "must run inside existing .NET WPF host"). When all values are locked, **skip Step 3.5 stack pick** in PROCESS.md and consume the locked stack directly. Capture the lock source (spec section, prior decision, integration constraint) so future-you knows why each value cannot move.
 
 ## Intake removals / relaxations
 
