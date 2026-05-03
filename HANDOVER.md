@@ -9,7 +9,7 @@
 
 ## ✅ What is set up
 
-### Repo structure (this repo, `C:\dev\design-system\`)
+### Repo structure (this repo, `C:\dev\Projects\design-system\`)
 
 - [x] `README.md` — explains what the system is
 - [x] `CLAUDE.md` — repo-specific Claude behavior rules
@@ -57,7 +57,7 @@
 
 ### Smoke test (do this in the next session, before any real client work)
 
-In a fresh Claude session opened in `C:\dev\design-system\`, the user will provide 1-3 reference URLs (e.g. linear.app, stripe.com, manual.is). Run the analyzer per `analyzer/extract-prompt.md` against each. Verify:
+In a fresh Claude session opened in `C:\dev\Projects\design-system\`, the user will provide 1-3 reference URLs (e.g. linear.app, stripe.com, manual.is). Run the analyzer per `analyzer/extract-prompt.md` against each. Verify:
 
 - Chrome DevTools MCP successfully navigates each URL
 - Type system extracted with real computed values
@@ -113,7 +113,7 @@ Expected: file exists.
 ### Repo state
 
 ```bash
-cd C:\dev\design-system
+cd C:\dev\Projects\design-system
 git log --oneline
 git status
 ```
