@@ -11,7 +11,7 @@
 //   "autocad", "autolisp", "claude", "skill", "conveyor", "website", "api", "tool", "design"
 {
   "name": "design-system",
-  "localPath": "C:\\dev\\design-system",
+  "localPath": "C:\\dev\\Projects\\design-system",
   "githubUrl": "",
   "stage": "alpha",
   "tags": ["design", "website", "skill", "claude", "system", "mcp"],
