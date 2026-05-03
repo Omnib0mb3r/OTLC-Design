@@ -4,6 +4,7 @@
 
 **Last updated:** 2026-05-03
 **Set up by:** Initial bootstrap session
+**Smoke tested:** 2026-05-03 against rcarecords.com, curious.co/about, flyhyer.com — **PASS**, with five substrate fixes applied to [`analyzer/extract-prompt.md`](analyzer/extract-prompt.md). Outputs at `C:\tmp\design-system-smoke\` (kept ~1 week as regression baseline; see `SMOKE-TEST-RESULTS.md` there).
 
 ---
 
@@ -109,24 +110,29 @@ Without the gate, post-mortems get skipped when you're tired and the project is 
 
 ---
 
-## ⏳ What is pending — smoke test (do this first in a fresh session)
+## ✅ Smoke test — PASSED 2026-05-03
 
-Before any real client/internal project, **run the smoke test**:
+Run against rcarecords.com, curious.co/about, flyhyer.com. All five HANDOVER checks passed:
 
-1. **Open `C:\dev\Projects\design-system\` in a fresh Claude session.**
-2. Claude reads [`INIT.md`](INIT.md) automatically (per [`CLAUDE.md`](CLAUDE.md)).
-3. Tell Claude: *"smoke test"* and provide 1-3 reference URLs (e.g., linear.app, stripe.com, manual.is).
-4. Claude runs the analyzer per `analyzer/extract-prompt.md` against each.
-5. **Verify:**
-   - Chrome DevTools MCP successfully navigates each URL
-   - Type system extracted with real computed values
-   - Colors converted to OKLCH correctly
-   - Screenshots captured at 4 breakpoints (375 / 768 / 1280 / 1920)
-   - Output written using the schema in `extract-prompt.md`
-6. **If any of these fail**, the workflow needs fixing before a real project. Capture findings in `OTLC-Brainstorm.MD` Open Questions and iterate.
-7. **If all pass**, the system is ready for a real project. Pick one and invoke `/OTLC-Design` from that project's directory.
+- Chrome DevTools MCP navigated each URL
+- Type system extracted with real computed values (curious.co thin by design — sparse semantic HTML — not a tooling failure)
+- Colors converted to OKLCH cleanly via embedded sRGB → linear → OKLab → OKLCH math
+- Screenshots captured at 4 breakpoints (375 / 768 / 1280 / 1920) as PNG full-page
+- Output written using the `extract-prompt.md` schema (one schema flex on curious.co, now codified as the experience-style rubric)
 
-### After smoke test
+**Substrate fixes applied to [`analyzer/extract-prompt.md`](analyzer/extract-prompt.md):**
+
+1. Step 2 — call `take_screenshot` without `format`/`quality` args (the `format: "jpeg"` arg overrides `.png` paths)
+2. Step 6 — fork into **scrolling-document** vs **experience-style** rubric based on `docHeight > viewport * 1.5`
+3. Step 7 — force `prefers-reduced-motion: no-preference` before observing motion (test machines often have reduced-motion on)
+4. New **Canonical extractor** section — paste-in JS that returns one JSON blob covering Steps 3-6 + Step 8 programmatic signals; do not reimplement OKLCH math per session
+5. Step 8 — programmatic checks (`document.fonts`, `cursor: none`, `::selection`, framework class-name patterns, sub-pixel font sizes) promoted ahead of visual hunting
+
+Smoke-test outputs kept at `C:\tmp\design-system-smoke\` for ~1 week as regression baseline. See `SMOKE-TEST-RESULTS.md` there for full details.
+
+---
+
+## ⏳ What is pending — first real project
 
 Run a real project end-to-end. The first one will surface gaps in:
 
