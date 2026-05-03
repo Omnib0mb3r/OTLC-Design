@@ -10,10 +10,10 @@
 // tags — free-form strings, e.g.:
 //   "autocad", "autolisp", "claude", "skill", "conveyor", "website", "api", "tool", "design"
 {
-  "name": "REPLACE_ME",
-  "localPath": "REPLACE_ME",
-  "githubUrl": "REPLACE_ME",
+  "name": "design-system",
+  "localPath": "C:\\dev\\design-system",
+  "githubUrl": "",
   "stage": "alpha",
-  "tags": [],
-  "description": "REPLACE_ME"
+  "tags": ["design", "website", "skill", "claude", "system", "mcp"],
+  "description": "Repeatable methodology and skill for building non-slop, professional client websites. Substrate for the design-website skill."
 }

@@ -3,3 +3,15 @@ dist/
 .env
 *.log
 .DS_Store
+Thumbs.db
+
+# Claude / IDE caches
+.claude/local/
+.vscode/
+.idea/
+
+# Per-project scratch (when project-template is copied out)
+project-template/*/node_modules/
+project-template/*/dist/
+project-template/*/.astro/
+project-template/*/.next/
