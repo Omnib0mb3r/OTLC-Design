@@ -21,6 +21,8 @@ Capture full-page screenshots at four widths:
 
 Save to `[client-project]/references/[domain]/screens/[width].png`.
 
+**Tooling note (Chrome DevTools MCP):** Call `take_screenshot` with `fullPage: true` and a `filePath` ending in `.png`. Do **not** pass the `format` or `quality` arguments. Passing `format: "jpeg"` overrides the file extension and writes a `.jpeg` even when the path says `.png`. Default behavior is PNG full-page; trust it.
+
 ### 3. Extract type system
 
 Inspect the DOM and computed styles. For at least: `body`, `h1`, `h2`, `h3`, `h4`, `p`, `small`, and any visible display/hero text.
@@ -65,6 +67,13 @@ Identify the **base unit** if evident. Marketing sites commonly use 4 or 8 px ba
 
 ### 6. Extract grid / layout primitives
 
+**Pick the rubric first.** Compare `document.documentElement.scrollHeight` to `window.innerHeight`:
+
+- If `docHeight > viewport * 1.5` → **scrolling-document** rubric (default — use the section list below).
+- If `docHeight ≈ viewport` → **experience-style** rubric (page is a fixed stage, not a scrolling doc — use the experience-style block below instead).
+
+#### Scrolling-document rubric
+
 For each major section type observed:
 
 - **Hero** — Centered? Left? Asymmetric? Image-led? Type-only? Full-bleed? Overlapping content?
@@ -76,9 +85,31 @@ For each major section type observed:
 
 Note column counts (12-col grid? 6-col? bespoke?) and whether breakouts beyond the main column happen.
 
+#### Experience-style rubric
+
+When the page is a fixed-viewport interactive (e.g. a Svelte/Three.js stage with no scroll), the section-by-section model does not apply. Capture instead:
+
+- **Page model** — Fixed stage? Pannable canvas? Click-to-progress scenes? Multi-route experience?
+- **Navigation model** — Implicit (hitzones / proximity) or explicit (menu overlay / keyboard)? Look for class names like `hitzone`, `MENU`, `wrapper`, `overAll`.
+- **Scene / act progression** — Does the page reveal more content over time or interaction? Cross-reference with Font Loading API status (Step 8) — lazy-loaded faces often correspond to later scenes.
+- **Stage anatomy** — Foreground actors (custom cursor, moon, jet, etc.), middle layer (interactive hitzones), background (canvas/WebGL/video).
+- **Aspect handling** — How does the experience adapt across the 4 breakpoints? Does it letterbox, recompose, or break?
+- **Sound / motion / haptics** — Site may explicitly opt in or out (e.g. "experience without sound"). Note the choice.
+
+Skip the conventional Hero/About/Contact/Footer section walk; it does not apply.
+
 ### 7. Extract motion patterns
 
-Observe the page over 30 seconds with cursor movement and scroll:
+**Force motion on first.** If the analyzer host has `prefers-reduced-motion: reduce` set (system accessibility setting on the developer's machine), most well-built sites will short-circuit their motion and render a static fallback. To get truthful motion data, override the media feature before observing:
+
+```js
+// Verify first
+matchMedia('(prefers-reduced-motion: reduce)').matches
+```
+
+If `true`, use Chrome DevTools MCP `emulate` to override CSS media features and set `prefers-reduced-motion` to `no-preference`, then re-check. Only proceed once `matchMedia('(prefers-reduced-motion: reduce)').matches === false`. If the override fails, **flag this in the analysis output as reduced confidence on motion** rather than reporting a static-fallback observation as if it were the real design.
+
+Then observe the page over 30 seconds with cursor movement and scroll:
 
 - **Hover states** — Subtle? Exaggerated? Color? Translate? Reveal?
 - **Scroll motion** — Parallax? Fades? Reveals? Sticky? Scrub? Pin?
@@ -90,10 +121,16 @@ Note easing feel (snappy? smooth? mechanical?) — guess at cubic-bezier curve o
 
 ### 8. Note unusual / signature choices
 
-Anything that signals deliberate design choice:
+**Run the programmatic checks first** (these are cheap and consistently high-signal — promote them ahead of visual hunting):
 
-- Custom cursor
-- Custom selection color
+- **Font Loading API** — `Array.from(document.fonts).map(f => ({ family: f.family, weight: f.weight, style: f.style, status: f.status }))`. Mixed `loaded` / `unloaded` faces imply a multi-act type system where new faces appear as the user progresses. Self-hosted custom WOFFs (vs Google/Adobe) is itself a signal of taste.
+- **Custom cursor** — `getComputedStyle(document.body).cursor === 'none'`. If true, the site is hiding the system cursor and rendering its own (look for a `.cursor` element or class).
+- **Custom selection** — Stylesheet rule scan for `::selection`. Presence indicates the site brand-matches the highlight color.
+- **Stack signal** — Class-name patterns on top-level wrappers reveal the framework cheaply: `lazyblock-*` / `wp-block-*` (WordPress + Lazy Blocks), `svelte-[hash]` (Svelte), `Component_name__[hash]` (Next.js CSS modules), `_a1b2c3` (CSS-in-JS like styled-components / Emotion). Capture once and note.
+- **Fluid sizing** — Any sub-pixel computed font sizes (e.g. `53.4275px`) almost always indicate `clamp()` / `vw` fluid type. Look at h1/h2 sizes; if they are not whole pixels, the system is fluid.
+
+Then visually scan for anything that signals deliberate design choice:
+
 - Marquee text
 - Mixed type sizes within a single line
 - Unusual border treatments (thick rules, double borders, none at all)
@@ -107,6 +144,158 @@ Anything that signals deliberate design choice:
 ### 9. Run Lighthouse (optional but recommended)
 
 Capture performance baseline of the reference. Often the reference's actual performance is worse than its design suggests; note this so the client doesn't expect both.
+
+---
+
+## Canonical extractor
+
+Paste the script below verbatim into Chrome DevTools MCP `evaluate_script` after navigating + resizing to 1280×900. It returns one JSON blob covering Steps 3, 4, 5, 6 (page model), and 8 (programmatic checks). Steps 7 (motion) and 9 (Lighthouse) still require their own observation. **Do not reimplement the OKLCH math per session** — keep the canonical version below as the source of truth.
+
+```js
+() => {
+  // sRGB → linear → OKLab → OKLCH (Björn Ottosson, https://bottosson.github.io/posts/oklab/)
+  const parseColor = (str) => {
+    if (!str) return null;
+    const m = str.match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    const parts = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+    if (parts.length < 3) return null;
+    const [r, g, b, a = 1] = parts;
+    return { r: r/255, g: g/255, b: b/255, a };
+  };
+  const srgbToLinear = (c) => c <= 0.04045 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4);
+  const cbrt = Math.cbrt;
+  const rgbToOklch = (rgb) => {
+    if (!rgb) return null;
+    const r = srgbToLinear(rgb.r), g = srgbToLinear(rgb.g), b = srgbToLinear(rgb.b);
+    const l = 0.4122214708*r + 0.5363325363*g + 0.0514459929*b;
+    const m = 0.2119034982*r + 0.6806995451*g + 0.1073969566*b;
+    const s = 0.0883024619*r + 0.2817188376*g + 0.6299787005*b;
+    const l_ = cbrt(l), m_ = cbrt(m), s_ = cbrt(s);
+    const L = 0.2104542553*l_ + 0.7936177850*m_ - 0.0040720468*s_;
+    const A = 1.9779984951*l_ - 2.4285922050*m_ + 0.4505937099*s_;
+    const B = 0.0259040371*l_ + 0.7827717662*m_ - 0.8086757660*s_;
+    const C = Math.sqrt(A*A + B*B);
+    let H = Math.atan2(B, A) * 180 / Math.PI; if (H < 0) H += 360;
+    return `oklch(${(L*100).toFixed(1)}% ${C.toFixed(3)} ${H.toFixed(1)})`;
+  };
+  const fmtColor = (str) => {
+    const rgb = parseColor(str);
+    if (!rgb) return str;
+    if (rgb.a < 1) return `${rgbToOklch(rgb)} / a=${rgb.a.toFixed(2)}`;
+    return rgbToOklch(rgb);
+  };
+
+  // Type system
+  const sampleSelectors = ['body','h1','h2','h3','h4','h5','p','a','small','blockquote','figcaption','li','button'];
+  const seen = new Set();
+  const typeRows = [];
+  for (const sel of sampleSelectors) {
+    for (const el of document.querySelectorAll(sel)) {
+      if (!el.offsetParent && sel !== 'body') continue;
+      const txt = (el.innerText || '').trim();
+      if (sel !== 'body' && !txt) continue;
+      const cs = getComputedStyle(el);
+      const key = `${sel}|${cs.fontFamily}|${cs.fontSize}|${cs.fontWeight}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      typeRows.push({
+        tag: sel, sample: txt.slice(0, 60),
+        family: cs.fontFamily, size: cs.fontSize, weight: cs.fontWeight,
+        lineHeight: cs.lineHeight, letterSpacing: cs.letterSpacing,
+        color: cs.color, colorOklch: fmtColor(cs.color),
+        textTransform: cs.textTransform,
+      });
+      if (typeRows.filter(r => r.tag === sel).length >= 2) break;
+    }
+  }
+
+  // Color palette
+  const bodyCs = getComputedStyle(document.body);
+  const htmlCs = getComputedStyle(document.documentElement);
+  const colors = {
+    htmlBg:   { raw: htmlCs.backgroundColor, oklch: fmtColor(htmlCs.backgroundColor) },
+    bodyBg:   { raw: bodyCs.backgroundColor, oklch: fmtColor(bodyCs.backgroundColor) },
+    bodyText: { raw: bodyCs.color,           oklch: fmtColor(bodyCs.color) },
+  };
+  const link = document.querySelector('a[href]');
+  if (link) { const cs = getComputedStyle(link); colors.link = { raw: cs.color, oklch: fmtColor(cs.color) }; }
+  const button = document.querySelector('button, [class*="button" i], [class*="btn" i], a.cta, [class*="cta" i]');
+  if (button) {
+    const cs = getComputedStyle(button);
+    colors.button = {
+      bg:     { raw: cs.backgroundColor, oklch: fmtColor(cs.backgroundColor) },
+      color:  { raw: cs.color,            oklch: fmtColor(cs.color) },
+      border: cs.borderColor ? { raw: cs.borderColor, oklch: fmtColor(cs.borderColor) } : null,
+    };
+  }
+  const sectionBgs = new Map();
+  for (const tag of ['section','main','header','footer','article','aside','nav']) {
+    document.querySelectorAll(tag).forEach(el => {
+      if (!el.offsetParent) return;
+      const bg = getComputedStyle(el).backgroundColor;
+      if (bg && bg !== 'rgba(0, 0, 0, 0)') {
+        if (!sectionBgs.has(bg)) sectionBgs.set(bg, { tag, oklch: fmtColor(bg), count: 0 });
+        sectionBgs.get(bg).count++;
+      }
+    });
+  }
+  colors.sectionBackgrounds = Array.from(sectionBgs.entries()).map(([raw, v]) => ({ raw, ...v })).slice(0, 8);
+
+  // Spacing samples
+  const spacingSamples = [];
+  for (const s of Array.from(document.querySelectorAll('section, main > div, main > article, body > div')).slice(0, 12)) {
+    if (!s.offsetParent) continue;
+    const cs = getComputedStyle(s);
+    const r = s.getBoundingClientRect();
+    spacingSamples.push({
+      tag: s.tagName.toLowerCase(),
+      cls: (s.className || '').toString().slice(0, 50),
+      paddingTop: cs.paddingTop, paddingBottom: cs.paddingBottom, paddingLeft: cs.paddingLeft,
+      width: Math.round(r.width), height: Math.round(r.height),
+    });
+  }
+  const containers = Array.from(document.querySelectorAll('main, [class*="container" i], [class*="wrapper" i], [class*="content" i]'))
+    .filter(el => el.offsetParent).slice(0, 6).map(el => {
+      const cs = getComputedStyle(el);
+      return { tag: el.tagName.toLowerCase(), cls: (el.className||'').toString().slice(0, 40),
+               maxWidth: cs.maxWidth, width: Math.round(el.getBoundingClientRect().width), padding: cs.padding };
+    });
+
+  // Headings (helps narrate IA)
+  const headings = Array.from(document.querySelectorAll('h1, h2, h3'))
+    .filter(el => el.offsetParent).slice(0, 12)
+    .map(el => ({ tag: el.tagName.toLowerCase(), text: (el.innerText||'').trim().slice(0, 80) }));
+
+  // Programmatic signals (Step 8)
+  const fontsLoaded = [];
+  if (document.fonts) document.fonts.forEach(f => fontsLoaded.push({ family: f.family, weight: f.weight, style: f.style, status: f.status }));
+  const customCursor = getComputedStyle(document.body).cursor;
+  const hasSelectionRule = !!Array.from(document.styleSheets).some(ss => {
+    try { return Array.from(ss.cssRules || []).some(r => r.selectorText && r.selectorText.includes('::selection')); } catch { return false; }
+  });
+
+  // Page model (Step 6 fork)
+  const meta = {
+    title: document.title, lang: document.documentElement.lang,
+    viewport: { w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio },
+    docHeight: document.documentElement.scrollHeight,
+  };
+  const pageModel = meta.docHeight > meta.viewport.h * 1.5 ? 'scrolling-document' : 'experience-style';
+
+  return {
+    meta, pageModel, typeRows, colors, spacingSamples, containers, headings,
+    fontsLoaded: fontsLoaded.slice(0, 30),
+    motion: {
+      bodyCursor: customCursor,
+      hasSelectionRule,
+      prefersReducedMotionMedia: matchMedia('(prefers-reduced-motion: reduce)').matches,
+    },
+  };
+}
+```
+
+The output JSON drives the markdown schema below. Use `pageModel` to pick which Step 6 rubric you write up.
 
 ---
 
@@ -199,3 +388,5 @@ Things this reference does that we should consider lifting (informed by, not cop
 - **Always note unusual choices.** They are usually what separates the reference from slop.
 - **Always identify "pull-forward candidates."** The synthesis step depends on this.
 - **Never copy 1:1.** Extract principles, not pixels (ANTI-SLOP rule on references).
+- **Use the canonical extractor.** Do not reimplement the OKLCH math or the type/color/fonts probes per session. Paste the script in `## Canonical extractor` and use its JSON output.
+- **Be honest about reduced confidence.** If `prefers-reduced-motion` could not be overridden, or if the page blocked extraction (login, geo, JS-heavy SPA needing waits), say so in the analysis. A flagged gap is worth more than a confident-sounding guess.
