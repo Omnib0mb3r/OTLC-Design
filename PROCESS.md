@@ -2,7 +2,7 @@
 
 > Version 1.1 (2026-05-03)
 
-The methodology the `design-website` skill enforces on every client project. Each step has explicit inputs, outputs, and a tool dependency. Skipping steps produces slop.
+The methodology the `OTLC-Design` skill enforces on every client project. Each step has explicit inputs, outputs, and a tool dependency. Skipping steps produces slop.
 
 ---
 
@@ -10,22 +10,70 @@ The methodology the `design-website` skill enforces on every client project. Eac
 
 **Goal:** Understand the project well enough that the rest of the workflow has correct constraints.
 
-**Asks:**
+### 1a. Branch question (always first)
+
+Before any other intake, ask exactly:
+
+> *"What are we building?*
+> *1. **Customer site** — marketing/showcase site for an external client*
+> *2. **Customer app** — product/app interface for paying customers (B2B SaaS, customer portal, web app)*
+> *3. **Internal site** — your own marketing/showcase site (your portfolio, MHW, project landing pages)*
+> *4. **Internal app** — your own tools, dashboards, admin panels"*
+
+Based on the answer, load adaptation docs and set context:
+
+| Branch | Adaptations to load | Brand source |
+|--------|---------------------|--------------|
+| 1. Customer site | (default — none extra) | Discovered from client brief + references |
+| 2. Customer app | [`APP-ADAPTATION.md`](APP-ADAPTATION.md) (with customer-app tightening subsection) | Discovered from client brief + references |
+| 3. Internal site | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Owner-brand profile (ask which: personal-site, MHW, or new) |
+| 4. Internal app | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) + [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Owner-brand profile (ask which) |
+
+State the resolved context in writing before proceeding:
+
+> *"Mode: [internal / external]. Type: [site / app]. Loading: [adaptation docs]. Brand: [source]."*
+
+### 1b. Mode-appropriate intake
+
+Based on the branch answer, ask the appropriate question set:
+
+**Customer site (full intake):**
 1. Client name, domain (if known), industry
 2. Audience (who visits this site)
 3. Project goals — sell something, inform, showcase work, drive contact, convert to signup, etc. Pick 1-2 primary, 0-1 secondary
-4. Scope — one-pager, multi-page marketing, blog/content site, web app, e-commerce
+4. Scope — one-pager, multi-page marketing, blog/content site
 5. **1 to 3 reference URLs** the client liked or that match the brief aesthetically
 6. Brand constraints — existing logo, mandated colors, mandated fonts, voice/tone
 7. Content state — does the client have copy and imagery, or do we generate/source it
 8. Deadline / budget signals — affects how aggressive we get
 9. Hosting / deploy preference (Vercel, Netlify, Cloudflare, custom, doesn't matter)
 
-**Output:** A `BRIEF.md` in the client project root capturing all of the above.
+**Customer app (extends customer site with app questions per APP-ADAPTATION.md):**
+- All of the above, plus the app intake questions in `APP-ADAPTATION.md`
+- Plus customer-app tightening questions (mobile required, onboarding model, help architecture, notifications, billing surface, i18n)
+
+**Internal site (per MODE-INTERNAL.md):**
+1. Project name (becomes folder name at `C:\dev\Projects\[name]\`)
+2. Project goals
+3. Scope
+4. Optional references (only if you want a deliberate aesthetic deviation from owner-brand)
+5. Hosting / deploy preference
+6. Brand surface — personal-site, MHW, or new (ask per MODE-INTERNAL.md)
+
+**Internal app (per MODE-INTERNAL.md + APP-ADAPTATION.md):**
+- Internal site intake questions, plus the app intake questions
+
+### 1c. Output
+
+`BRIEF.md` in the project root capturing all answers. Include the branch resolution at the top so future-Claude has context.
+
+Project folder location:
+- Customer work → `C:\dev\Projects\[client-name]\`
+- Internal work → `C:\dev\Projects\[name]\` (no client wrapper)
 
 **Tool:** None. Conversation only.
 
-**Anti-pattern:** Skipping intake because "we have references." References define aesthetic. Brief defines everything else (structure, copy, scope, hosting).
+**Anti-pattern:** Skipping intake because "we have references" or "it's just internal." References define aesthetic; brief defines everything else (structure, copy, scope, hosting). Internal mode skips brand-discovery questions specifically — not the rest of intake.
 
 ---
 
@@ -177,7 +225,7 @@ Walk these 5 questions one at a time. Do not batch them. For each, the user must
 2. **New pattern for [`patterns/`](patterns/)?** Did we build a structural move (hero shape, layout primitive, section structure) you would reach for again on a different project?
 3. **New reference for [`references/INDEX.md`](references/INDEX.md)?** Did we encounter (or did the user bring) a site worth keeping in the curated vault?
 4. **Did `PROCESS.md` drag or lack a step?** Was any step too long, too short, missing, in the wrong order, or asking the wrong questions?
-5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit `~/.claude/skills/design-website/SKILL.md`.
+5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit `~/.claude/skills/OTLC-Design/SKILL.md`.
 
 ### What counts as a substantive answer
 

@@ -15,7 +15,7 @@ Stack picking guide: [`../STACK-DECISIONS.md`](../STACK-DECISIONS.md)
 
 ## Usage
 
-When the `design-website` skill creates a new client project at `C:\dev\Projects\[client-name]\`:
+When the `OTLC-Design` skill creates a new client project at `C:\dev\Projects\[client-name]\`:
 
 1. Skill picks stack per `STACK-DECISIONS.md`
 2. Skill either:

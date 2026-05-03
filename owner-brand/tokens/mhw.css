@@ -1,0 +1,35 @@
+/*
+ * Material Handling Weekly brand tokens
+ * Source of truth: ../source/MichaelCollins_BrandGuide.docx
+ *
+ * Paste into a new MHW project's tokens.css to start with the correct design tokens.
+ * Restraint is the brand: navy and gold only. Do not add accents.
+ */
+
+:root {
+  /* CORE */
+  --mhw-navy:   #1a1a2e;
+  --mhw-gold:   #f0c419;
+
+  /* TEXT */
+  --mhw-light:  #e6edf3;   /* main text on dark */
+  --mhw-white:  #ffffff;   /* headers / emphasis */
+
+  /* SEMANTIC */
+  --bg:         var(--mhw-navy);
+  --accent:     var(--mhw-gold);
+  --t1:         var(--mhw-light);
+  --t2:         var(--mhw-white);
+
+  /* FONTS — selected within Beehiiv Tradecraft template */
+  --ff: 'Archivo', system-ui, sans-serif;
+  --ff-alt: 'Montserrat', system-ui, sans-serif;
+}
+
+/*
+ * Required <head> imports for fonts:
+ *
+ * <link rel="preconnect" href="https://fonts.googleapis.com">
+ * <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ * <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+ */

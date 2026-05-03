@@ -4,7 +4,7 @@
 
 ## What this repo is
 
-**This repo is the design-system substrate, not a project under construction.** It powers the `design-website` skill, which reads from here when building client websites in other directories.
+**This repo is the design-system substrate, not a project under construction.** It powers the `OTLC-Design` skill, which reads from here when building client websites in other directories.
 
 When the user is working **inside this repo**, they are maintaining the system itself: adding references, refining the anti-slop list, building new patterns, editing process steps, tuning the skill, etc.
 
@@ -20,7 +20,7 @@ If the user's first message in this repo is *anything other than a trivial quest
 4. [`ANTI-SLOP.md`](ANTI-SLOP.md) — durable rules
 5. [`STACK-DECISIONS.md`](STACK-DECISIONS.md) — when to use which stack
 
-If the user is starting a client project (not maintaining the system), invoke the `design-website` skill directly instead.
+If the user is starting a client project (not maintaining the system), invoke the `OTLC-Design` skill directly instead.
 
 ## Behavior rules in this repo
 
@@ -32,7 +32,7 @@ When the user adds or refines content in this repo (new reference, new pattern, 
 - **Patterns** — write to `patterns/[pattern-name].md`. Include intent, structural sketch (ASCII or SVG), code reference, and when to use it.
 - **Anti-slop rules** — append to `ANTI-SLOP.md` under the right category. Include `**Why:**` and `**How to apply:**`.
 - **Process changes** — edit `PROCESS.md` directly. Bump the version line at the top.
-- **Skill changes** — edit `C:\Users\michael\.claude\skills\design-website\SKILL.md`.
+- **Skill changes** — edit `C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md`.
 
 ### Anti-slop applies even here
 

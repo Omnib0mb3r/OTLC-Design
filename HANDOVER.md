@@ -2,7 +2,7 @@
 
 > Snapshot of what is set up, what is verified, what is pending. Update this whenever the system state changes meaningfully.
 
-**Last updated:** 2026-05-02
+**Last updated:** 2026-05-03
 **Set up by:** Initial bootstrap session
 
 ---
@@ -11,26 +11,42 @@
 
 ### Repo structure (this repo, `C:\dev\Projects\design-system\`)
 
-- [x] `README.md` — explains what the system is
-- [x] `CLAUDE.md` — repo-specific Claude behavior rules
-- [x] `INIT.md` — fresh-session entry point (you should have already read this)
-- [x] `HANDOVER.md` — this file
-- [x] `OTLC-Brainstorm.MD` — vision, architecture, decisions, open questions, session log
-- [x] `WORKFLOW.md` — inherited from dev-template, kept as-is
-- [x] `PROCESS.md` — the 6-step workflow (1.0)
-- [x] `ANTI-SLOP.md` — 20 starting rules (growable)
-- [x] `STACK-DECISIONS.md` — plain HTML / Astro / Next decision tree
-- [x] `devneural.jsonc` — populated with real metadata
-- [x] `.gitignore` — extended for Claude/IDE caches and project-template scratch
-- [x] `references/INDEX.md` — pre-seeded with ~30 curated studio/product/gallery sites
-- [x] `tokens/README.md` + `type-scales.md` + `color-systems.md` + `spacing.md` + `motion.md`
-- [x] `patterns/README.md` — empty intentionally; grows from real project work
-- [x] `analyzer/README.md` + `extract-prompt.md` — reference extraction procedure
-- [x] `project-template/README.md` + `vanilla-vite/` + `astro/` placeholders
+#### Core methodology
+- [x] [`README.md`](README.md) — what the system is and how it is used
+- [x] [`CLAUDE.md`](CLAUDE.md) — repo-specific Claude behavior rules
+- [x] [`INIT.md`](INIT.md) — fresh-session entry point (read first when opening this repo)
+- [x] [`HANDOVER.md`](HANDOVER.md) — this file
+- [x] [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD) — vision, architecture, decisions, open questions, session log
+- [x] [`WORKFLOW.md`](WORKFLOW.md) — inherited from dev-template, kept as-is
+- [x] [`PROCESS.md`](PROCESS.md) v1.2 — the 6-step workflow with branch question, hard-enforced post-mortem
+- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md) — 24 universal rules (growable)
+- [x] [`STACK-DECISIONS.md`](STACK-DECISIONS.md) — plain HTML / Astro / Next / native decision tree
+- [x] [`MODE-INTERNAL.md`](MODE-INTERNAL.md) — adaptation for owned/internal work
+- [x] [`APP-ADAPTATION.md`](APP-ADAPTATION.md) — adaptation for app/product UI (with customer-app tightening subsection)
+- [x] [`devneural.jsonc`](devneural.jsonc) — populated with real metadata
+- [x] [`.gitignore`](.gitignore) — extended for Claude/IDE caches and project-template scratch
 
-### Skill (`C:\Users\michael\.claude\skills\design-website\`)
+#### Substrate folders
+- [x] [`references/INDEX.md`](references/INDEX.md) — pre-seeded with ~40 curated sites (marketing + app + galleries)
+- [x] [`tokens/`](tokens/) — type-scales, color-systems, spacing, motion templates
+- [x] [`patterns/`](patterns/) — subdivided into `marketing/` and `app/` (both empty by design; grow from real work)
+- [x] [`analyzer/`](analyzer/) — extract-prompt and extraction procedure
+- [x] [`project-template/`](project-template/) — vanilla-vite and astro placeholders
 
-- [x] `SKILL.md` — the entry point Claude invokes; reads from this repo as substrate
+#### Owner-brand
+- [x] [`owner-brand/source/MichaelCollins_BrandGuide.docx`](owner-brand/source/MichaelCollins_BrandGuide.docx) — source of truth for owner brand
+- [x] [`owner-brand/profile.md`](owner-brand/profile.md) — index of brand surfaces
+- [x] [`owner-brand/voice.md`](owner-brand/voice.md) — universal voice DOs/DON'Ts
+- [x] [`owner-brand/brands/personal-site.md`](owner-brand/brands/personal-site.md) — Solutions Wizard / cyan brand
+- [x] [`owner-brand/brands/mhw.md`](owner-brand/brands/mhw.md) — Material Handling Weekly / navy + gold brand
+- [x] [`owner-brand/tokens/personal-site.css`](owner-brand/tokens/personal-site.css) — drop-in CSS tokens
+- [x] [`owner-brand/tokens/mhw.css`](owner-brand/tokens/mhw.css) — drop-in CSS tokens
+
+### Skill (`C:\Users\michael\.claude\skills\OTLC-Design\`)
+
+- [x] [`SKILL.md`](file:///C:/Users/michael/.claude/skills/OTLC-Design/SKILL.md) — entry point. Asks the 4-way branch question. Reads from this repo as substrate. Hard-enforces post-mortem.
+- [x] Registered as `OTLC-Design` (visible in available-skills list)
+- [x] Invoked by `/OTLC-Design`, `/design`, or natural language ("let's build a site for X", "build an app for Y", "internal tool", etc.)
 
 ### MCP servers (user scope, available everywhere)
 
@@ -38,38 +54,81 @@
 - [x] `playwright` — installed, connected ✓
 - [x] `context7` — installed, connected ✓
 
-### Memory
-
-- [x] User role saved (web designer for clients)
-- [x] design-system repo + skill location saved as reference
-- [x] Anti-slop rule summary saved as feedback memory
-
 ### Git
 
 - [x] Repo initialized (inherited from dev-template clone)
-- [x] dev-template origin removed; this is now a fresh standalone repo
-- [x] Initial commit created
-- [ ] Remote not yet configured. To add: `gh repo create design-system --private --source=. --remote=origin --push`
+- [x] dev-template origin removed; standalone repo
+- [x] All bootstrap work committed in topical commits
+- [ ] Remote not yet configured. To add: `gh repo create OTLC-Design --private --source=. --remote=origin --push`
 
 ---
 
-## ⏳ What is pending
+## 🔁 The closing loop (this is what makes the system better)
 
-### Smoke test (do this in the next session, before any real client work)
+**The point of this entire system is that every project makes the next one start higher.** That only happens if Step 6 post-mortem is actually walked. The skill **hard-enforces** this — you cannot exit a project as complete without writing `POSTMORTEM.md` with substantive answers to all questions.
 
-In a fresh Claude session opened in `C:\dev\Projects\design-system\`, the user will provide 1-3 reference URLs (e.g. linear.app, stripe.com, manual.is). Run the analyzer per `analyzer/extract-prompt.md` against each. Verify:
+### How a project closes
 
-- Chrome DevTools MCP successfully navigates each URL
-- Type system extracted with real computed values
-- Colors converted to OKLCH correctly
-- Screenshots captured at 4 breakpoints
-- Output written using the schema in `extract-prompt.md`
+1. You signal done with one of: `we're done`, `ship it`, `client approved`, `post-mortem`, `let's wrap up`, `/done`, `/postmortem`
+2. The skill enters **post-mortem enforcement mode**
+3. The skill walks 5 universal questions (or 6 if internal mode), one at a time
+4. For each question, you must give either:
+   - **A concrete addition** ("Yes, add rule: never X"; "Yes, lift this hero pattern"; "Yes, add this site to references") — Claude writes the addition AND commits it to this repo with a topical message
+   - **An explicit skip with reason** ("Intentionally nothing this round, because [reason]") — logged in the project's `POSTMORTEM.md`
+5. Non-answers ("nah", "skip", "we're good", silence) are **rejected**. The skill re-asks. The skill does not advance until satisfied.
+6. After all questions answered, the skill writes `[client-project]/POSTMORTEM.md` with the date, every question, every answer, and links to commits made in this repo as a result.
+7. Only then is the project marked complete.
 
-If any of these fail, the workflow needs fixing before a real client project.
+### The 5 universal post-mortem questions
 
-### First real client project
+1. **New ANTI-SLOP rule?** Did anything ship that felt generic, default, or templated?
+2. **New pattern for `patterns/`?** Did we build a structural move you'd reach for again?
+3. **New reference for `references/INDEX.md`?** Did we encounter a site worth keeping?
+4. **Did `PROCESS.md` drag or lack a step?**
+5. **Did the skill itself need refinement?** Wrong tone, wrong order, missing checkpoints?
 
-After smoke test passes, run a real `design-website` workflow end-to-end on a real client brief. The first project will surface gaps in:
+### Internal-mode 6th question
+
+6. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token? New voice rule? New design rule for the brand guide?
+
+### What gets committed where
+
+| Addition type | Goes to | Commit message convention |
+|---------------|---------|---------------------------|
+| Anti-slop rule | `ANTI-SLOP.md` | `anti-slop: <short rule summary>` |
+| Pattern (marketing) | `patterns/marketing/[name].md` | `patterns: add marketing/<name>` |
+| Pattern (app) | `patterns/app/[name].md` | `patterns: add app/<name>` |
+| Reference | `references/INDEX.md` (+ optional deep analysis at `references/[slug].md`) | `references: add <domain>` |
+| Process change | `PROCESS.md` (bump version) | `process: <what changed>` |
+| Skill change | `~/.claude/skills/OTLC-Design/SKILL.md` | `skill: <what changed>` |
+| Owner-brand change | `owner-brand/source/MichaelCollins_BrandGuide.docx` + derived markdown | `owner-brand: <what changed>` |
+
+### Why hard enforcement matters
+
+Without the gate, post-mortems get skipped when you're tired and the project is shipped. "We're good, nothing came up." Then the system stays static and every project starts from the same baseline. The gate is annoying-on-purpose — it forces the 30 seconds of reflection that grows the system.
+
+---
+
+## ⏳ What is pending — smoke test (do this first in a fresh session)
+
+Before any real client/internal project, **run the smoke test**:
+
+1. **Open `C:\dev\Projects\design-system\` in a fresh Claude session.**
+2. Claude reads [`INIT.md`](INIT.md) automatically (per [`CLAUDE.md`](CLAUDE.md)).
+3. Tell Claude: *"smoke test"* and provide 1-3 reference URLs (e.g., linear.app, stripe.com, manual.is).
+4. Claude runs the analyzer per `analyzer/extract-prompt.md` against each.
+5. **Verify:**
+   - Chrome DevTools MCP successfully navigates each URL
+   - Type system extracted with real computed values
+   - Colors converted to OKLCH correctly
+   - Screenshots captured at 4 breakpoints (375 / 768 / 1280 / 1920)
+   - Output written using the schema in `extract-prompt.md`
+6. **If any of these fail**, the workflow needs fixing before a real project. Capture findings in `OTLC-Brainstorm.MD` Open Questions and iterate.
+7. **If all pass**, the system is ready for a real project. Pick one and invoke `/OTLC-Design` from that project's directory.
+
+### After smoke test
+
+Run a real project end-to-end. The first one will surface gaps in:
 
 - `PROCESS.md` step coverage
 - `ANTI-SLOP.md` rule completeness
@@ -77,14 +136,15 @@ After smoke test passes, run a real `design-website` workflow end-to-end on a re
 - `tokens/` template usefulness
 - `STACK-DECISIONS.md` decision tree edge cases
 - `SKILL.md` workflow phrasing
+- `MODE-INTERNAL.md` and `APP-ADAPTATION.md` correctness in real use
+- `owner-brand/` profile coverage
 
-Capture findings in the post-mortem (Step 6).
+Capture all gaps in the Step 6 post-mortem. The system's first 5 real projects will dramatically refine it.
 
 ### Optional improvements (not blocking)
 
 - [ ] Set up GitHub remote (`gh repo create`)
-- [ ] Decide whether `project-template/` should ship with concrete starter scaffolds or stay empty (currently empty by design)
-- [ ] Add `clients/` directory if client-specific design preferences accumulate
+- [ ] Decide whether `project-template/` should ship with concrete starter scaffolds (currently empty by design)
 - [ ] Consider Firecrawl MCP as fallback for JS-heavy reference sites (not currently installed)
 - [ ] Build the first 1-2 patterns into `patterns/` once they emerge from real work
 
@@ -105,7 +165,7 @@ Expected: `chrome-devtools`, `playwright`, `context7` all show ✓ Connected.
 ### Skill registration
 
 ```powershell
-ls C:\Users\michael\.claude\skills\design-website\SKILL.md
+ls C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md
 ```
 
 Expected: file exists.
@@ -118,7 +178,7 @@ git log --oneline
 git status
 ```
 
-Expected: at least one commit, clean working tree.
+Expected: clean working tree, multiple bootstrap commits.
 
 ---
 
@@ -129,8 +189,9 @@ Expected: at least one commit, clean working tree.
 | MCP `chrome-devtools` missing | `claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp@latest` |
 | MCP `playwright` missing | `claude mcp add --scope user playwright -- npx -y @playwright/mcp@latest` |
 | MCP `context7` missing | `claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp` |
-| Skill not triggering | Check `C:\Users\michael\.claude\skills\design-website\SKILL.md` exists; restart Claude session |
+| Skill not triggering | Check `C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md` exists; restart Claude session |
 | Repo missing files | This file lists everything that should exist; restore from git history if needed |
+| Brand-guide markdown out of sync with .docx | Re-extract from `owner-brand/source/MichaelCollins_BrandGuide.docx` and update derived markdown files |
 
 ---
 
@@ -138,10 +199,10 @@ Expected: at least one commit, clean working tree.
 
 Update `Last updated` and the relevant section whenever:
 
-- A new substrate file is added (PROCESS step, anti-slop rule additions don't count individually; major file additions do)
+- A new substrate file is added (process step / anti-slop rule additions don't count individually; major file additions do)
 - An MCP is added or removed
-- Memory entries change
 - A new known issue is identified
 - A smoke test or first project completes
+- The closing-loop conventions change
 
 Commit with message: `handover: [what changed]`.
