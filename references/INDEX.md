@@ -64,6 +64,7 @@ The narrow band of SaaS marketing that escapes slop.
 - [retool.com](https://retool.com) — Engineering tool. Dense, type-led, real-feeling.
 - [notion.com](https://www.notion.com) — Polished, restrained, illustration-led.
 - [supabase.com](https://supabase.com) — Strong dark-mode aesthetic, interactive demos.
+- [openstatus.dev](https://www.openstatus.dev) — Engineer-mono voice. Whole UI in `ui-monospace` + Inter fallback, compressed display tier (h1 = 30px), outlined-rect status pills. Reach for this when the project's voice is "rendered output, not marketing."
 
 ## App / Product UI
 
