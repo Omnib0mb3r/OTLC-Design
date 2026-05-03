@@ -1,6 +1,6 @@
 # PROCESS.md — The 6-Step Workflow
 
-> Version 1.0 (2026-05-02)
+> Version 1.1 (2026-05-03)
 
 The methodology the `design-website` skill enforces on every client project. Each step has explicit inputs, outputs, and a tool dependency. Skipping steps produces slop.
 
@@ -143,11 +143,12 @@ The methodology the `design-website` skill enforces on every client project. Eac
 
 ---
 
-## Step 6 — ITERATE
+## Step 6 — ITERATE + POST-MORTEM (hard-enforced)
 
-**Goal:** Incorporate user (and ultimately client) feedback. Then close the loop with a system-improvement post-mortem.
+**Goal:** Incorporate user feedback through sign-off, then close the loop with a system-improvement post-mortem. The post-mortem is **hard-enforced** — the project does not complete until all 5 questions have substantive answers.
 
-**Procedure:**
+### Iteration phase
+
 1. Show the user the verification report and a live preview.
 2. Capture feedback — be specific (which section, what feeling, what change).
 3. Triage feedback:
@@ -156,20 +157,76 @@ The methodology the `design-website` skill enforces on every client project. Eac
    - Copy-level → edit content
    - Motion-level → edit JS / CSS animations
 4. Re-run Step 5 verification after each meaningful round of changes.
-5. Loop until the user signs off.
-6. **Post-mortem (5 minutes max):**
-   - New rule worth adding to [`ANTI-SLOP.md`](../../ANTI-SLOP.md)?
-   - New pattern worth lifting into [`patterns/`](../../patterns/)?
-   - New reference worth adding to [`references/INDEX.md`](../../references/INDEX.md)?
-   - Did [`PROCESS.md`](../../PROCESS.md) drag or lack a step? Edit it.
-   - Did the skill instructions need refinement? Edit `~/.claude/skills/design-website/SKILL.md`.
-7. Commit improvements to the design-system repo with topical messages.
+5. Loop until the user gives a **done signal**.
 
-**Output:** Shipped site + system improvements committed to design-system repo.
+### Done signals (trigger post-mortem enforcement)
+
+- "we're done"
+- "ship it" / "ready to ship"
+- "client approved" / "client signed off"
+- "post-mortem" / "let's wrap up"
+- "/done" or "/postmortem"
+
+When the user gives a done signal, enter **post-mortem enforcement mode**.
+
+### Post-mortem enforcement mode
+
+Walk these 5 questions one at a time. Do not batch them. For each, the user must give either (a) a concrete addition or (b) an explicit "intentionally nothing this round, because [reason]". Non-answers ("nah", "skip", "we're good", silence) get pushed back: *"I need a substantive answer. Either name a concrete addition or give a reason for intentionally skipping. Take 30 seconds."*
+
+1. **New ANTI-SLOP rule?** Did anything ship that felt generic, default, or templated? Did you have to tell Claude to stop doing X mid-project?
+2. **New pattern for [`patterns/`](patterns/)?** Did we build a structural move (hero shape, layout primitive, section structure) you would reach for again on a different project?
+3. **New reference for [`references/INDEX.md`](references/INDEX.md)?** Did we encounter (or did the user bring) a site worth keeping in the curated vault?
+4. **Did `PROCESS.md` drag or lack a step?** Was any step too long, too short, missing, in the wrong order, or asking the wrong questions?
+5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit `~/.claude/skills/design-website/SKILL.md`.
+
+### What counts as a substantive answer
+
+| Answer type | Example | What you do |
+|-------------|---------|-------------|
+| Concrete addition (rule) | "Yes, add: never use scroll-snap on marketing landings unless the design earns it." | Write to [`ANTI-SLOP.md`](ANTI-SLOP.md). Commit `anti-slop: scroll-snap restriction`. Confirm. |
+| Concrete addition (pattern) | "Yes, lift the asymmetric hero with right breakout to patterns." | Write `patterns/asymmetric-hero-right-breakout.md`. Commit `patterns: add asymmetric-hero-right-breakout`. Confirm. |
+| Concrete addition (reference) | "Yes, add bbb.studio." | Add line to [`references/INDEX.md`](references/INDEX.md). Optionally write full analysis. Commit `references: add bbb.studio`. |
+| Concrete addition (process) | "Step 2 should also capture page transition timing." | Edit `PROCESS.md`. Bump version. Commit `process: capture page transition timing in step 2`. |
+| Concrete addition (skill) | "You over-asked during intake. Cut question 8." | Edit `SKILL.md`. Commit `skill: trim intake question 8`. |
+| Intentional skip with reason | "Intentionally nothing this round — project was small enough nothing generalized." | Log in client `POSTMORTEM.md`. Move on. |
+| Non-answer (REJECT) | "Nah", "skip", silence | Push back. Re-ask. Do not advance. |
+
+### Output — required before completion
+
+Write `[client-project]/POSTMORTEM.md`:
+
+```markdown
+# Post-mortem — [client-name]
+
+**Date:** [date]
+**Project:** [path to client folder]
+
+## 1. New ANTI-SLOP rule?
+[answer]
+[link to commit if added]
+
+## 2. New pattern?
+[answer]
+[link to commit if added]
+
+## 3. New reference?
+[answer]
+[link to commit if added]
+
+## 4. PROCESS.md change?
+[answer]
+[link to commit if added]
+
+## 5. Skill change?
+[answer]
+[link to commit if added]
+```
 
 **Tool:** Playwright MCP for ongoing verification during iteration.
 
-**Anti-pattern:** Skipping the post-mortem. The flywheel is the whole point. Without post-mortems, the system stays static and every project starts from the same baseline.
+**Project complete only when:** `POSTMORTEM.md` exists with substantive answers to all 5 questions, and any improvement commits to the design-system repo are pushed.
+
+**Anti-pattern:** Soft-quitting the post-mortem because the user is tired. The hard gate is the entire point — without it, the system stays static and every project starts from the same baseline.
 
 ---
 
