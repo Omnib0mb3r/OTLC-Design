@@ -4,20 +4,24 @@
 
 ## The default decision tree
 
+The OTLC-Design skill's branch question (Customer site / Customer app / Internal site / Internal app) maps to stack defaults:
+
 ```
-Is it an interactive application (real-time, dashboard, editor, multi-step
-state, drag-drop, complex form validation, authenticated session)?
-
-├── YES → Next.js + React (only when actually needed)
+Branch resolves to APP (customer or internal)?
 │
-└── NO → Is it a content site (5+ pages, blog, case studies, docs, dynamic
-         routing for content collections)?
-
+├── YES (web app) → Next.js + React + TypeScript + shadcn (see APP-ADAPTATION.md)
+├── YES (desktop app) → C# + .NET WPF, Tauri, or Electron (rare, project-driven)
+│
+└── NO (site) → Is it a content site (5+ pages, blog, case studies, docs)?
+         │
          ├── YES → Astro
          │
          └── NO (one-pager, simple multi-page marketing, portfolio, showcase)
-              → Plain HTML/CSS/JS + Vite
+              → Plain HTML/CSS/JS + Vite (the owner's preferred default for
+                 single-file deployable sites)
 ```
+
+For desktop / native app contexts (e.g., the stream-deck WPF tray utility), the web stack tree does not apply — pick the appropriate native stack for the platform. The skill's process still applies (intake, anti-slop, verification, post-mortem).
 
 ---
 
@@ -75,10 +79,10 @@ state, drag-drop, complex form validation, authenticated session)?
 
 ---
 
-## Next.js + React
+## Next.js + React (web app default)
 
-**Use when:**
-- It is an actual application, not a site
+**Use when (this is the default for web apps):**
+- The branch question resolves to Customer app or Internal app (web)
 - Multi-step interactive flows with shared client state
 - Real-time features (websockets, server-sent events, live data)
 - Authentication / authorization with session-aware UI
@@ -86,27 +90,45 @@ state, drag-drop, complex form validation, authenticated session)?
 - Server actions, server components, edge functions are core to the requirement
 - Client has explicitly mandated React
 
-**Why Next over Astro for apps:**
+**Why Next is the app default:**
 - React's component model + state management ecosystem is right for stateful UIs
 - Server components, streaming, and edge runtimes are the modern standard for app-shaped products
-- The React ecosystem (TanStack, Radix primitives, etc.) is unmatched for complex interaction
+- The React ecosystem (TanStack Query, Radix primitives, shadcn/ui) is unmatched for complex interaction
+- For app mode, the conventional choice serves users better than the distinctive choice — see APP-ADAPTATION.md
 
-**Why NOT to use Next:**
-- For marketing/showcase sites, Next adds significant complexity (hydration, RSC concerns, SSR/SSG decisions, larger bundles) for negligible benefit
-- The "Next + Tailwind + shadcn" default look is the visual signature of AI slop
-- Build complexity scales with project; debugging takes longer
+**Why NOT to use Next for marketing sites:**
+- Next adds significant complexity (hydration, RSC concerns, SSR/SSG decisions, larger bundles) for negligible benefit
+- The "Next + Tailwind + shadcn" default look is the visual signature of AI slop **for marketing**
+- For apps, that same conventional look is *correct* (see APP-ADAPTATION.md anti-slop inversion)
 
 **Stack:**
 - Next.js (App Router, current major version)
 - React (current major version)
 - TypeScript (always for apps)
 - Tanstack Query for server state
-- Radix primitives or hand-built for UI primitives (NOT shadcn defaults — see ANTI-SLOP rule 12)
-- Custom CSS architecture (cascade layers + tokens, NOT Tailwind defaults — see ANTI-SLOP rule 4)
+- Zustand or Jotai for client state (when needed beyond server state)
+- shadcn/ui (or Radix primitives + custom) for component layer — appropriate for apps per APP-ADAPTATION rule 12
+- Tailwind CSS with project token theme (still custom theme; defaults are lazy)
+- NextAuth / Clerk / Auth.js / custom for auth
+- Prisma + Postgres typical for ORM/data
+- Resend / Postmark / Loops for email (customer apps)
 
 **Deploy:** Vercel (native), or self-host with Node.
 
 ---
+
+## Native / Desktop apps
+
+For desktop or platform-native apps (e.g., the stream-deck WPF tray utility), pick the right native stack for the platform — the web stack tree does not apply.
+
+| Platform | Recommended | Examples |
+|----------|-------------|----------|
+| Windows desktop | **C# + .NET WPF** (or WinUI 3 for newer) | stream-deck |
+| Cross-platform desktop | **Tauri** (Rust + web frontend) or Electron (when native size matters less) | most cross-platform tools |
+| macOS native | Swift + SwiftUI | Apple-only tools |
+| iOS / Android | Native (Swift / Kotlin) or React Native / Flutter | mobile apps |
+
+The OTLC-Design process still applies (intake, anti-slop, verification, post-mortem) regardless of platform. APP-ADAPTATION.md rules apply where relevant (some web-specific rules like Lighthouse don't apply to native; replace with native equivalents).
 
 ## What we do NOT use
 

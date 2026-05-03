@@ -10,7 +10,7 @@
 
 ## How it is used
 
-When the `design-website` skill runs Step 2 (Reference Analysis), for each reference URL provided at intake:
+When the `OTLC-Design` skill runs Step 2 (Reference Analysis), for each reference URL provided at intake:
 
 1. Read [`extract-prompt.md`](extract-prompt.md) for the extraction procedure
 2. Use Chrome DevTools MCP to navigate to the URL

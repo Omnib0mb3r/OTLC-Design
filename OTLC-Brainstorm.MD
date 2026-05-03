@@ -36,7 +36,7 @@ C:\dev\Projects\design-system\       ← this repo (system + knowledge base)
 ├── INIT.md, HANDOVER.md             Fresh-session pickup
 └── CLAUDE.md, WORKFLOW.md           Repo behavior rules
 
-C:\Users\michael\.claude\skills\design-website\
+C:\Users\michael\.claude\skills\OTLC-Design\
 └── SKILL.md                         The entry point Claude invokes
 
 C:\dev\Projects\[client-name]\       ← actual client work happens here
@@ -69,7 +69,7 @@ The skill is the entry point. The repo is the substrate. Both are git-versioned 
 
 When *modifying the design-system itself* (not building a client site), use the OTLC + superpowers pipeline inherited from the template. See [`CLAUDE.md`](CLAUDE.md) for details.
 
-When *building a client site*, the user invokes the `design-website` skill, which reads from this repo and follows [`PROCESS.md`](PROCESS.md).
+When *building a project (any of the four modes)*, the user invokes the `OTLC-Design` skill, which reads from this repo and follows [`PROCESS.md`](PROCESS.md).
 
 ### PRE — before brainstorming changes to the system
 
@@ -98,7 +98,7 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 ### 2026-05-02 — Initial setup
 
 - **Repo location**: `C:\dev\Projects\design-system\` (sibling to other client projects in `C:\dev\Projects\`).
-- **Skill location**: `C:\Users\michael\.claude\skills\design-website\SKILL.md`. Skill is the entry point; repo is the substrate.
+- **Skill location**: `C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md`. Skill is the entry point; repo is the substrate. (Originally named `design-website` — renamed to `OTLC-Design` in session 2 when scope expanded beyond websites.)
 - **Stack policy**: Multi-stack per project (plain HTML/CSS/JS for one-pagers, Astro for content sites, React/Next.js only for genuine apps). Documented in [`STACK-DECISIONS.md`](STACK-DECISIONS.md).
 - **MCPs**: chrome-devtools, playwright, context7. User scope. Documented in [`HANDOVER.md`](HANDOVER.md).
 - **Process steps**: 6 (Intake, Reference Analysis, Synthesis, Build, Verify, Iterate). Documented in [`PROCESS.md`](PROCESS.md).
@@ -107,15 +107,29 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 - **Template origin detached**: This repo is no longer connected to `dev-template` remote. User can `gh repo create` to add a new origin when ready.
 - **Reasoning**: User builds websites for clients (no personal style to codify). System needs to take 1-3 reference URLs per project and produce non-slop output that matches the aesthetic. Improvement over time via post-mortem additions to references / patterns / anti-slop.
 
+### 2026-05-03 — Session 2 decisions
+
+- **Scope**: Expanded from "websites for clients" to "any design/build project". 4 modes via single branch question at intake.
+- **Mode model**: Customer site / Customer app / Internal site / Internal app. One branch question routes to the right adaptation docs and brand source.
+- **Skill rename**: `design-website` → `OTLC-Design`. Reflects broader scope (sites + apps + internal + customer). Folder at `~/.claude/skills/OTLC-Design/`.
+- **Owner-brand profile**: Built from user's existing `<BrandGuide>.docx`. Two brand surfaces (personal-site, MHW). Source `.docx` lives in `owner-brand/source/`; markdown copies are derived working copies.
+- **Internal mode quality bar**: Same as customer work. Internal mode skips brand-discovery questions only. ANTI-SLOP, verification, post-mortem all apply identically.
+- **App adaptation**: Most marketing anti-slop rules invert for apps (shadcn fine, Lucide fine, Tailwind defaults fine, dense grids fine). Customer-app tightening adds onboarding/mobile/perf/cross-browser gates.
+- **Hard-enforced post-mortem**: Step 6 cannot be skipped. Each of 5 (or 6 in internal mode) questions requires substantive answer. Project not complete until POSTMORTEM.md exists.
+- **Closing-loop conventions**: Topical commit messages (`anti-slop:`, `patterns:`, `references:`, `process:`, `skill:`, `owner-brand:`, `handover:`).
+- **Brand-rule softenings**: User flagged his own guide as too rigid in places. Softened: dark backgrounds default-not-required, motion ambient default-not-required, eyebrows available-not-required, blue beta-only scoped to personal-site brand only.
+- **Reasoning**: System must serve all the owner's design work, not just websites. Internal work was being underserved by a client-only model that asked brand-discovery questions every time. App work was being malformed by marketing anti-slop rules that don't apply.
+
 ---
 
 ## Open Questions
 
-- [ ] Should `project-template/` ship with concrete starter scaffolds (vanilla-vite, astro), or leave empty and use `npm create vite@latest` / `npm create astro@latest` on demand? Currently scaffolded as empty placeholders.
-- [ ] Does the user want a remote origin set up now, or wait until first client project ships?
-- [ ] Add a `clients/` directory here for client-specific design preferences as they accumulate, or keep client data isolated to each client's own project repo?
-- [ ] How aggressive should the verification gate be in Step 5? Hard-fail on Lighthouse perf <90, or warn?
-- [ ] When a reference site is JavaScript-heavy and Chrome DevTools MCP can not extract clean tokens, fallback to Firecrawl MCP? (not currently installed)
+- [ ] Should `project-template/` ship with concrete starter scaffolds (vanilla-vite, astro, next), or leave empty and use `npm create ...` on demand? Currently scaffolded as empty placeholders.
+- [ ] Does the user want a remote origin set up now? GitHub repo name suggestion: `OTLC-Design` (matching the skill name) or `design-system` (matching the substrate name).
+- [ ] How does the brand-guide `.docx` stay in sync with derived markdown? Currently manual re-extraction. Worth a tiny PowerShell script or skip until it bites?
+- [ ] Add Firecrawl MCP as fallback for JS-heavy reference sites? (Not installed.)
+- [ ] First app project — which one? Could exercise MODE-INTERNAL + APP-ADAPTATION + owner-brand pull all at once and surface real gaps.
+- [ ] Should owner-brand grow a third surface for OTLC-domain customer work (i.e., "OTLC consulting" brand for client-facing materials), or keep client-facing materials per-project?
 
 ---
 
@@ -141,5 +155,47 @@ Discussed the slop problem (AI-generated websites all look the same), worked thr
 - User opens `C:\dev\Projects\design-system\` in a fresh Claude session
 - Fresh Claude reads INIT.md and HANDOVER.md
 - Smoke test: user provides 1-3 reference URLs, Claude runs the analyzer, prove the workflow works
-- First real client project test
+- First real project test
 - Iterate on rules / patterns / process based on what surfaces
+
+---
+
+### 2026-05-03 — Session 2: Scope expansion + branch model + owner-brand integration
+
+**Participants:** the operator
+
+**What happened:**
+Scope grew from "build websites for clients" to "build any project — sites and apps, internal and external — with the right rules per mode." Worked through:
+
+1. **Mode dimension**: external client (unknown brand) vs internal/owned (known brand). Internal mode skips brand-discovery questions; reads from owner-brand profile.
+2. **Type dimension**: marketing/showcase site vs product/app interface. Apps invert most marketing anti-slop rules (shadcn fine, Lucide bullets fine, default Tailwind palette fine, etc.).
+3. **App-user dimension** (only when type=app): internal employees vs paying customers. Customer apps tighten gates (mobile required, onboarding designed, perf back to 90, cross-browser including Safari iOS).
+
+Simplified to **4-way branch question** at intake: Customer site / Customer app / Internal site / Internal app. Adaptation docs (MODE-INTERNAL.md, APP-ADAPTATION.md with customer-app tightening subsection) load per branch.
+
+Analyzed user's existing 4 projects (omnibomber-site, Landmark40, stream-deck, conveyor-designer) to extract real house style. Then user provided his actual brand guide (`<BrandGuide>.docx`) — moved into repo as `owner-brand/source/` and converted to markdown working copies.
+
+User pushed back on a few of his own brand rules being too rigid; softened: dark backgrounds default-not-required, motion ambient default-not-required, eyebrows available-not-required, blue beta-only on personal-site brand only.
+
+Renamed skill from `design-website` to `OTLC-Design` reflecting the broader scope (OTLC = On The Level Concepts, the owner's domain).
+
+**What was built:**
+- `MODE-INTERNAL.md` — adaptation for internal/owned work
+- `APP-ADAPTATION.md` — adaptation for app/product UI with customer-app tightening subsection
+- `owner-brand/` — full structure: README, profile (index), voice (universal DOs/DON'Ts), brands/personal-site.md, brands/mhw.md, tokens/personal-site.css, tokens/mhw.css, source/<BrandGuide>.docx
+- `patterns/` subdivided into `marketing/` and `app/` with READMEs
+- `references/INDEX.md` extended with App / Product UI category (12 app references seeded)
+- `STACK-DECISIONS.md` updated for app stack defaults (Next.js + React + shadcn for apps, native section added for desktop)
+- `ANTI-SLOP.md` extended with 4 new rules (no emoji icons, sub-12px legibility floor, no personal-aesthetic chrome on client work, custom cursor deliberate-only)
+- `PROCESS.md` Step 1 updated with branch question and mode-appropriate intake
+- `SKILL.md` renamed to OTLC-Design, fully rewritten for new scope and branch handling
+- `HANDOVER.md`, `INIT.md`, `README.md` rewritten for new scope and new closing-loop emphasis
+- All cross-references updated (15 files swept for design-website → OTLC-Design)
+
+**Decisions logged below**
+
+**Next:**
+- Smoke test in fresh Claude session opened in this repo
+- First real project (likely an internal one, to exercise MODE-INTERNAL + owner-brand pull)
+- Capture all gaps surfaced through Step 6 hard-enforced post-mortem
+- Set up GitHub remote when ready (`gh repo create`)

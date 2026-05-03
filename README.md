@@ -1,46 +1,57 @@
 # design-system
 
-A repeatable methodology for building **non-slop, professional websites for clients**. The substrate that powers the `design-website` skill.
+A repeatable methodology for building **non-slop, professional sites and apps** — for clients and for owned work, marketing and product. The substrate that powers the `OTLC-Design` skill.
 
-This repo is not a website. It is the system that produces websites: process, anti-slop rules, reference vault, pattern library, token templates, and analyzer prompts that Claude reads at the start of every client project.
+This repo is not a website or app. It is the system that produces them: process, anti-slop rules, reference vault, pattern library, token templates, mode adaptations, owner-brand profile, and analyzer prompts that Claude reads at the start of every project.
 
 ## What lives here
 
 | Path | Purpose |
 |------|---------|
-| [`PROCESS.md`](PROCESS.md) | The 6-step workflow: Intake → Analyze → Synthesize → Build → Verify → Iterate |
-| [`ANTI-SLOP.md`](ANTI-SLOP.md) | Durable rules Claude follows on every project, no reminding required |
-| [`STACK-DECISIONS.md`](STACK-DECISIONS.md) | When to use plain HTML / Astro / Next.js. Not "always React". |
-| [`references/`](references/) | Curated vault of sites worth studying. Catalog in [`references/INDEX.md`](references/INDEX.md). Grows over time. |
-| [`patterns/`](patterns/) | Hand-built layout primitives. Your vocabulary, not shadcn defaults. |
-| [`tokens/`](tokens/) | Type scale, color, spacing, motion templates. Synthesized per project, not copied. |
-| [`analyzer/`](analyzer/) | The prompts and procedures Claude uses to extract design data from reference URLs via Chrome DevTools MCP. |
-| [`project-template/`](project-template/) | Starter scaffolds copied out when a new client project begins. |
-| [`INIT.md`](INIT.md) | What a fresh Claude session reads first when this repo is opened. |
-| [`HANDOVER.md`](HANDOVER.md) | Live status of the system: what is set up, what is pending. |
+| [`PROCESS.md`](PROCESS.md) | The 6-step workflow (Intake with branch question → Analyze → Synthesize → Build → Verify → Iterate + hard-enforced post-mortem) |
+| [`ANTI-SLOP.md`](ANTI-SLOP.md) | 24 universal durable rules Claude follows on every project |
+| [`STACK-DECISIONS.md`](STACK-DECISIONS.md) | When to use plain HTML / Astro / Next.js / native |
+| [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Adaptation for internal/owned work (skips brand discovery, pulls owner-brand profile) |
+| [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Adaptation for app/product UI (anti-slop inversion, app stack defaults, app verification gates) — with customer-app tightening subsection |
+| [`owner-brand/`](owner-brand/) | Standing brand profile (personal-site, MHW), voice rules, drop-in tokens, source `.docx` |
+| [`references/`](references/) | Curated vault of sites worth studying. Catalog in [`references/INDEX.md`](references/INDEX.md) |
+| [`patterns/`](patterns/) | Hand-built layout primitives, subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/) |
+| [`tokens/`](tokens/) | Type scale, color, spacing, motion *templates* (synthesized per project, not copied) |
+| [`analyzer/`](analyzer/) | Prompts and procedures Claude uses to extract design data from references via Chrome DevTools MCP |
+| [`project-template/`](project-template/) | Starter scaffolds copied out when a new project begins |
+| [`INIT.md`](INIT.md) | What a fresh Claude session reads first when this repo is opened |
+| [`HANDOVER.md`](HANDOVER.md) | Live status: what is set up, what is pending, **the closing loop** |
+| [`CLAUDE.md`](CLAUDE.md) | Repo-specific Claude behavior rules |
+| [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD) | Vision, architecture, decisions, open questions, session log |
 
 ## How it is used
 
-You do not work *in* this repo to build client sites. You work in `C:\dev\Projects\[client-name]\`. The `design-website` skill reads from this repo as its knowledge base.
+You do not work *in* this repo to build sites or apps. You work in `C:\dev\Projects\[project-name]\`. The OTLC-Design skill reads from this repo as its knowledge base.
 
-Typical flow:
+### Typical flow
 
-1. New client project. You run `/design-website` (or just say "let's build a site for X").
-2. The skill walks intake, then uses Chrome DevTools MCP to analyze the references you provide.
-3. Synthesizes tokens, proposes a stack and structure, gets your sign-off.
-4. Builds. Verifies via Playwright MCP. Iterates.
-5. Anything genuinely reusable extracted to this repo: a new pattern, a new anti-slop rule, a new reference.
+1. Start a new project. Invoke `/OTLC-Design` (or say "let's build a site for X" / "build an app for Y").
+2. Skill asks the **branch question**: Customer site / Customer app / Internal site / Internal app.
+3. Skill walks intake (full for customer, light for internal).
+4. For projects with references: Chrome DevTools MCP analyzes each.
+5. Synthesizes tokens (informed by references for customer; pulled from owner-brand for internal). Proposes stack and structure. Gets your sign-off.
+6. Builds. Verifies via Playwright MCP and Lighthouse. Iterates.
+7. **You signal done.** Skill enters hard-enforced post-mortem. Anything genuinely reusable from this project gets extracted and committed to this repo.
 
-## How it improves
+### How the system improves
 
-Every client project ends with a 5-minute post-mortem:
+Every project ends with a hard-enforced post-mortem (Step 6). 5 questions (6 in internal mode), one at a time. Each requires either a concrete addition or an explicit skip with reason. Non-answers are rejected.
 
-- New rule worth adding to `ANTI-SLOP.md`?
-- New pattern worth lifting into `patterns/`?
-- New reference worth adding to `references/INDEX.md`?
-- Did `PROCESS.md` need to change because a step dragged or was missing?
+| Question | If yes, what gets committed where |
+|----------|-----------------------------------|
+| New ANTI-SLOP rule? | `ANTI-SLOP.md` → commit `anti-slop: ...` |
+| New pattern? | `patterns/marketing/[name].md` or `patterns/app/[name].md` → commit `patterns: add ...` |
+| New reference? | `references/INDEX.md` → commit `references: add ...` |
+| `PROCESS.md` change? | `PROCESS.md` (bump version) → commit `process: ...` |
+| Skill change? | `~/.claude/skills/OTLC-Design/SKILL.md` → commit `skill: ...` |
+| (Internal only) Owner-brand change? | `owner-brand/source/<BrandGuide>.docx` + derived markdown → commit `owner-brand: ...` |
 
-The repo is a flywheel. Each project makes the next one start higher.
+The repo is a flywheel. Each project makes the next one start higher. See [`HANDOVER.md`](HANDOVER.md) §"The closing loop" for the full mechanism.
 
 ## Required tooling
 
@@ -54,4 +65,31 @@ See [`HANDOVER.md`](HANDOVER.md) for verification commands.
 
 ## Honest scope
 
-This system raises the floor. It does not replace art direction. The last 20% (the part separating "very good" from "Pentagram") still requires your judgment. What this gives you: every project starts at *considered* instead of *Tailwind template*, the slop tells are eliminated systematically, and matching a reference aesthetic gets to ~80% on first pass.
+This system raises the floor. It does not replace art direction. The last 20% (the part separating "very good" from "Pentagram") still requires the owner's judgment. What this gives:
+
+- Every project starts at *considered* instead of *Tailwind template*
+- The slop tells are eliminated systematically
+- For customer work, matching a reference aesthetic gets to ~80% on first pass
+- For internal work, the owner-brand profile means brand-discovery is one question, not ten
+- The hard-enforced post-mortem means the system gets smarter with every project shipped
+- Quality bar does not drop for internal work — same anti-slop, same verification gates appropriate to mode
+
+What this does NOT do:
+
+- Replace the user's art direction
+- Generate brand strategy or commission custom photography
+- Write long-form copy from nothing (drafting from a brief is in scope; copy strategy is not)
+- Deploy
+
+## Skill invocation
+
+The OTLC-Design skill triggers on:
+- `/OTLC-Design` or `/design`
+- "let's build a site for [X]"
+- "new client website"
+- "build an app for [Y]"
+- "internal tool for [Z]"
+- "design a UI for [W]"
+- Any project-kickoff phrase that involves design work
+
+The skill is the entry point. The repo is the substrate. Both are git-versioned and evolve together.

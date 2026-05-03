@@ -2,7 +2,7 @@
 
 > The 20 starting rules. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
 
-These rules apply to every client project automatically. The `design-website` skill reads them at the start of work and enforces them throughout. They override defaults from any framework (Tailwind, shadcn, Next.js templates, etc.).
+These rules apply to every client project automatically. The `OTLC-Design` skill reads them at the start of work and enforces them throughout. They override defaults from any framework (Tailwind, shadcn, Next.js templates, etc.).
 
 A rule that says "never X" can be broken if the user **explicitly** opts in for a specific project, with a logged reason. Default behavior is the rule.
 
@@ -176,7 +176,51 @@ Real copy with names, dates, prices, jokes, locations. Placeholder text is for t
 Lighthouse Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90. Zero critical/serious axe violations. WCAG AA contrast minimum on body text (AAA preferred).
 
 **Why:** Bad performance and a11y *feel* worse than they audit. Slow sites read as cheap. Inaccessible sites are unprofessional and legally risky.
-**How to apply:** Step 5 of `PROCESS.md` is non-optional. Run the audits. Fix the failures. Then deliver.
+**How to apply:** Step 5 of `PROCESS.md` is non-optional. Run the audits. Fix the failures. Then deliver. App-mode gates differ — see `APP-ADAPTATION.md` §5.
+
+---
+
+## Iconography
+
+### 21. Never use emoji as iconography.
+
+Emoji glyphs in feature lists, palette icons, button labels, or as primary affordances. They render inconsistently across platforms (Apple vs. Google vs. Windows vs. fallback fonts), drift from the brand's visual language, and read as filler.
+
+**Why:** Inconsistent rendering, no brand control, looks like template padding. The omnibomber-site analysis surfaced this — emoji used as `tool-card-icon`, `lc-icon`, `dl-icon`, `proj-card-vis .emo`. Cannot be brand-controlled and reads as default.
+**How to apply:** Use SVG icons (custom, Lucide, Phosphor, Heroicons depending on context per ANTI-SLOP rule 11). Use typographic glyphs (numbers, letters, mono characters). Use no icon at all. Never emoji.
+
+---
+
+## Legibility
+
+### 22. Never set body or label content below 12px.
+
+Sub-12px text in body content fails legibility on retina at normal viewing distance and is an accessibility risk. The omnibomber-site analysis surfaced this — labels at 8-9.6px (`0.5rem`–`0.6rem`).
+
+**Why:** Below the legibility floor for body text. WCAG 1.4.4 expects users to scale to 200% without loss; sub-12px breaks before that target.
+**How to apply:** Body content: ≥ 14px. Labels and supporting text: ≥ 12px. Smaller is acceptable only for ornamental display elements that are not load-bearing for comprehension (e.g., a tiny version number in a footer corner). App UI may use 11-13px labels with appropriate weight/contrast — see APP-ADAPTATION rule 22.
+
+---
+
+## Personal-aesthetic chrome on client work
+
+### 23. Never import the owner's personal-aesthetic chrome into client work.
+
+Personal-brand decorative chrome (cyberpunk telemetry panels, custom cursor with `cursor: none`, glitch effects, terminal/operator panels, animated bars labeled CPU/MEM, etc.) belongs on the owner's projects only. Importing it into a client project means delivering the wrong brand.
+
+**Why:** A client paid for *their* brand. Decorative chrome from the developer's personal aesthetic is the developer leaking through.
+**How to apply:** When in customer mode, do not pull patterns from the owner-brand profile. Owner-brand may inform the developer's instincts (font pairing, anti-slop reflexes) but never overrides client direction. If a client deliberately wants an aesthetic that overlaps with the owner's personal brand, they get a derivative — not a copy.
+
+---
+
+## Custom cursor
+
+### 24. Never replace the OS cursor as a default.
+
+`cursor: none` plus a custom cursor (dot + lagging ring, etc.) is a deliberate use only — never a default. It breaks accessibility (resize handles, text caret, link cues), increases motion load, and is the most common "designer portfolio template" trick of the last few years.
+
+**Why:** Breaks OS expectations and accessibility affordances. Reads as template-default when overused.
+**How to apply:** Custom cursor is allowed when the project's voice genuinely calls for it (the owner's personal site qualifies — it's a brand signature). Never on customer work unless explicitly briefed. Never on apps. When using, always preserve native cursor functionality on inputs and resize handles.
 
 ---
 

@@ -65,6 +65,23 @@ The narrow band of SaaS marketing that escapes slop.
 - [notion.com](https://www.notion.com) — Polished, restrained, illustration-led.
 - [supabase.com](https://supabase.com) — Strong dark-mode aesthetic, interactive demos.
 
+## App / Product UI
+
+References for **app interfaces** (logged-in product surfaces, dashboards, tools), not their marketing pages. Used in app mode when references are appropriate. Many require an account to inspect deeply; screenshots and case studies are sometimes the best access.
+
+- [linear.app](https://linear.app) — The actual app (post-login). Issue tracker that defined modern app UI restraint. Command palette, keyboard-first.
+- [stripe.com/dashboard](https://stripe.com/dashboard) — Payment dashboard. Reference for data tables, settings architecture, financial UI clarity.
+- [notion.so](https://www.notion.so) — Knowledge tool. Reference for nested content, contextual menus, inline editing.
+- [vercel.com/dashboard](https://vercel.com/dashboard) — Deployment dashboard. Reference for build/log surfaces, project list, real-time status.
+- [retool.com](https://retool.com) — Internal-tool builder. Reference for dense data UIs, configurable layouts.
+- [pitch.com](https://pitch.com) — In-app presentation tool. Reference for collaborative editing, slide canvas.
+- [plausible.io](https://plausible.io) — Analytics dashboard (live demo available without signup). Reference for clean data display, restrained color.
+- [cal.com](https://cal.com) — Booking tool. Reference for multi-step forms, calendar widgets, public-facing app surfaces.
+- [readymag.com/editor](https://readymag.com) — In-app editor. Reference for canvas-based editing, side panels.
+- [arc.net](https://arc.net) — Browser. Reference for sidebar navigation, command palette, native-feeling web app.
+- [things.app](https://culturedcode.com/things/) — Native to-do app. Reference for restraint, type-driven app aesthetic.
+- [pocketcasts.com](https://pocketcasts.com) — Podcast app. Reference for media-app patterns.
+
 ## Galleries (meta-reference)
 
 Curated lists of good sites. Use these to *find* references, not as references themselves.
