@@ -1,79 +1,76 @@
-# [Project Name] — Claude Instructions
+# design-system — Claude Instructions
 
-> Human-readable workflow docs live in [`WORKFLOW.md`](WORKFLOW.md). The rules below are the machine-readable authority for Claude.
+> Human-readable workflow lives in [`README.md`](README.md), [`PROCESS.md`](PROCESS.md), and [`WORKFLOW.md`](WORKFLOW.md). The rules below are the machine-readable authority for Claude when this repo is the working directory.
 
-## Brainstorming Sessions
+## What this repo is
 
-At the start of every session, if `OTLC-Brainstorm.MD` exists, read it before doing anything else.
+**This repo is the design-system substrate, not a project under construction.** It powers the `design-website` skill, which reads from here when building client websites in other directories.
 
-Brainstorm work uses the **superpowers pipeline, augmented with OTLC layers**. Follow this exact order — do NOT jump straight into `superpowers:brainstorming` without the PRE steps, and do NOT advance to `writing-plans` without the POST steps.
+When the user is working **inside this repo**, they are maintaining the system itself: adding references, refining the anti-slop list, building new patterns, editing process steps, tuning the skill, etc.
 
-### PRE — before invoking superpowers brainstorming
+When the user is working **on a client website**, they are in `C:\dev\Projects\[client]\` (not here). The skill reads this repo automatically.
 
-1. **Read `OTLC-Brainstorm.MD`** in full — load Vision, Architecture, prior Decisions, and Open Questions into context.
-2. **Vision check** — if `## Vision` is empty or the user is starting a new direction, ask the user to define/confirm the Vision before going further. The Vision is written once and rarely overwritten.
-3. **Visual Companion offer** — if the topic involves layouts, mockups, designs, style choices, flow diagrams, or any visual comparison, offer to launch the Visual Companion before brainstorming begins.
+## Required reading on session start
 
-### RUN — superpowers pipeline
+If the user's first message in this repo is *anything other than a trivial question*, read these in order before responding substantively:
 
-1. **Brainstorm** — invoke `superpowers:brainstorming`. Produces a spec in `docs/superpowers/specs/`.
-2. **Plan** — `superpowers:writing-plans` is auto-invoked at the end of brainstorm. Produces a plan in `docs/superpowers/plans/`.
-3. **Execute** — `superpowers:subagent-driven-development` runs the plan task-by-task with spec + quality review after each task.
-4. **Finish** — `superpowers:finishing-a-development-branch` is auto-invoked at the end of execution.
+1. [`INIT.md`](INIT.md) — fresh-session entry point, current state
+2. [`HANDOVER.md`](HANDOVER.md) — what is set up, what is pending
+3. [`PROCESS.md`](PROCESS.md) — the 6-step workflow the skill enforces
+4. [`ANTI-SLOP.md`](ANTI-SLOP.md) — durable rules
+5. [`STACK-DECISIONS.md`](STACK-DECISIONS.md) — when to use which stack
 
-### POST — after the brainstorm spec is approved (BEFORE entering plan phase)
+If the user is starting a client project (not maintaining the system), invoke the `design-website` skill directly instead.
 
-Update `OTLC-Brainstorm.MD`:
+## Behavior rules in this repo
 
-- **Decisions Made** — append a new dated entry summarizing the choices and trade-offs. Check for conflicts with prior entries before adding.
-- **Open Questions** — append any new ones. Mark resolved questions with `[x]` rather than deleting them.
-- **Architecture** — update only if structural decisions changed.
+### Maintenance work
 
-### END — after the session ends
+When the user adds or refines content in this repo (new reference, new pattern, new anti-slop rule):
 
-- **Session Log** — append a brief dated entry: participants, what happened, what was built, next steps.
+- **References** — write a new file in `references/[slug].md` with the analysis structure documented in [`analyzer/README.md`](analyzer/README.md). Add a one-line entry to [`references/INDEX.md`](references/INDEX.md) under the right aesthetic category.
+- **Patterns** — write to `patterns/[pattern-name].md`. Include intent, structural sketch (ASCII or SVG), code reference, and when to use it.
+- **Anti-slop rules** — append to `ANTI-SLOP.md` under the right category. Include `**Why:**` and `**How to apply:**`.
+- **Process changes** — edit `PROCESS.md` directly. Bump the version line at the top.
+- **Skill changes** — edit `C:\Users\michael\.claude\skills\design-website\SKILL.md`.
 
-### OTLC maintenance rules
+### Anti-slop applies even here
 
-- **Vision** — written once. Never overwrite unless explicitly asked.
-- **Architecture** — update when structural decisions change.
-- **Decisions Made** — append-only. Check for conflicts before adding.
-- **Open Questions** — append new ones. Mark resolved with `[x]` — never delete.
-- **Session Log** — append at the end of every session.
+When generating examples or sample code in this repo (in patterns, tokens, project-template), follow `ANTI-SLOP.md`. Do not seed slop into the system that exists to prevent it.
 
-The goal: a fresh Claude reading `OTLC-Brainstorm.MD` plus the project files should understand the true original intent — the why, not just the what.
+### Git hygiene
+
+This repo is a tool used across years and projects. Commits should be small and topical:
+
+- One reference added → one commit, message: `references: add [domain]`
+- One pattern added → one commit, message: `patterns: add [pattern-name]`
+- Rule added → one commit, message: `anti-slop: [short rule summary]`
+- Skill change → one commit, message: `skill: [what changed]`
+
+Never amend. Never force-push.
+
+## Brainstorm workflow (inherited from template)
+
+If the user wants to brainstorm a *change to the system itself* (e.g., reworking the process, adding a major new subsystem), follow the OTLC + superpowers workflow inherited from the dev-template:
+
+1. Read `OTLC-Brainstorm.MD` (Vision, Architecture, prior Decisions, Open Questions)
+2. Run `superpowers:brainstorming`
+3. Auto-flow into `superpowers:writing-plans` then `superpowers:subagent-driven-development`
+4. Update `OTLC-Brainstorm.MD` Decisions Made and Session Log
+
+For everyday content additions (new reference, new pattern, new rule), the brainstorm pipeline is overkill. Just do the work.
 
 ## devneural.jsonc
 
-- `devneural.jsonc` is the source of truth for project stage and metadata.
-- When stage changes, update the file AND call the monday.com MCP `move_project` tool in the same step.
-- Never change `localPath` or `githubUrl` manually — managed by the SessionStart hook.
+`devneural.jsonc` registers this repo in the DevNeural graph. It is metadata only and does not affect the skill workflow.
 
-## monday.com Sync Rules
+## What this repo does NOT do
 
-When stage changes in devneural.jsonc:
-1. Call `move_project` MCP tool with the new stage.
-2. If this is a new project with no .Dev card yet, call `register_project` first.
+- Build any client website (those live in `C:\dev\Projects\[client]\`)
+- Run any web server or have a deploy target
+- Contain client-specific code, copy, or assets
+- Replace the user's judgment as the designer of record
 
-Stage → .Dev board column:
-- `alpha` → Alpha
-- `beta` → Beta
-- `deployed` → Released
-- `archived` → Archived
+## Global instructions still apply
 
-Pre-Release is a manual promotion only — never move there automatically.
-
-## Adding Tasks
-
-When a bug, task, or idea is identified during a session, call `add_task` MCP tool:
-- Default column: Backlog
-- Use "To Do" for confirmed next actions
-- Use "In Progress" only if actively being worked on this session
-
-## Force Sync
-
-If asked to "sync devneural" or "sync monday", call the DevNeural API:
-`POST http://localhost:3747/sync`
-
-This reconciles all devneural.jsonc files against the current monday.com board state.
-
+The user's global `CLAUDE.md` (no em dashes ever, blunt feedback, PowerShell syntax on Windows, no co-author tags in commits, etc.) takes precedence over anything written here.

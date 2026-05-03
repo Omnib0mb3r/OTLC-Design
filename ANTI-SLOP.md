@@ -1,0 +1,193 @@
+# ANTI-SLOP.md — Durable Rules
+
+> The 20 starting rules. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
+
+These rules apply to every client project automatically. The `design-website` skill reads them at the start of work and enforces them throughout. They override defaults from any framework (Tailwind, shadcn, Next.js templates, etc.).
+
+A rule that says "never X" can be broken if the user **explicitly** opts in for a specific project, with a logged reason. Default behavior is the rule.
+
+---
+
+## Type
+
+### 1. Never use a default modular type scale.
+
+Pick a specific ratio (1.2, 1.25, 1.333, 1.414, 1.5, 1.618, or 2.0) deliberately based on the project's voice. Tailwind's default `text-xs / text-sm / text-base / text-lg / text-xl` is an inconsistent scale that produces flat hierarchy.
+
+**Why:** Modular scales are a 100-year-old typographic principle. Skipping them is the loudest signal of "AI default."
+**How to apply:** Synthesize the scale in Step 3 from references. Author tokens. Reference tokens, not arbitrary sizes.
+
+### 2. Never use a single font across the entire site.
+
+Minimum: one display + one body. Optionally add mono for code or numbers. The display can be the same family at a different weight if budget is tight, but variation must be visible.
+
+**Why:** Single-typeface sites read as undesigned unless they're done by a typographer who knows what they're doing. AI defaults are single-Inter.
+**How to apply:** Pick pairings from the references. If references use one font, find the *expressive variation* (weight, italic, optical size) that gives texture.
+
+### 3. Never use Inter as the only typeface unless the references demand it.
+
+Inter is the default of defaults. It signals "I used the first option." Plenty of beautiful sites use Inter, but they pair it with something or treat it expressively.
+
+**Why:** Visual sameness across the modern web. Same energy as "I used Bootstrap defaults."
+**How to apply:** Look at references. If they use a serif, use a serif. If they use a weirder grotesk (Söhne, Neue Haas, GT America, ABC Diatype), pull a similar one.
+
+---
+
+## Color
+
+### 4. Never use the default Tailwind palette.
+
+`bg-blue-500`, `bg-gray-100`, `text-slate-700` are slop signals. Any designer audits the palette before approving.
+
+**Why:** Tailwind defaults appear in every AI-built site. Instant recognition.
+**How to apply:** Author colors in OKLCH. Build a custom 9-step neutral ramp + 1-2 accents per project.
+
+### 5. Never use generic gradients.
+
+Purple-to-pink, blue-to-cyan, the "sunset" gradient. These are 2020 SaaS defaults that aged into slop.
+
+**Why:** A gradient is a strong design statement. Generic gradients are "I want a strong statement but did not pick one."
+**How to apply:** If a gradient is right, build a specific one with intent (single hue with lightness shift, complementary, conic, mesh). Or skip gradients.
+
+### 6. Never use pure white (#FFF) and pure black (#000) by default.
+
+Cream, off-white, near-black, dark navy, near-charcoal — choose a specific neutral story. Pure white and pure black are harsh defaults.
+
+**Why:** Real designers tune their neutrals. Pure values look unconsidered.
+**How to apply:** Pull background and foreground from references. Convert to OKLCH. Use ~98% L for "white" backgrounds and ~12-18% L for "black" foregrounds unless deliberately contrasty.
+
+---
+
+## Layout
+
+### 7. Never default to centered hero + headline + subhead + two pill buttons.
+
+The single most overused layout in AI-built sites. Looks like a Vercel template every time.
+
+**Why:** Maximum recognizability as slop.
+**How to apply:** Look at references. Hero structures vary wildly: left-aligned, asymmetric, image-first, type-only, marquee, full-bleed video, no hero at all. Pick from references.
+
+### 8. Never default to symmetric three-up feature card grids.
+
+"Feature 1 / Feature 2 / Feature 3" cards with a Lucide icon, an h3, and a paragraph. Slop ground zero.
+
+**Why:** Same recognizability problem as #7.
+**How to apply:** What is the actual structure of "what we do" in the references? Often it's a list, a table, a numbered set of paragraphs, an interactive showcase, or a dense type-only block.
+
+### 9. Never default to perfect symmetry.
+
+Asymmetric layouts read as designed. Centered-everything reads as templated.
+
+**Why:** Asymmetry signals deliberate composition.
+**How to apply:** Use a real grid (12-col or fewer). Break out of it intentionally. Mix wide and narrow content blocks.
+
+### 10. Never use the same border-radius value everywhere.
+
+If everything is `rounded-xl`, the design has no rhythm. Either commit to a specific radius value used surgically, mix sharp and rounded with intent, or use no radius at all.
+
+**Why:** Indiscriminate radius is a default. Considered radius is a choice.
+**How to apply:** Audit references. Most professional sites use 0-2 radius values applied to specific element types, not all elements.
+
+---
+
+## Components
+
+### 11. Never use Lucide / Heroicons / FontAwesome icons next to feature bullets.
+
+Generic icon-next-to-text bullets are the most-recognized slop component on the modern web.
+
+**Why:** Same problem as feature cards: every AI site has them.
+**How to apply:** Either no icons (type-only feature lists), custom illustrative marks, or numbers/letters used typographically. If an icon set is required, use one with character (Phosphor "Duotone" weight, custom SVGs, or sourced glyphs).
+
+### 12. Never use shadcn/ui or other off-the-shelf component kits for marketing/showcase sites.
+
+Component kits are right for *applications*, where consistency is the goal. They are wrong for *marketing sites*, where distinctiveness is the goal.
+
+**Why:** Every shadcn marketing site looks the same.
+**How to apply:** Hand-build components for the project. They are usually 5-10 components, not a library.
+
+### 13. Never use generic FAQ accordion / pricing tier cards / testimonial slider templates without earning them.
+
+These exist in every template. They get reached for as filler. If a section is added because "every site has one," it is slop.
+
+**Why:** Section presence should be driven by the brief, not the template.
+**How to apply:** Each section must answer: does the audience need this? Is it the strongest way to answer? If no, cut.
+
+### 14. Never use mystery-meat icon-only navigation on marketing sites.
+
+Hamburger-only on desktop, icon-only nav without labels — these are app patterns, not marketing patterns.
+
+**Why:** Marketing sites need labels for SEO and clarity.
+**How to apply:** Text labels for primary nav. Icons can supplement, never replace.
+
+---
+
+## Motion
+
+### 15. Never ship a marketing site with zero motion.
+
+Even subtle motion (hover, focus, scroll-into-view fades, button press feedback) signals craft. Motion-less sites read as static templates.
+
+**Why:** Motion is humanity. Its absence is uncanny.
+**How to apply:** Minimum: hover transitions on interactive elements, scroll-reveal on hero/sections, focus rings that animate. Better: scroll-driven parallax, custom cursor, page transitions.
+
+### 16. Never use easing curves that are not custom.
+
+`ease-in-out` and Tailwind's transition defaults feel generic. Use cubic-bezier curves that match the brand voice (sharp/snappy vs. soft/heavy).
+
+**Why:** Easing is the personality of motion.
+**How to apply:** Pick 2-3 cubic-beziers in the tokens. Use them everywhere. Never `transition: all 200ms`.
+
+---
+
+## Glass / Effects
+
+### 17. Never use glassmorphism by default.
+
+`backdrop-filter: blur(...)` on every card was a 2021 trend. It now signals "AI built this in 2024." Use only if a reference deliberately calls for it and you can execute it well.
+
+**Why:** Aesthetic peaked and declined. Now reads as cliché.
+**How to apply:** Glass effects belong in deliberate moments (a hero overlay, a modal). Never as the base aesthetic.
+
+---
+
+## Copy
+
+### 18. Never use generic AI-flavored copy.
+
+Banned phrases: "Elevate your X", "Built for modern teams", "The future of Y", "Streamline your workflow", "Powered by intelligence", "Unlock the power of", "Take your X to the next level", "Reimagine your Z", anything with "seamlessly".
+
+**Why:** These phrases are ChatGPT defaults. They mark a site as auto-generated immediately.
+**How to apply:** Write specific copy. Use the client's actual offering, named features, real numbers, real names, specific benefits. If you don't know the specifics, ask.
+
+### 19. Never ship lorem ipsum, placeholder copy, or filler in delivered work.
+
+Real copy with names, dates, prices, jokes, locations. Placeholder text is for the build phase only.
+
+**Why:** Placeholder copy is a "looks like a template" signal even if visuals are good.
+**How to apply:** If the client has not provided copy, draft it from the brief. Mark drafts clearly. Never deliver with filler still in.
+
+---
+
+## Verification
+
+### 20. Never deliver without verification gates passing.
+
+Lighthouse Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90. Zero critical/serious axe violations. WCAG AA contrast minimum on body text (AAA preferred).
+
+**Why:** Bad performance and a11y *feel* worse than they audit. Slow sites read as cheap. Inaccessible sites are unprofessional and legally risky.
+**How to apply:** Step 5 of `PROCESS.md` is non-optional. Run the audits. Fix the failures. Then deliver.
+
+---
+
+## How to add to this file
+
+When a slop pattern slips through (you noticed it in delivered work, or the user flagged it):
+
+1. Find the right category above.
+2. Append a new numbered rule. Title it as "Never X" or "Always Y".
+3. Include `**Why:**` (the reason — typically a specific incident or aesthetic principle).
+4. Include `**How to apply:**` (the tactical implementation).
+5. Commit with message `anti-slop: <short rule summary>`.
+
+The list will outgrow 20 over time. That's the point.
