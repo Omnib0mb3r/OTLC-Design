@@ -24,7 +24,7 @@ What success looks like:
 ## Architecture
 
 ```
-C:\dev\design-system\               ← this repo (system + knowledge base)
+C:\dev\Projects\design-system\       ← this repo (system + knowledge base)
 ├── PROCESS.md                       6-step workflow
 ├── ANTI-SLOP.md                     Durable rules
 ├── STACK-DECISIONS.md               Plain HTML / Astro / Next decision tree
@@ -97,7 +97,7 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 
 ### 2026-05-02 — Initial setup
 
-- **Repo location**: `C:\dev\design-system\` (sibling to client projects in `C:\dev\Projects\`).
+- **Repo location**: `C:\dev\Projects\design-system\` (sibling to other client projects in `C:\dev\Projects\`).
 - **Skill location**: `C:\Users\michael\.claude\skills\design-website\SKILL.md`. Skill is the entry point; repo is the substrate.
 - **Stack policy**: Multi-stack per project (plain HTML/CSS/JS for one-pagers, Astro for content sites, React/Next.js only for genuine apps). Documented in [`STACK-DECISIONS.md`](STACK-DECISIONS.md).
 - **MCPs**: chrome-devtools, playwright, context7. User scope. Documented in [`HANDOVER.md`](HANDOVER.md).
@@ -129,7 +129,7 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 Discussed the slop problem (AI-generated websites all look the same), worked through MCP options (Magic vs Figma vs Playwright vs Chrome DevTools), arrived at: tool stack matters less than process + references + durable rules. Reframed the goal from "personal design system" to "process system that takes per-project references and produces non-slop output." Cloned `dev-template` as starting point, detached origin, built out the design-system structure.
 
 **What was built:**
-- Repo structure at `C:\dev\design-system\` initialized from `dev-template`
+- Repo structure at `C:\dev\Projects\design-system\` initialized from `dev-template`
 - Foundational docs: README, CLAUDE.md (rewritten for this repo's purpose), OTLC-Brainstorm.MD (this file), PROCESS.md, ANTI-SLOP.md, STACK-DECISIONS.md, INIT.md, HANDOVER.md
 - Subdirectories with content: references/INDEX.md (pre-seeded with ~25 studio/product sites), patterns/README.md, tokens/ (type-scales, color-systems, spacing, motion), analyzer/ (extract-prompt + README), project-template/ (vanilla-vite + astro placeholders)
 - Skill at `C:\Users\michael\.claude\skills\design-website\SKILL.md`
@@ -138,7 +138,7 @@ Discussed the slop problem (AI-generated websites all look the same), worked thr
 - Initial git commit
 
 **Next:**
-- User opens `C:\dev\design-system\` in a fresh Claude session
+- User opens `C:\dev\Projects\design-system\` in a fresh Claude session
 - Fresh Claude reads INIT.md and HANDOVER.md
 - Smoke test: user provides 1-3 reference URLs, Claude runs the analyzer, prove the workflow works
 - First real client project test
