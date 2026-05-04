@@ -240,6 +240,26 @@ A marketing site's muted body color (Linear's `oklch(62%)` on near-black, for ex
 
 ---
 
+## Runtime hygiene
+
+Rules about how the running app behaves on the user's machine, not how it looks. Slop here is invisible during demos and very visible during actual use.
+
+### 26. Never spawn a child process on Windows without `windowsHide: true`.
+
+Every Node `child_process.spawn` / `spawnSync` / `execSync` / `exec` call on Windows MUST pass `windowsHide: true`. Without it, CreateProcess allocates a visible console window for each subprocess, which flashes onto the user's desktop.
+
+**Why:** DevNeural dashboard polling spawned `powershell -NoProfile ...` every 4 seconds (drive enumeration in `system-metrics.ts`) and `execSync` per monitored service every 8 seconds (`services.ts`), both without `windowsHide`. With the dashboard tab open, the user saw roughly **15 powershell window flashes per minute** while sitting idle. Took multiple wrong diagnoses (blamed unrelated plugins) before the user pushed back hard enough to find the actual cause. The symptom was subtle (windows opened and closed faster than the user could see what they were) and dismissed as someone else's problem.
+
+**How to apply:**
+- Every `child_process.spawn(...)`, `spawnSync(...)`, `execSync(...)`, `exec(...)` call site: include `windowsHide: true` in the options object. There are no exceptions for "but it's just one call" — call counts compound (4s polling × 15min/dashboard-session × 5 sessions/day = thousands).
+- Long-running detached processes: combine `windowsHide: true` + `detached: true` + redirected `stdio`. `detached: true` alone allocates a fresh console; `windowsHide` is what hides it.
+- Scheduled tasks (Windows Task Scheduler): action args must include `-WindowStyle Hidden` AND `-NonInteractive` for PowerShell scripts. Without `-WindowStyle Hidden`, the task host briefly shows the console.
+- Hooks where a parent harness controls spawn (e.g., Claude Code hooks): wrap the command in a `wscript.exe` + VBS shim. `WshShell.Run cmd, 0, False` reliably hides whatever the parent passes through. Defense in depth is appropriate here because the parent's spawn behavior is not under your control.
+- Audit-before-merge: `grep -rn 'spawn\|execSync\|spawnSync' src/` and verify every result has the flag. Add a lint rule if the project has eslint.
+- Cross-platform code: the option is ignored on POSIX, so always include it; never gate behind `if (process.platform === 'win32')`.
+
+---
+
 ## How to add to this file
 
 When a slop pattern slips through (you noticed it in delivered work, or the user flagged it):
