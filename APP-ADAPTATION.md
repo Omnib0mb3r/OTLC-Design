@@ -90,6 +90,18 @@ Apply only in app mode:
 - **Never use `alert()` or browser-native confirm dialogs.** Build inline confirmations or modal patterns. Native dialogs feel cheap.
 - **Never expose technical errors to end users.** "500 Internal Server Error" → "Something went wrong on our end. Try again or contact support."
 
+## Operational readiness (added — app mode)
+
+> From the "DevOps for vibe coders" lesson: building software fast is half the job; operating it reliably is the other half. AI-assisted apps grow operational complexity faster than the builder's understanding of it. These rules force the operational decisions to happen at design time, not at 2am during an incident. Siblings to ANTI-SLOP rule 26 (runtime hygiene): invisible in a demo, very visible in real use. "Reliability is a feature" — downtime, failed requests, and slow responses are bugs from the user's point of view.
+
+Apply only in app mode (customer or internal app):
+
+- **Never ship an app with undocumented runtime config.** Every env var, secret name, and external dependency required to boot must be listed in a committed `.env.example` and a "Runtime" section in the README. No hidden infrastructure assumptions, no "it only works because my machine already has X." Document dependencies as you build, not by reconstructing them later.
+- **Never store secrets in the repo or ship them to the browser.** Secrets live in a gitignored env file or a secret store. No API keys in source, no server-only keys bundled into client code. Verify with a grep before delivery.
+- **Never treat deploy as a post-build afterthought.** Where the app runs, how config and secrets are provided, how it updates, and how it rolls back are decided in Step 3 synthesis, not discovered after build. The intake deploy-preference answer feeds this. Define the simplest reliable deploy path before building major features.
+- **Never ship a deploy with no rollback path.** Must be revertible to the last known-good state (immutable/versioned deploys, or a documented manual rollback). "Redeploy from git and hope" is not a rollback plan. Failures are inevitable; recovery is designed, not improvised.
+- **Never ship an async operation whose failure is invisible in production.** Decide at synthesis which failures must be detectable (unhandled errors, failed requests, external/AI provider outages, retry exhaustion) and wire at minimum server-side error logging or an error-reporting hook. Observability is a design decision, not a later add-on. This matters most in AI-assisted apps where failures span multiple services interacting asynchronously.
+
 ## Stack defaults (app)
 
 Stack defaults flip vs marketing:
@@ -122,6 +134,18 @@ For **internal apps**, the stack is more permissive — desktop-native (.NET WPF
 | Real data fixtures | realistic copy | **realistic data volume** (1, 10, 1000 records) | realistic data volume |
 | Mobile responsive | required | optional | **required** |
 | Cross-browser | Chrome enough | Chrome enough | **Chrome + Safari iOS + Firefox** |
+
+### Operational readiness gates (app)
+
+From the operational-readiness rules above. These gate at delivery alongside the Lighthouse/axe gates.
+
+| Gate | Internal app | Customer app |
+|------|--------------|--------------|
+| `.env.example` + README runtime section present | required | required |
+| No secrets in repo or client bundle (grep verified) | required | required |
+| Deploy + rollback path documented (`OPERATIONS.md`) | required | required |
+| Error observability wired (logging or reporting hook) | required | required |
+| Async failure-visibility decisions recorded | documented | **documented + tested** |
 
 ## Patterns folder
 

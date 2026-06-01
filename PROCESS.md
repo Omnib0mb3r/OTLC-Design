@@ -1,6 +1,6 @@
 # PROCESS.md — The 6-Step Workflow
 
-> Version 1.1 (2026-05-03)
+> Version 1.2 (2026-05-31)
 
 The methodology the `OTLC-Design` skill enforces on every client project. Each step has explicit inputs, outputs, and a tool dependency. Skipping steps produces slop.
 
@@ -130,14 +130,16 @@ Project folder location:
 5. **Stack pick** — consult [`STACK-DECISIONS.md`](STACK-DECISIONS.md). Default to plain HTML/CSS/JS + Vite for one-pagers, Astro for content sites, Next.js only for genuine apps.
 6. **Sitemap** — list the pages (often just one).
 7. **Section structure** — for each page, list the sections in order (e.g. "Nav, hero, work selector, single project deep-dive, footer"). Use the structural vocabulary from references, not template defaults.
+8. **Operational design** — consume the intake deploy-preference answer (customer Q9 / internal Q5), which is otherwise captured and never used. Decide, before any build, how the thing runs outside the laptop. For **marketing sites** this is a one-line confirmation (static host + any build-time env). For **apps** (customer or internal) this is a real plan per [`APP-ADAPTATION.md`](APP-ADAPTATION.md) §"Operational readiness": where it runs, how config and secrets are provided, how it updates, how it rolls back, and which production failures must be observable. Operational design is part of software design, not an afterthought — deciding it here is the cheapest it will ever be.
 
 **Output:**
 - `[client-project]/tokens.css` — CSS custom properties
 - `[client-project]/SITEMAP.md` — pages + section structure proposal
+- `[client-project]/OPERATIONS.md` (app mode) — deploy target, runtime config + secrets handling, update + rollback path, failure-observability decisions
 
 **Tool:** Context7 MCP for current docs on whatever stack is picked.
 
-**Gate:** **Show this to the user. Do not start building until they confirm.** Synthesis is the cheapest stage to iterate.
+**Gate:** **Show this to the user. Do not start building until they confirm.** Synthesis is the cheapest stage to iterate. For apps, the operational plan (`OPERATIONS.md`) is part of what they confirm — a deploy/rollback decision is far cheaper to change now than after the system is built around it.
 
 **Anti-pattern:** Skipping synthesis and going straight from references to coding. Tokens enforce consistency. Without them, the build drifts toward defaults.
 
