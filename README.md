@@ -125,7 +125,7 @@ The repo is a flywheel. Each project makes the next one start higher.
 | [`ANTI-SLOP.md`](ANTI-SLOP.md) | 24 universal durable rules Claude follows on every project. |
 | [`STACK-DECISIONS.md`](STACK-DECISIONS.md) | When to use plain HTML / Astro / Next.js / native. |
 | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Adaptation for internal/owned work. Skips brand discovery, pulls owner-brand profile. |
-| [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Adaptation for app/product UI. Anti-slop inversion, app stack defaults, app verification gates. Includes customer-app tightening subsection. |
+| [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Adaptation for app/product UI. Anti-slop inversion, app stack defaults, app verification gates, operational-readiness rules + gates (config/secrets/deploy/rollback/observability). Includes customer-app tightening subsection. |
 | [`owner-brand/`](owner-brand/) | Standing brand profile (personal-site, MHW), voice rules, drop-in tokens, source `.docx`. |
 | [`references/`](references/) | Curated vault of sites worth studying. Catalog in [`references/INDEX.md`](references/INDEX.md). |
 | [`patterns/`](patterns/) | Hand-built layout primitives. Subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/). Empty by design; grow from real work. |
