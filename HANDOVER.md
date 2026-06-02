@@ -43,9 +43,10 @@
 - [x] [`owner-brand/tokens/personal-site.css`](owner-brand/tokens/personal-site.css) — drop-in CSS tokens
 - [x] [`owner-brand/tokens/mhw.css`](owner-brand/tokens/mhw.css) — drop-in CSS tokens
 
-### Skill (`C:\Users\michael\.claude\skills\OTLC-Design\`)
+### Skill (canonical source: [`skill/SKILL.md`](skill/SKILL.md) in this repo)
 
-- [x] [`SKILL.md`](file:///C:/Users/michael/.claude/skills/OTLC-Design/SKILL.md) — entry point. Asks the 4-way branch question. Reads from this repo as substrate. Hard-enforces post-mortem.
+- [x] [`skill/SKILL.md`](skill/SKILL.md) — entry point. Asks the 4-way branch question. Reads from this repo as substrate. Hard-enforces post-mortem.
+- [x] **Now git-tracked in-repo.** `C:\Users\michael\.claude\skills\OTLC-Design` is a **directory junction** to `skill/` so Claude Code loads it while git versions it. No vendored copy, no drift. Recreate the junction per [`skill/README.md`](skill/README.md).
 - [x] Registered as `OTLC-Design` (visible in available-skills list)
 - [x] Invoked by `/OTLC-Design`, `/design`, or natural language ("let's build a site for X", "build an app for Y", "internal tool", etc.)
 
