@@ -120,6 +120,13 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 - **Brand-rule softenings**: User flagged his own guide as too rigid in places. Softened: dark backgrounds default-not-required, motion ambient default-not-required, eyebrows available-not-required, blue beta-only scoped to personal-site brand only.
 - **Reasoning**: System must serve all the owner's design work, not just websites. Internal work was being underserved by a client-only model that asked brand-discovery questions every time. App work was being malformed by marketing anti-slop rules that don't apply.
 
+### 2026-06-02 — Operational-readiness + skill versioning
+
+- **Operational-readiness pass (app mode)**: Added 5 rules + a gates table to [`APP-ADAPTATION.md`](APP-ADAPTATION.md) (documented runtime config, no secrets in repo/client bundle, deploy decided at synthesis, no deploy without rollback, no invisible async failures). Sourced from the "DevOps for vibe coders" article; scoped to apps because the marketing default branch (static sites) does not deploy infra. `PROCESS.md` bumped to v1.2: Step 3 synthesis gains an Operational-design item that consumes the previously dead-end intake deploy-preference answer and writes `OPERATIONS.md`.
+- **Deliberately NOT added**: CI/CD, IaC, monitoring stacks, backup automation. Those are client-project concerns; this repo is substrate and explicitly has no deploy target (per `CLAUDE.md` "What this repo does NOT do").
+- **Skill now versioned in-repo**: Canonical `SKILL.md` moved from the unversioned `~/.claude/skills/OTLC-Design/` into the repo at `skill/SKILL.md`. `~/.claude/skills/OTLC-Design` is now a **directory junction** to `skill/`, so Claude Code loads the same physical file git tracks. Chosen over a vendored copy (drift-prone) and a separate git init (fragments history). The skill already hardcodes this repo's path at runtime, so the junction adds no new coupling. Recreation documented in [`skill/README.md`](skill/README.md).
+- **Reasoning**: The repo's own `CLAUDE.md` promises "skill changes get committed", but the skill lived outside any repo, so the convention could not hold and edits drifted. Versioning it in-repo closes that gap.
+
 ---
 
 ## Open Questions

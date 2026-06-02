@@ -226,7 +226,7 @@ These apply on every project regardless of branch. Inherited from `ANTI-SLOP.md`
 - Never use AI buzzwords (see owner-brand/voice.md banned list)
 - Never use em dashes in any artifact (global owner rule)
 
-The full list (currently 24 rules, growing) is in `ANTI-SLOP.md`. Read it at start.
+The full list (currently 26 rules, growing) is in `ANTI-SLOP.md`. Read it at start.
 
 ## What this skill does NOT do
 

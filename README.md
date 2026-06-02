@@ -122,7 +122,7 @@ The repo is a flywheel. Each project makes the next one start higher.
 | Path | Purpose |
 |------|---------|
 | [`PROCESS.md`](PROCESS.md) | The 6-step workflow. Intake (with branch question), Reference Analysis, Synthesis, Build, Verify, Iterate + hard-enforced post-mortem. |
-| [`ANTI-SLOP.md`](ANTI-SLOP.md) | 24 universal durable rules Claude follows on every project. |
+| [`ANTI-SLOP.md`](ANTI-SLOP.md) | 26 universal durable rules Claude follows on every project. |
 | [`STACK-DECISIONS.md`](STACK-DECISIONS.md) | When to use plain HTML / Astro / Next.js / native. |
 | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Adaptation for internal/owned work. Skips brand discovery, pulls owner-brand profile. |
 | [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Adaptation for app/product UI. Anti-slop inversion, app stack defaults, app verification gates, operational-readiness rules + gates (config/secrets/deploy/rollback/observability). Includes customer-app tightening subsection. |
@@ -131,6 +131,7 @@ The repo is a flywheel. Each project makes the next one start higher.
 | [`patterns/`](patterns/) | Hand-built layout primitives. Subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/). Empty by design; grow from real work. |
 | [`tokens/`](tokens/) | Type scale, color, spacing, motion *templates*. Synthesized per project, not copied from here. |
 | [`analyzer/`](analyzer/) | Prompts and procedures Claude uses to extract design data from references via Chrome DevTools MCP. |
+| [`skill/`](skill/) | Canonical source of the `OTLC-Design` skill (`SKILL.md`). `~/.claude/skills/OTLC-Design` is a directory junction to here, so Claude Code loads the git-tracked file. See [`skill/README.md`](skill/README.md). |
 | [`project-template/`](project-template/) | Starter scaffolds copied out when a new project begins. |
 | [`INIT.md`](INIT.md) | What a fresh Claude session reads first when this repo is opened. |
 | [`HANDOVER.md`](HANDOVER.md) | Live status: what is set up, what is pending, the closing loop conventions. |

@@ -32,7 +32,7 @@ When the user adds or refines content in this repo (new reference, new pattern, 
 - **Patterns** — write to `patterns/[pattern-name].md`. Include intent, structural sketch (ASCII or SVG), code reference, and when to use it.
 - **Anti-slop rules** — append to `ANTI-SLOP.md` under the right category. Include `**Why:**` and `**How to apply:**`.
 - **Process changes** — edit `PROCESS.md` directly. Bump the version line at the top.
-- **Skill changes** — edit `C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md`.
+- **Skill changes** — edit the in-repo canonical `C:\dev\Projects\design-system\skill\SKILL.md`. The `~/.claude/skills/OTLC-Design` junction loads it live; commit per git hygiene below.
 
 ### Anti-slop applies even here
 

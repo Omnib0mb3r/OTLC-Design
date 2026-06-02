@@ -15,3 +15,6 @@ project-template/*/node_modules/
 project-template/*/dist/
 project-template/*/.astro/
 project-template/*/.next/
+
+# Local cleanup archives (not substrate)
+*-cleanup.zip

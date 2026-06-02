@@ -2,7 +2,7 @@
 
 > Snapshot of what is set up, what is verified, what is pending. Update this whenever the system state changes meaningfully.
 
-**Last updated:** 2026-05-03
+**Last updated:** 2026-06-02
 **Set up by:** Initial bootstrap session
 **Smoke tested:** 2026-05-03 against rcarecords.com, curious.co/about, flyhyer.com — **PASS**, with five substrate fixes applied to [`analyzer/extract-prompt.md`](analyzer/extract-prompt.md). Outputs at `C:\tmp\design-system-smoke\` (kept ~1 week as regression baseline; see `SMOKE-TEST-RESULTS.md` there).
 
@@ -20,7 +20,7 @@
 - [x] [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD) — vision, architecture, decisions, open questions, session log
 - [x] [`WORKFLOW.md`](WORKFLOW.md) — inherited from dev-template, kept as-is
 - [x] [`PROCESS.md`](PROCESS.md) v1.2 — the 6-step workflow with branch question, hard-enforced post-mortem
-- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md) — 24 universal rules (growable)
+- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md) — 26 universal rules (growable)
 - [x] [`STACK-DECISIONS.md`](STACK-DECISIONS.md) — plain HTML / Astro / Next / native decision tree
 - [x] [`MODE-INTERNAL.md`](MODE-INTERNAL.md) — adaptation for owned/internal work
 - [x] [`APP-ADAPTATION.md`](APP-ADAPTATION.md) — adaptation for app/product UI (with customer-app tightening subsection)
@@ -102,7 +102,7 @@
 | Pattern (app) | `patterns/app/[name].md` | `patterns: add app/<name>` |
 | Reference | `references/INDEX.md` (+ optional deep analysis at `references/[slug].md`) | `references: add <domain>` |
 | Process change | `PROCESS.md` (bump version) | `process: <what changed>` |
-| Skill change | `~/.claude/skills/OTLC-Design/SKILL.md` | `skill: <what changed>` |
+| Skill change | `skill/SKILL.md` (in-repo canonical; `~/.claude/skills/OTLC-Design` junction loads it live) | `skill: <what changed>` |
 | Owner-brand change | `owner-brand/source/<BrandGuide>.docx` + derived markdown | `owner-brand: <what changed>` |
 
 ### Why hard enforcement matters
@@ -172,10 +172,12 @@ Expected: `chrome-devtools`, `playwright`, `context7` all show ✓ Connected.
 ### Skill registration
 
 ```powershell
+# Confirm the junction resolves to the in-repo canonical source
+Get-Item C:\Users\michael\.claude\skills\OTLC-Design | Select-Object LinkType,Target
 ls C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md
 ```
 
-Expected: file exists.
+Expected: `LinkType` = `Junction`, `Target` = `C:\dev\Projects\design-system\skill`, and `SKILL.md` resolves through it. If the junction is missing, recreate it per [`skill/README.md`](skill/README.md).
 
 ### Repo state
 
@@ -196,7 +198,7 @@ Expected: clean working tree, multiple bootstrap commits.
 | MCP `chrome-devtools` missing | `claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp@latest` |
 | MCP `playwright` missing | `claude mcp add --scope user playwright -- npx -y @playwright/mcp@latest` |
 | MCP `context7` missing | `claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp` |
-| Skill not triggering | Check `C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md` exists; restart Claude session |
+| Skill not triggering | Check the `~/.claude/skills/OTLC-Design` junction resolves to `skill/` (`Get-Item ... \| Select LinkType,Target`); recreate per [`skill/README.md`](skill/README.md) if missing; restart Claude session |
 | Repo missing files | This file lists everything that should exist; restore from git history if needed |
 | Brand-guide markdown out of sync with .docx | Re-extract from `owner-brand/source/<BrandGuide>.docx` and update derived markdown files |
 
