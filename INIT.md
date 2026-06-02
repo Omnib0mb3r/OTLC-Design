@@ -19,7 +19,7 @@ The OTLC-Design skill takes any of these from "let's build X" through to a non-s
 1. [`HANDOVER.md`](HANDOVER.md) — current state of setup, smoke test status, **the closing loop** (how projects close to keep improving the system)
 2. [`README.md`](README.md) — what the system does and how it is used
 3. [`PROCESS.md`](PROCESS.md) — the 6-step workflow with branch question and hard-enforced post-mortem
-4. [`ANTI-SLOP.md`](ANTI-SLOP.md) — 24 universal durable rules
+4. [`ANTI-SLOP.md`](ANTI-SLOP.md) — 26 universal durable rules
 5. [`STACK-DECISIONS.md`](STACK-DECISIONS.md) — when to use plain HTML / Astro / Next / native
 6. [`MODE-INTERNAL.md`](MODE-INTERNAL.md) — adaptation for owned/internal work (loaded by skill when intake branch = internal)
 7. [`APP-ADAPTATION.md`](APP-ADAPTATION.md) — adaptation for app UI (loaded by skill when intake branch = app, with customer-app tightening subsection)
@@ -51,7 +51,7 @@ Common first messages and how to respond:
 |-----------|-----------|
 | "smoke test" / "test the system" / "give me an example" | Mode B. Ask for 1-3 reference URLs. Run Chrome DevTools MCP analyzer per `analyzer/extract-prompt.md`. Show output. |
 | "let's add a reference" / "I found a great site" | Mode A. Get URL. Run analyzer. Add full analysis to `references/[slug].md` and one-line entry to `references/INDEX.md`. Commit `references: add [domain]`. |
-| "the skill is doing X wrong" / "let's tune the skill" | Mode A. Open `C:\Users\michael\.claude\skills\OTLC-Design\SKILL.md`. Discuss the change. Edit. Commit `skill: [what changed]`. |
+| "the skill is doing X wrong" / "let's tune the skill" | Mode A. Open the in-repo canonical `skill/SKILL.md` (the `~/.claude/skills/OTLC-Design` junction loads it live). Discuss the change. Edit. Commit `skill: [what changed]`. |
 | "we need a new rule" / "I keep seeing X slop" | Mode A. Add to `ANTI-SLOP.md` per the format in that file. Commit `anti-slop: [short rule summary]`. |
 | "update the brand" / "I changed the guide" | Mode A. Re-extract from `owner-brand/source/MichaelCollins_BrandGuide.docx`. Update derived markdown. Commit `owner-brand: [what changed]`. |
 | "let's build a site/app for [X]" | **Wrong directory.** Tell user to navigate to `C:\dev\Projects\[name]\` and invoke `/OTLC-Design` from there. |

@@ -227,7 +227,7 @@ Walk these 5 questions one at a time. Do not batch them. For each, the user must
 2. **New pattern for [`patterns/`](patterns/)?** Did we build a structural move (hero shape, layout primitive, section structure) you would reach for again on a different project?
 3. **New reference for [`references/INDEX.md`](references/INDEX.md)?** Did we encounter (or did the user bring) a site worth keeping in the curated vault?
 4. **Did `PROCESS.md` drag or lack a step?** Was any step too long, too short, missing, in the wrong order, or asking the wrong questions?
-5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit `~/.claude/skills/OTLC-Design/SKILL.md`.
+5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit the in-repo canonical `skill/SKILL.md` (the `~/.claude/skills/OTLC-Design` junction picks it up live).
 
 ### What counts as a substantive answer
 
