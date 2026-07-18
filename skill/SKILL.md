@@ -198,6 +198,8 @@ Verification gates differ by mode (full table in APP-ADAPTATION.md):
 
 For apps, also gate on operational readiness (full table in APP-ADAPTATION.md §"Operational readiness gates"): `.env.example` + README runtime section present, no secrets in repo or client bundle (grep verified), `OPERATIONS.md` deploy + rollback path documented, error observability wired. These gate at delivery alongside Lighthouse/axe.
 
+**Reputation-safe shipping (every live site or app).** Before delivery, confirm per STACK-DECISIONS.md §"Shipping hygiene": no page ships as a mostly-inline-JS blob (scripts and datasets stay external, content-hash versioned); HTTPS is forced and the security headers are set (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy). A carrier/reputation filter blocking a live domain because of a giant inline-JS page is a real, observed failure mode, not hypothetical, and it takes a re-crawl or a vendor reclassification to undo. Also verify as a *returning* user (primed cache + existing localStorage), not only a fresh profile.
+
 Write `[project]/VERIFICATION.md` with screenshots, scores, results, verdict.
 
 ### Step 6 — ITERATE + POST-MORTEM (hard-enforced)
