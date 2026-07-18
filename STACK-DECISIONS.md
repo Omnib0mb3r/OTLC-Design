@@ -154,3 +154,14 @@ The OTLC-Design process still applies (intake, anti-slop, verification, post-mor
 If a client mandates a stack (corporate WordPress, mandated Webflow, internal React framework), respect the mandate. Document the override in the project's `BRIEF.md`. The anti-slop rules still apply within whatever stack.
 
 If you want to try a new stack experimentally (Solid, Qwik, HTMX), discuss it with the user *before* the project, not during. Stack changes mid-project are expensive.
+
+---
+
+## Shipping hygiene (reputation-safe)
+
+Learned from a live incident (a live customer site, 2026-07): a page shipped as ~73% one inline `<script>` blob (a JS engine plus a large dataset inlined into the HTML) got the whole domain flagged and blocked by a carrier reputation filter (a major mobile carrier). Google Safe Browsing and Norton were clean the entire time, so it was a heuristic/category flag, not malware. A real user was blocked from the live site. Rules for anything that goes live:
+
+- **Keep JS and large data external.** Ship scripts and datasets as separate `.js` files, cache-busted with a content hash (`?v=<hash>`). Never inline a large engine or dataset into the page HTML. A page that is mostly one giant inline script reads like an obfuscated payload to reputation crawlers and is a false-positive magnet. Inlining is acceptable *only* for a deliberately offline, self-contained artifact, never for the hosted site.
+- **Force HTTPS + security headers.** Host config (`.htaccess` on Apache/cPanel): 301 HTTP→HTTPS with a proxy-safe double condition so it cannot loop (`RewriteCond %{HTTPS} off` **and** `RewriteCond %{HTTP:X-Forwarded-Proto} !https`), plus HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. Skip CSP only when the page ships intentional inline script/style (a broken CSP is worse than none).
+- **Cache contract.** If `.js`/data cache long (`max-age`) while HTML is `no-cache`, version the data URLs on any shell/data-contract change, or returning browsers run the new shell against day-old cached data (silent breakage).
+- **Cloudflare-migration gotcha.** Moving a site off Cloudflare leaves `__cf_email__` / `/cdn-cgi/l/email-protection#HEX` obfuscated emails whose decoder script now 404s: the emails render broken *and* the 404 trips security scanners. Decode `data-cfemail` (first hex byte = XOR key, remaining bytes XORed with it) back to real `mailto:` links and delete the dead `cdn-cgi/.../email-decode.min.js` script.
