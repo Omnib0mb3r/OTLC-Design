@@ -250,7 +250,22 @@ Renamed skill from `design-website` to `OTLC-Design` reflecting the broader scop
 
 **Standing lesson:** documentation asserting a state is not the state. Two of the highest-severity findings this session (the MCPs, the post-mortem template) were places where a doc confidently described something that was not true. The audit dimension worth repeating is "verify every claim against reality", not "read for typos".
 
+**Session 4 continued: legal library, full audit, and the public-repo scrub.**
+
+7. **`legal/` built.** 22 law files, each researched against primary sources and then fact-checked by a separate pass that verified every date, threshold, penalty figure, and citation URL. The fact-checkers corrected real defects (a miscited EDPB example, an unsupported claim that a Council file had been adopted, an unconfirmable court stay) and marked what they could not confirm as `UNVERIFIED:` rather than guessing. That convention is now the standard for this directory: an honest gap beats a confident invention, because these files get used to make compliance decisions.
+
+8. **The repo was public, and nobody had noticed.** `gh repo view` reported PUBLIC. It contained the owner's brand guide `.docx`, brand identity files, the operator's name, and a named production incident stating that a specific site's domain had been blocked by a named carrier. No credentials, but plenty that did not belong on the open internet. Decision: stay public, scrub hard.
+   - `owner-brand/` is now gitignored except its README, and was removed from git history entirely along with the source `.docx`.
+   - The carrier-block incident is anonymized in the files, in every historical blob, and in the commit message that named it. The engineering rules it produced are untouched; only the attribution went.
+   - Workflow docs no longer hardcode brand surface names. `MODE-INTERNAL.md` reads them from `owner-brand/profile.md` at runtime, which is better architecture regardless of privacy.
+   - `LICENSE` added (MIT) with explicit carve-outs for the verbatim third-party material in `guides/`, for brand identity, and a not-legal-advice notice for `legal/`.
+   - History was rewritten with `git-filter-repo` and force-pushed. A full backup bundle sits at `C:	mp\design-system-pre-scrub-backup.bundle` and the pre-scrub tip is on the `backup-pre-scrub` branch.
+
+**Standing lesson from the scrub:** check repo visibility before writing anything into a repo, not after. Every incident write-up, client name, and brand asset that went in was written on the assumption of privacy that was never verified. The habit worth keeping is that the *first* question about any repo is who can read it.
+
+**Residual exposure the owner should know about:** the git author email appears in every commit and cannot be removed without rewriting authorship on all 43 commits. It is the same address attached to the public GitHub account, so it is already public. Left alone deliberately. Separately, the brand guide was publicly readable from May to July 2026, so anything already cloned or indexed in that window is outside this repo's control.
+
 **Next:**
-- Repo-wide em dash cleanup (BUG-007, still open)
 - First real project end to end, exercising the legal gate for the first time
 - Six-month review cadence on `legal/laws/`, with `us-state-privacy-laws.md` the fastest to go stale
+- Resolve the `UNVERIFIED:` markers in the legal files as sources become confirmable

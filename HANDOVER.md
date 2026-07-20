@@ -38,7 +38,7 @@
 - [x] [`project-template/`](project-template/): vanilla-vite and astro placeholders
 
 #### Owner-brand
-- [x] [`owner-brand/source/<BrandGuide>.docx`](owner-brand/source/<BrandGuide>.docx): source of truth for owner brand
+- [x] `owner-brand/` **local-only and gitignored** (the repo is public, the brand is not). Only [`owner-brand/README.md`](owner-brand/README.md) is tracked; it documents the expected shape. Not recoverable from git history, so back it up separately.
 - [x] [`owner-brand/profile.md`](owner-brand/profile.md): index of brand surfaces
 - [x] [`owner-brand/voice.md`](owner-brand/voice.md): universal voice DOs/DON'Ts
 - [x] `owner-brand/brands/*.md`: one file per brand surface
