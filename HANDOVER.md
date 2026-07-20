@@ -2,7 +2,7 @@
 
 > Snapshot of what is set up, what is verified, what is pending. Update this whenever the system state changes meaningfully.
 
-**Last updated:** 2026-06-02
+**Last updated:** 2026-07-20
 **Set up by:** Initial bootstrap session
 **Smoke tested:** 2026-05-03 against rcarecords.com, curious.co/about, flyhyer.com — **PASS**, with five substrate fixes applied to [`analyzer/extract-prompt.md`](analyzer/extract-prompt.md). Outputs at `C:\tmp\design-system-smoke\` (kept ~1 week as regression baseline; see `SMOKE-TEST-RESULTS.md` there).
 
@@ -20,7 +20,8 @@
 - [x] [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD) — vision, architecture, decisions, open questions, session log
 - [x] [`WORKFLOW.md`](WORKFLOW.md) — inherited from dev-template, kept as-is
 - [x] [`PROCESS.md`](PROCESS.md) v1.2 — the 6-step workflow with branch question, hard-enforced post-mortem
-- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md) — 26 universal rules (growable)
+- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md) — 26 universal rules (growable), visual slop
+- [x] [`BUGS.md`](BUGS.md) — persistent bug log, created 2026-07-20 with a 7-bug consolidation sweep
 - [x] [`STACK-DECISIONS.md`](STACK-DECISIONS.md) — plain HTML / Astro / Next / native decision tree
 - [x] [`MODE-INTERNAL.md`](MODE-INTERNAL.md) — adaptation for owned/internal work
 - [x] [`APP-ADAPTATION.md`](APP-ADAPTATION.md) — adaptation for app/product UI (with customer-app tightening subsection)
@@ -43,7 +44,28 @@
 - [x] [`owner-brand/tokens/personal-site.css`](owner-brand/tokens/personal-site.css) — drop-in CSS tokens
 - [x] [`owner-brand/tokens/mhw.css`](owner-brand/tokens/mhw.css) — drop-in CSS tokens
 
-### Skill (canonical source: [`skill/SKILL.md`](skill/SKILL.md) in this repo)
+### Skills (canonical sources in this repo, loaded via directory junctions)
+
+This repo now hosts **two** skills. Both use the same junction pattern: canonical source lives here under git, `~/.claude/skills/<name>` is a directory junction pointing at it, so Claude Code runs exactly what git tracks and no vendored copy can drift.
+
+| Skill | Source | Junction | Scope |
+|-------|--------|----------|-------|
+| `OTLC-Design` | [`skill/`](skill/) | `~/.claude/skills/OTLC-Design` | Design and build projects. Reads this whole repo as substrate |
+| `anti-ai-writing` | [`skill-writing/`](skill-writing/) | `~/.claude/skills/anti-ai-writing` | Any prose, anywhere. Not scoped to design work |
+
+#### anti-ai-writing (added 2026-07-20)
+
+- [x] [`skill-writing/SKILL.md`](skill-writing/SKILL.md) — the rules, in two modes (WRITE and AUDIT)
+- [x] [`skill-writing/references/tells.md`](skill-writing/references/tells.md) — full taxonomy, verbatim watch-phrase lists, vocabulary eras, provenance table
+- [x] [`skill-writing/references/false-positives.md`](skill-writing/references/false-positives.md) — ineffective indicators, detection-accuracy caveats
+- [x] [`skill-writing/references/model-artifacts.md`](skill-writing/references/model-artifacts.md) — per-model fingerprints, citation failure modes
+- [x] Junction created and verified
+- [x] Pointer added to the global `~/.claude/CLAUDE.md` so it is discoverable from every project
+- [x] Wired into `ANTI-SLOP.md` §Copy and into `skill/SKILL.md` Step 4 (BUILD) as a gate on every user-facing string
+
+Source: [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing). The skill is source-extensible; folding in a new source is documented in [`skill-writing/README.md`](skill-writing/README.md).
+
+#### OTLC-Design (canonical source: [`skill/SKILL.md`](skill/SKILL.md))
 
 - [x] [`skill/SKILL.md`](skill/SKILL.md) — entry point. Asks the 4-way branch question. Reads from this repo as substrate. Hard-enforces post-mortem.
 - [x] **Now git-tracked in-repo.** `C:\Users\michael\.claude\skills\OTLC-Design` is a **directory junction** to `skill/` so Claude Code loads it while git versions it. No vendored copy, no drift. Recreate the junction per [`skill/README.md`](skill/README.md).
@@ -81,17 +103,18 @@
 6. After all questions answered, the skill writes `[client-project]/POSTMORTEM.md` with the date, every question, every answer, and links to commits made in this repo as a result.
 7. Only then is the project marked complete.
 
-### The 5 universal post-mortem questions
+### The 6 universal post-mortem questions
 
 1. **New ANTI-SLOP rule?** Did anything ship that felt generic, default, or templated?
 2. **New pattern for `patterns/`?** Did we build a structural move you'd reach for again?
 3. **New reference for `references/INDEX.md`?** Did we encounter a site worth keeping?
 4. **Did `PROCESS.md` drag or lack a step?**
 5. **Did the skill itself need refinement?** Wrong tone, wrong order, missing checkpoints?
+6. **New anti-ai-writing rule?** Question 1 covers how it looked. This covers how it read. Any copy that shipped sounding generated, any phrase you struck, any construction you kept correcting?
 
-### Internal-mode 6th question
+### Internal-mode 7th question
 
-6. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token? New voice rule? New design rule for the brand guide?
+7. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token? New voice rule? New design rule for the brand guide?
 
 ### What gets committed where
 
@@ -102,7 +125,8 @@
 | Pattern (app) | `patterns/app/[name].md` | `patterns: add app/<name>` |
 | Reference | `references/INDEX.md` (+ optional deep analysis at `references/[slug].md`) | `references: add <domain>` |
 | Process change | `PROCESS.md` (bump version) | `process: <what changed>` |
-| Skill change | `skill/SKILL.md` (in-repo canonical; `~/.claude/skills/OTLC-Design` junction loads it live) | `skill: <what changed>` |
+| Skill change (OTLC-Design) | `skill/SKILL.md` (in-repo canonical; `~/.claude/skills/OTLC-Design` junction loads it live) | `skill: <what changed>` |
+| Prose rule / skill change (anti-ai-writing) | `skill-writing/SKILL.md` + `skill-writing/references/tells.md` (`~/.claude/skills/anti-ai-writing` junction loads it live) | `skill-writing: <what changed>` |
 | Owner-brand change | `owner-brand/source/<BrandGuide>.docx` + derived markdown | `owner-brand: <what changed>` |
 
 ### Why hard enforcement matters

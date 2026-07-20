@@ -153,6 +153,11 @@ Even subtle motion (hover, focus, scroll-into-view fades, button press feedback)
 
 ## Copy
 
+> Rules 18 and 19 are the short form. The full prose-slop system is the `anti-ai-writing` skill
+> at [`skill-writing/SKILL.md`](skill-writing/SKILL.md): roughly 60 documented LLM tells covering
+> vocabulary, sentence construction, content padding, and formatting, plus a false-positive guard.
+> Invoke it whenever writing or reviewing any user-facing copy.
+
 ### 18. Never use generic AI-flavored copy.
 
 Banned phrases: "Elevate your X", "Built for modern teams", "The future of Y", "Streamline your workflow", "Powered by intelligence", "Unlock the power of", "Take your X to the next level", "Reimagine your Z", anything with "seamlessly".

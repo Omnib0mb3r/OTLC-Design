@@ -1,6 +1,6 @@
 # PROCESS.md — The 6-Step Workflow
 
-> Version 1.2 (2026-05-31)
+> Version 1.3 (2026-07-20)
 
 The methodology the `OTLC-Design` skill enforces on every client project. Each step has explicit inputs, outputs, and a tool dependency. Skipping steps produces slop.
 
@@ -221,13 +221,14 @@ When the user gives a done signal, enter **post-mortem enforcement mode**.
 
 ### Post-mortem enforcement mode
 
-Walk these 5 questions one at a time. Do not batch them. For each, the user must give either (a) a concrete addition or (b) an explicit "intentionally nothing this round, because [reason]". Non-answers ("nah", "skip", "we're good", silence) get pushed back: *"I need a substantive answer. Either name a concrete addition or give a reason for intentionally skipping. Take 30 seconds."*
+Walk these 6 questions one at a time. Do not batch them. For each, the user must give either (a) a concrete addition or (b) an explicit "intentionally nothing this round, because [reason]". Non-answers ("nah", "skip", "we're good", silence) get pushed back: *"I need a substantive answer. Either name a concrete addition or give a reason for intentionally skipping. Take 30 seconds."*
 
 1. **New ANTI-SLOP rule?** Did anything ship that felt generic, default, or templated? Did you have to tell Claude to stop doing X mid-project?
 2. **New pattern for [`patterns/`](patterns/)?** Did we build a structural move (hero shape, layout primitive, section structure) you would reach for again on a different project?
 3. **New reference for [`references/INDEX.md`](references/INDEX.md)?** Did we encounter (or did the user bring) a site worth keeping in the curated vault?
 4. **Did `PROCESS.md` drag or lack a step?** Was any step too long, too short, missing, in the wrong order, or asking the wrong questions?
 5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit the in-repo canonical `skill/SKILL.md` (the `~/.claude/skills/OTLC-Design` junction picks it up live).
+6. **New anti-ai-writing rule?** Question 1 covers how the work looked. This one covers how it read. Did any copy ship sounding generated? A phrase you struck, a construction you kept correcting, a tell not yet on the list? Edit [`skill-writing/SKILL.md`](skill-writing/SKILL.md) and [`skill-writing/references/tells.md`](skill-writing/references/tells.md).
 
 ### What counts as a substantive answer
 
@@ -238,6 +239,7 @@ Walk these 5 questions one at a time. Do not batch them. For each, the user must
 | Concrete addition (reference) | "Yes, add bbb.studio." | Add line to [`references/INDEX.md`](references/INDEX.md). Optionally write full analysis. Commit `references: add bbb.studio`. |
 | Concrete addition (process) | "Step 2 should also capture page transition timing." | Edit `PROCESS.md`. Bump version. Commit `process: capture page transition timing in step 2`. |
 | Concrete addition (skill) | "You over-asked during intake. Cut question 8." | Edit `SKILL.md`. Commit `skill: trim intake question 8`. |
+| Concrete addition (prose rule) | "You kept writing 'purpose-built for'. Ban it." | Add to `skill-writing/SKILL.md` §3 and `references/tells.md`. Commit `skill-writing: ban purpose-built for`. |
 | Intentional skip with reason | "Intentionally nothing this round — project was small enough nothing generalized." | Log in client `POSTMORTEM.md`. Move on. |
 | Non-answer (REJECT) | "Nah", "skip", silence | Push back. Re-ask. Do not advance. |
 
