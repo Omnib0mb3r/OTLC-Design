@@ -30,13 +30,17 @@ When the user adds or refines content in this repo (new reference, new pattern, 
 
 - **References** — write a new file in `references/[slug].md` with the analysis structure documented in [`analyzer/README.md`](analyzer/README.md). Add a one-line entry to [`references/INDEX.md`](references/INDEX.md) under the right aesthetic category.
 - **Patterns** — write to `patterns/[pattern-name].md`. Include intent, structural sketch (ASCII or SVG), code reference, and when to use it.
-- **Anti-slop rules** — append to `ANTI-SLOP.md` under the right category. Include `**Why:**` and `**How to apply:**`.
+- **Anti-slop rules (visual)** — append to `ANTI-SLOP.md` under the right category. Include `**Why:**` and `**How to apply:**`.
+- **Anti-slop rules (prose)** — append to `skill-writing/SKILL.md` under the right section (§1 vocabulary, §2 construction, §3 content, §4 formatting), with full detail in `skill-writing/references/tells.md`. If the new finding is *not* a reliable tell, it belongs in `skill-writing/references/false-positives.md` instead.
 - **Process changes** — edit `PROCESS.md` directly. Bump the version line at the top.
-- **Skill changes** — edit the in-repo canonical `C:\dev\Projects\design-system\skill\SKILL.md`. The `~/.claude/skills/OTLC-Design` junction loads it live; commit per git hygiene below.
+- **Skill changes (OTLC-Design)** — edit the in-repo canonical `C:\dev\Projects\design-system\skill\SKILL.md`. The `~/.claude/skills/OTLC-Design` junction loads it live; commit per git hygiene below.
+- **Skill changes (anti-ai-writing)** — edit `C:\dev\Projects\design-system\skill-writing\SKILL.md`. The `~/.claude/skills/anti-ai-writing` junction loads it live.
 
 ### Anti-slop applies even here
 
 When generating examples or sample code in this repo (in patterns, tokens, project-template), follow `ANTI-SLOP.md`. Do not seed slop into the system that exists to prevent it.
+
+The same holds for prose. Every word written in this repo, including these docs, follows `skill-writing/SKILL.md`. A substrate that tells other projects not to write like an LLM cannot itself read like one.
 
 ### Git hygiene
 
@@ -45,7 +49,8 @@ This repo is a tool used across years and projects. Commits should be small and 
 - One reference added → one commit, message: `references: add [domain]`
 - One pattern added → one commit, message: `patterns: add [pattern-name]`
 - Rule added → one commit, message: `anti-slop: [short rule summary]`
-- Skill change → one commit, message: `skill: [what changed]`
+- Skill change (OTLC-Design) → one commit, message: `skill: [what changed]`
+- Skill change (anti-ai-writing) → one commit, message: `skill-writing: [what changed]`
 
 Never amend. Never force-push.
 

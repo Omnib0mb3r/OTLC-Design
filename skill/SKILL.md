@@ -36,6 +36,7 @@ The design-system repo at `C:\dev\Projects\design-system\` is your knowledge bas
 4. `C:\dev\Projects\design-system\analyzer\extract-prompt.md` — reference extraction procedure
 5. `C:\dev\Projects\design-system\references\INDEX.md` — the reference vault
 6. `C:\dev\Projects\design-system\tokens\README.md` and the four scale files — token systems
+7. `C:\dev\Projects\design-system\skill-writing\SKILL.md` — the `anti-ai-writing` prose rules (ANTI-SLOP for words)
 
 Then **conditionally** based on the branch question (see next section), also read:
 - If internal: `C:\dev\Projects\design-system\MODE-INTERNAL.md` and `owner-brand/profile.md` (which routes to brand-specific files)
@@ -180,6 +181,8 @@ Write:
 
 Scaffold per stack pick. Apply ANTI-SLOP.md universally. Apply MODE-INTERNAL / APP-ADAPTATION rules per branch. For internal work, apply owner-brand voice rules from `owner-brand/voice.md`.
 
+**Every user-facing string you write in this step goes through the `anti-ai-writing` skill** (`skill-writing/SKILL.md`): headlines, body copy, button labels, form labels, error messages, empty states, meta descriptions, alt text. ANTI-SLOP.md governs how the page looks; anti-ai-writing governs how it reads. Copy that trips those rules is as much of a slop signal as a default Tailwind palette, and it is the tell a client notices first.
+
 ### Step 5 — VERIFY
 
 Use Playwright MCP for multi-browser screenshots. Use Chrome DevTools MCP for Lighthouse.
@@ -206,10 +209,13 @@ Write `[project]/VERIFICATION.md` with screenshots, scores, results, verdict.
 
 Iterate with user feedback. When user gives a done signal, enter post-mortem enforcement mode per PROCESS.md Step 6.
 
-Walk the 5 questions one at a time. Each requires a substantive answer (concrete addition OR explicit "intentionally nothing this round, because [reason]"). Non-answers get pushed back. Write `[project]/POSTMORTEM.md`. Do not mark complete until all 5 are answered.
+Walk the 6 questions one at a time. Each requires a substantive answer (concrete addition OR explicit "intentionally nothing this round, because [reason]"). Non-answers get pushed back. Write `[project]/POSTMORTEM.md`. Do not mark complete until all 6 are answered.
 
-If internal mode, add a 6th post-mortem question:
-6. **Did anything from this project deserve to go into your owner-brand profile?** (New brand surface? New token? New voice rule? New design rule that should evolve into the brand guide?)
+Question 6 is the prose counterpart to question 1:
+6. **New anti-ai-writing rule?** Did any copy ship that read generated? A phrase you had to strike, a construction you kept correcting, a tell not yet on the list? Additions go to `skill-writing/SKILL.md` and `skill-writing/references/tells.md`, committed `skill-writing: [summary]`.
+
+If internal mode, add a 7th post-mortem question:
+7. **Did anything from this project deserve to go into your owner-brand profile?** (New brand surface? New token? New voice rule? New design rule that should evolve into the brand guide?)
 
 Same enforcement: substantive answer or explicit skip with reason.
 
