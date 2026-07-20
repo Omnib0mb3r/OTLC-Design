@@ -1,16 +1,23 @@
 # design-system
 
-A repeatable methodology for building **non-slop, professional sites and apps** for clients and for owned work, marketing and product. The substrate that powers the `OTLC-Design` skill.
+A repeatable methodology for building **non-slop, professional sites and apps** for clients and for owned work, marketing and product. The substrate that powers two Claude Code skills:
 
-This repo is not a website or app. It is the system that produces them: process, anti-slop rules, reference vault, pattern library, token templates, mode adaptations, owner-brand profile, and analyzer prompts that Claude reads at the start of every project.
+- **`OTLC-Design`**: the build workflow. Takes any project from "let's build X" through intake, reference analysis, token synthesis, build, verification, and a hard-enforced post-mortem.
+- **`anti-ai-writing`**: the prose rules. Roughly 60 documented tells that mark text as LLM-generated, distilled into bans applied to every word produced (site copy, docs, commit messages, UI strings), in any project, not only design work.
+
+The two cover the same defect in different media. `ANTI-SLOP.md` stops a page from *looking* AI-generated; `skill-writing/` stops it from *reading* AI-generated.
+
+This repo is not a website or app. It is the system that produces them: process, anti-slop rules, prose rules, reference vault, pattern library, token templates, mode adaptations, owner-brand profile, and analyzer prompts that Claude reads at the start of every project.
 
 ---
 
 ## Skill invocation
 
-The `OTLC-Design` skill is the entry point. Invoke it from the project directory you're working in.
+The `OTLC-Design` skill is the entry point for build work. Invoke it from the project directory you're working in.
 
-### Triggers
+The `anti-ai-writing` skill invokes on its own triggers ("does this sound like AI", "de-slop this copy", `/anti-ai-writing`) or automatically before substantial prose. It needs no project context.
+
+### Triggers (OTLC-Design)
 
 - `/OTLC-Design` or `/design`
 - "let's build a site for [X]"
@@ -77,24 +84,25 @@ This is the only mechanism that makes the system improve over time. It is hard-e
 
 ### How a project closes
 
-After you signal done, the skill walks **5 universal questions** (or 6 in internal mode), one at a time. Each question requires either:
+After you signal done, the skill walks **6 universal questions** (or 7 in internal mode), one at a time. Each question requires either:
 
 - **A concrete addition** ("Yes, add rule: never X"; "Yes, lift this hero pattern to patterns/marketing/"; "Yes, add bbb.studio to references"). Claude writes the addition AND commits it to this repo with a topical message.
 - **An explicit skip with reason** ("Intentionally nothing this round, because [reason]"). Logged in the project's `POSTMORTEM.md`.
 
 **Non-answers ("nah", "skip", "we're good", silence) are rejected.** The skill re-asks. The skill does not advance until satisfied.
 
-### The 5 universal questions
+### The 6 universal questions
 
 1. **New ANTI-SLOP rule?** Did anything ship that felt generic, default, or templated? Did you have to tell Claude to stop doing X mid-project?
 2. **New pattern for `patterns/`?** Did we build a structural move you'd reach for again on a different project?
 3. **New reference for `references/INDEX.md`?** Did we encounter a site worth keeping in the curated vault?
 4. **Did `PROCESS.md` drag or lack a step?** Was any step too long, too short, missing, in the wrong order, or asking the wrong questions?
 5. **Did the skill itself need refinement?** Wrong tone, wrong order, missing checkpoints, over-asking, under-asking?
+6. **New anti-ai-writing rule?** Question 1 covers how it looked; this covers how it read. Any copy that shipped sounding generated, any phrase struck, any construction repeatedly corrected?
 
-### Internal-mode 6th question
+### Internal-mode 7th question
 
-6. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token? New voice rule? New design rule for the brand guide?
+7. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token? New voice rule? New design rule for the brand guide?
 
 ### What gets committed where
 
@@ -105,7 +113,8 @@ After you signal done, the skill walks **5 universal questions** (or 6 in intern
 | Pattern (app) | `patterns/app/[name].md` | `patterns: add app/<name>` |
 | Reference | `references/INDEX.md` (+ optional deep analysis at `references/[slug].md`) | `references: add <domain>` |
 | Process change | `PROCESS.md` (bump version) | `process: <what changed>` |
-| Skill change | `~/.claude/skills/OTLC-Design/SKILL.md` | `skill: <what changed>` |
+| Skill change (OTLC-Design) | `skill/SKILL.md` (junction loads it live) | `skill: <what changed>` |
+| Prose rule (anti-ai-writing) | `skill-writing/SKILL.md` + `skill-writing/references/tells.md` | `skill-writing: <what changed>` |
 | Owner-brand change | `owner-brand/source/<BrandGuide>.docx` + derived markdown | `owner-brand: <what changed>` |
 | Handover update | `HANDOVER.md` | `handover: <what changed>` |
 
@@ -122,7 +131,9 @@ The repo is a flywheel. Each project makes the next one start higher.
 | Path | Purpose |
 |------|---------|
 | [`PROCESS.md`](PROCESS.md) | The 6-step workflow. Intake (with branch question), Reference Analysis, Synthesis, Build, Verify, Iterate + hard-enforced post-mortem. |
-| [`ANTI-SLOP.md`](ANTI-SLOP.md) | 26 universal durable rules Claude follows on every project. |
+| [`ANTI-SLOP.md`](ANTI-SLOP.md) | 26 universal durable rules Claude follows on every project. Visual slop. |
+| [`skill-writing/`](skill-writing/) | Canonical source of the `anti-ai-writing` skill. Prose slop: banned vocabulary, banned constructions, content padding, formatting tells, false-positive guard. `~/.claude/skills/anti-ai-writing` is a junction to here. See [`skill-writing/README.md`](skill-writing/README.md). |
+| [`BUGS.md`](BUGS.md) | Persistent bug log. Index block first, detail blocks below. Survives context resets. |
 | [`STACK-DECISIONS.md`](STACK-DECISIONS.md) | When to use plain HTML / Astro / Next.js / native. |
 | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Adaptation for internal/owned work. Skips brand discovery, pulls owner-brand profile. |
 | [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Adaptation for app/product UI. Anti-slop inversion, app stack defaults, app verification gates, operational-readiness rules + gates (config/secrets/deploy/rollback/observability). Includes customer-app tightening subsection. |
@@ -131,7 +142,7 @@ The repo is a flywheel. Each project makes the next one start higher.
 | [`patterns/`](patterns/) | Hand-built layout primitives. Subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/). Empty by design; grow from real work. |
 | [`tokens/`](tokens/) | Type scale, color, spacing, motion *templates*. Synthesized per project, not copied from here. |
 | [`analyzer/`](analyzer/) | Prompts and procedures Claude uses to extract design data from references via Chrome DevTools MCP. |
-| [`skill/`](skill/) | Canonical source of the `OTLC-Design` skill (`SKILL.md`). `~/.claude/skills/OTLC-Design` is a directory junction to here, so Claude Code loads the git-tracked file. See [`skill/README.md`](skill/README.md). |
+| [`skill/`](skill/) | Canonical source of the `OTLC-Design` skill (`SKILL.md`). `~/.claude/skills/OTLC-Design` is a directory junction to here, so Claude Code loads the git-tracked file. See [`skill/README.md`](skill/README.md). Same junction pattern as `skill-writing/`. |
 | [`project-template/`](project-template/) | Starter scaffolds copied out when a new project begins. |
 | [`INIT.md`](INIT.md) | What a fresh Claude session reads first when this repo is opened. |
 | [`HANDOVER.md`](HANDOVER.md) | Live status: what is set up, what is pending, the closing loop conventions. |
@@ -187,7 +198,9 @@ What this does NOT do:
 If you've just set this up:
 
 1. Verify the three MCPs are connected: `claude mcp list`
-2. Open `C:\dev\Projects\design-system\` in a fresh Claude session and run a smoke test (see [`HANDOVER.md`](HANDOVER.md) §"What is pending")
-3. After smoke test passes, start a real project in `C:\dev\Projects\[project-name]\` and invoke `/OTLC-Design`
+2. Verify both skill junctions resolve (`skill/README.md` and `skill-writing/README.md` have the commands)
+3. Start a real project in `C:\dev\Projects\[project-name]\` and invoke `/OTLC-Design`
 
-The skill is the entry point. The repo is the substrate. Both are git-versioned and evolve together.
+The smoke test already passed (2026-05-03, three reference sites; see [`HANDOVER.md`](HANDOVER.md)). The next milestone is the first real project end-to-end.
+
+The skills are the entry points. The repo is the substrate. All of it is git-versioned and evolves together through the closing loop.

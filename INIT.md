@@ -70,7 +70,7 @@ Verify with `claude mcp list`. If any are missing or disconnected, see [`HANDOVE
 
 ## The closing loop (read once, then it shapes everything)
 
-The OTLC-Design skill **hard-enforces** Step 6 post-mortem. Every project must close by walking 5 questions (or 6 in internal mode) one at a time. Each requires either a concrete addition (which gets committed to this repo) or an explicit skip with reason. Non-answers are rejected.
+The OTLC-Design skill **hard-enforces** Step 6 post-mortem. Every project must close by walking 6 questions (or 7 in internal mode) one at a time. Each requires either a concrete addition (which gets committed to this repo) or an explicit skip with reason. Non-answers are rejected.
 
 This is the only mechanism that makes the system improve over time. See [`HANDOVER.md`](HANDOVER.md) §"The closing loop" for the full mechanism.
 
