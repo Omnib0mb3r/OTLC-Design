@@ -142,6 +142,7 @@ The repo is a flywheel. Each project makes the next one start higher.
 | [`patterns/`](patterns/) | Hand-built layout primitives. Subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/). Empty by design; grow from real work. |
 | [`tokens/`](tokens/) | Type scale, color, spacing, motion *templates*. Synthesized per project, not copied from here. |
 | [`analyzer/`](analyzer/) | Prompts and procedures Claude uses to extract design data from references via Chrome DevTools MCP. |
+| [`guides/`](guides/) | Verbatim-stored external guides (SEO, AEO, structured data, GA4, browser-aware design). Provenance headers inline; re-pull from source rather than editing. Not yet wired into PROCESS steps. |
 | [`skill/`](skill/) | Canonical source of the `OTLC-Design` skill (`SKILL.md`). `~/.claude/skills/OTLC-Design` is a directory junction to here, so Claude Code loads the git-tracked file. See [`skill/README.md`](skill/README.md). Same junction pattern as `skill-writing/`. |
 | [`project-template/`](project-template/) | Starter scaffolds copied out when a new project begins. |
 | [`INIT.md`](INIT.md) | What a fresh Claude session reads first when this repo is opened. |
