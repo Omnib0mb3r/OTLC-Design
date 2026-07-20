@@ -146,6 +146,7 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 - [ ] Add Firecrawl MCP as fallback for JS-heavy reference sites? (Not installed.)
 - [ ] First app project — which one? Could exercise MODE-INTERNAL + APP-ADAPTATION + owner-brand pull all at once and surface real gaps.
 - [ ] Should owner-brand grow a third surface for OTLC-domain customer work (i.e., "OTLC consulting" brand for client-facing materials), or keep client-facing materials per-project?
+- [ ] `guides/` (added 2026-07-20: SEO/AEO track, structured data, GA4, browser-aware design) is stored but not wired into the workflow. Candidates: PROCESS Step 4 build checklist (crawlability, JSON-LD), Step 5 gates (AEO/SEO verification), or a new delivery-checklist doc. Decide after the first real project shows where they bite.
 
 ---
 
