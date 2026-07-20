@@ -83,7 +83,7 @@ Source: [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:
 - [x] Repo initialized (inherited from dev-template clone)
 - [x] dev-template origin removed; standalone repo
 - [x] All bootstrap work committed in topical commits
-- [ ] Remote not yet configured. To add: `gh repo create OTLC-Design --private --source=. --remote=origin --push`
+- [x] Remote configured: `https://github.com/Omnib0mb3r/OTLC-Design` (private). Push after each work session.
 
 ---
 
@@ -95,7 +95,7 @@ Source: [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:
 
 1. You signal done with one of: `we're done`, `ship it`, `client approved`, `post-mortem`, `let's wrap up`, `/done`, `/postmortem`
 2. The skill enters **post-mortem enforcement mode**
-3. The skill walks 5 universal questions (or 6 if internal mode), one at a time
+3. The skill walks 6 universal questions (or 7 if internal mode), one at a time
 4. For each question, you must give either:
    - **A concrete addition** ("Yes, add rule: never X"; "Yes, lift this hero pattern"; "Yes, add this site to references") — Claude writes the addition AND commits it to this repo with a topical message
    - **An explicit skip with reason** ("Intentionally nothing this round, because [reason]") — logged in the project's `POSTMORTEM.md`

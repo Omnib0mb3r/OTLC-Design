@@ -127,12 +127,21 @@ Standard `superpowers:brainstorming` → `writing-plans` → `subagent-driven-de
 - **Skill now versioned in-repo**: Canonical `SKILL.md` moved from the unversioned `~/.claude/skills/OTLC-Design/` into the repo at `skill/SKILL.md`. `~/.claude/skills/OTLC-Design` is now a **directory junction** to `skill/`, so Claude Code loads the same physical file git tracks. Chosen over a vendored copy (drift-prone) and a separate git init (fragments history). The skill already hardcodes this repo's path at runtime, so the junction adds no new coupling. Recreation documented in [`skill/README.md`](skill/README.md).
 - **Reasoning**: The repo's own `CLAUDE.md` promises "skill changes get committed", but the skill lived outside any repo, so the convention could not hold and edits drifted. Versioning it in-repo closes that gap.
 
+### 2026-07-20: anti-ai-writing skill (prose slop subsystem)
+
+- **Second skill added, hosted in this repo**: `anti-ai-writing`, canonical source at `skill-writing/`, junctioned to `~/.claude/skills/anti-ai-writing` (same pattern as `skill/`). Distilled from Wikipedia:Signs of AI writing, fetched section-by-section via the MediaWiki API for verbatim watch-phrase lists.
+- **Hybrid placement over alternatives**: Considered a standalone repo, a design-system-only doc, and an unversioned skills-dir copy. Chose: deep skill here + thin pointer in global `~/.claude/CLAUDE.md` + wiring into the OTLC workflow. Reasoning: the rule set applies to all prose everywhere (so it cannot live only behind the OTLC-Design trigger), but the repo already owns the anti-slop closing loop, and a second junctioned skill reuses proven infrastructure.
+- **Post-mortem grew to 6 universal questions** (7 internal): new question 6 asks for prose-slop rules, mirroring question 1's visual-slop ask. `PROCESS.md` bumped to v1.3. Without a closing-loop hook, the skill would be static; with it, every project can grow the tells list.
+- **False-positive guard is load-bearing**: the skill ships `references/false-positives.md` (ineffective indicators, chance-level human detection, unreliable detectors) and mandates density judgements, never authorship verdicts. A tells catalogue without this becomes a witch-hunt tool.
+- **BUGS.md created** (global-instructions requirement): 7-bug consolidation sweep from git history and ANTI-SLOP provenance. BUG-007 logged OPEN: 444 em/en dashes across 29 repo markdown files, awaiting a cleanup pass decision.
+- **GitHub remote confirmed live**: `Omnib0mb3r/OTLC-Design` (private). HANDOVER's "remote not yet configured" was stale and is fixed.
+
 ---
 
 ## Open Questions
 
 - [ ] Should `project-template/` ship with concrete starter scaffolds (vanilla-vite, astro, next), or leave empty and use `npm create ...` on demand? Currently scaffolded as empty placeholders.
-- [ ] Does the user want a remote origin set up now? GitHub repo name suggestion: `OTLC-Design` (matching the skill name) or `design-system` (matching the substrate name).
+- [x] ~~Does the user want a remote origin set up now?~~ Resolved: `github.com/Omnib0mb3r/OTLC-Design` (private) is live as origin.
 - [ ] How does the brand-guide `.docx` stay in sync with derived markdown? Currently manual re-extraction. Worth a tiny PowerShell script or skip until it bites?
 - [ ] Add Firecrawl MCP as fallback for JS-heavy reference sites? (Not installed.)
 - [ ] First app project — which one? Could exercise MODE-INTERNAL + APP-ADAPTATION + owner-brand pull all at once and surface real gaps.

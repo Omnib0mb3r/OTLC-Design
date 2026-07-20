@@ -57,7 +57,7 @@ Internal work has the same quality bar as customer work. The taste threshold doe
 - **All ANTI-SLOP rules** (read `ANTI-SLOP.md`). No relaxation.
 - **owner-brand/voice.md** rules (DO/DON'T list, banned phrases, brand-mark conventions).
 - **Verification gates** (Step 5) — full Lighthouse, full a11y, full cross-browser as appropriate to mode (site or app — see APP-ADAPTATION for app gates).
-- **Post-mortem hard enforcement** (Step 6) — all 5 questions, plus the internal-mode 6th question about owner-brand evolution.
+- **Post-mortem hard enforcement** (Step 6): all 6 universal questions, plus the internal-mode 7th question about owner-brand evolution.
 - **Stack decision tree** (STACK-DECISIONS.md) — apps still use Next.js + React, sites still use vanilla or Astro per the same logic.
 - **Pattern library** (patterns/) — same patterns apply, same growth flywheel.
 
@@ -81,11 +81,11 @@ Optional, not required. If the user provided references, analyze them per `analy
 
 Apply `owner-brand/voice.md` as authored. Specific copy, real names, real numbers, real outcomes. Internal projects get the strongest application of voice rules because there's no client to dilute them.
 
-### Post-mortem 6th question (internal-mode addition)
+### Post-mortem 7th question (internal-mode addition)
 
-In addition to the 5 universal post-mortem questions in PROCESS.md Step 6:
+In addition to the 6 universal post-mortem questions in PROCESS.md Step 6:
 
-6. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token convention? New voice rule? New design rule that should be lifted into the brand guide?
+7. **Did anything from this project deserve to go into your owner-brand profile?** New brand surface? New token convention? New voice rule? New design rule that should be lifted into the brand guide?
 
 Same hard enforcement. Substantive answer required:
 - *"Yes, lift X to owner-brand"* → write the addition; commit `owner-brand: add X`

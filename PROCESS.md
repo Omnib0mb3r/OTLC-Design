@@ -195,7 +195,7 @@ Project folder location:
 
 ## Step 6 — ITERATE + POST-MORTEM (hard-enforced)
 
-**Goal:** Incorporate user feedback through sign-off, then close the loop with a system-improvement post-mortem. The post-mortem is **hard-enforced** — the project does not complete until all 5 questions have substantive answers.
+**Goal:** Incorporate user feedback through sign-off, then close the loop with a system-improvement post-mortem. The post-mortem is **hard-enforced**: the project does not complete until all 6 questions have substantive answers.
 
 ### Iteration phase
 
@@ -276,7 +276,7 @@ Write `[client-project]/POSTMORTEM.md`:
 
 **Tool:** Playwright MCP for ongoing verification during iteration.
 
-**Project complete only when:** `POSTMORTEM.md` exists with substantive answers to all 5 questions, and any improvement commits to the design-system repo are pushed.
+**Project complete only when:** `POSTMORTEM.md` exists with substantive answers to all 6 questions, and any improvement commits to the design-system repo are pushed.
 
 **Anti-pattern:** Soft-quitting the post-mortem because the user is tired. The hard gate is the entire point — without it, the system stays static and every project starts from the same baseline.
 
