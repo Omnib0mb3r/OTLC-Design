@@ -1,6 +1,6 @@
 # patterns/marketing/
 
-Marketing/showcase site patterns. Heroes, sections, navigation, footers — anything used by **visitors who read content** rather than users who do tasks.
+Marketing/showcase site patterns. Heroes, sections, navigation, footers: anything used by **visitors who read content** rather than users who do tasks.
 
 See [`../README.md`](../README.md) for the pattern file format and contribution rules.
 

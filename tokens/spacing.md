@@ -70,10 +70,10 @@ Marketing sites typically use **80-128px between sections** at desktop, scaling 
 
 Pick a max content width. Common choices:
 
-- **Narrow** (~640-720px) — long-form reading, editorial
-- **Standard** (~1100-1280px) — general marketing
-- **Wide** (~1440-1600px) — image-heavy, showcase
-- **Full bleed** (no max) — statement design
+- **Narrow** (~640-720px): long-form reading, editorial
+- **Standard** (~1100-1280px): general marketing
+- **Wide** (~1440-1600px): image-heavy, showcase
+- **Full bleed** (no max): statement design
 
 Use container queries for component-level responsive spacing where helpful, not just media queries.
 

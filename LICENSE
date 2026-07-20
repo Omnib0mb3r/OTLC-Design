@@ -1,0 +1,49 @@
+MIT License
+
+Copyright (c) 2026 On The Level Concepts
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+SCOPE AND EXCLUSIONS
+
+The MIT grant above covers the methodology, process documents, skill
+definitions, rules, templates, and code in this repository.
+
+It does NOT grant rights in:
+
+1. Third-party material stored here for reference. The files under `guides/`
+   are stored verbatim from external authors, each with its source noted in a
+   header comment. They remain the property of their respective authors and are
+   included under fair use for private reference. Re-pull them from the original
+   source rather than redistributing them from here.
+
+2. Brand identity material. The `owner-brand/` directory is gitignored and is
+   not published as part of this repository. Any brand names, wordmarks, color
+   systems, or brand guidelines belonging to the operator are excluded from this
+   grant, whether or not they appear incidentally in examples.
+
+NOT LEGAL ADVICE
+
+The `legal/` directory is a build checklist, not legal advice, and no
+attorney-client relationship arises from its use. It is maintained by a design
+studio for its own workflow, may be out of date, and is not a substitute for
+counsel. See `legal/INDEX.md`. Use at your own risk, and note the warranty
+disclaimer above applies to it in full.

@@ -13,8 +13,12 @@
 | BUG-004 | RESOLVED | `devneural.jsonc` `localPath` stale after repo move to `C:\dev\Projects\design-system` |
 | BUG-005 | RESOLVED | Muted-text token lifted from reference failed WCAG 4.5:1 on dark app canvas |
 | BUG-006 | RESOLVED | Node `child_process` calls without `windowsHide: true` flashed console windows on Windows |
-| BUG-007 | OPEN | 444 em/en dashes across 29 markdown files violate the standing no-em-dash rule |
+| BUG-007 | RESOLVED | 496 em/en dashes across 37 files cleared; `guides/` verbatim external content explicitly exempt |
 | BUG-008 | RESOLVED | All three required MCP servers vanished from user scope; HANDOVER claimed them connected |
+| BUG-009 | RESOLVED | Page shipped as ~73% inline JS tripped a carrier reputation filter and blocked the live domain |
+| BUG-010 | RESOLVED | Cloudflare migration left dead email-decoder script: emails rendered broken and the 404 tripped scanners |
+| BUG-011 | RESOLVED | Emoji used as iconography on omnibomber-site, no brand control and inconsistent cross-platform rendering |
+| BUG-012 | RESOLVED | Label text at 8-9.6px on omnibomber-site, below the 12px legibility floor |
 
 <!-- INDEX END -->
 
@@ -98,19 +102,42 @@ DevNeural dashboard polling spawned `powershell -NoProfile ...` every 4 seconds 
 
 ---
 
-## BUG-007 - Repo-wide em dash violations
+## BUG-007: Repo-wide em dash violations
 
-**Status:** OPEN
-**Found:** 2026-07-20
-**Area:** 29 markdown files across the repo
+**Status:** RESOLVED
+**Found:** 2026-05-03
+**Fixed:** 2026-07-20
+**Area:** all text files across the repo, not markdown only
 
-The global standing rule bans em dashes and en dashes in every produced artifact with no exceptions, explicitly including config files, YAML content, and string literals. A sweep found **444 occurrences across 29 files**.
+The global standing rule bans em dashes and en dashes in every produced artifact with no exceptions, explicitly including config files, YAML content, and string literals. A scripted recount at commit `506265f` (2026-07-20) found **496 occurrences across 37 files**: 492 em dashes (U+2014) and 4 en dashes (U+2013). Untracked files carry none.
 
-Worst offenders: `references/INDEX.md` (52), `PROCESS.md` (47), `APP-ADAPTATION.md` (44), `HANDOVER.md` (43), `analyzer/extract-prompt.md` (34), `skill/SKILL.md` (31, including the YAML `description` field that Claude Code reads on every session).
+Split by file type:
 
-Found during the `anti-ai-writing` skill build, which lists em dash overuse as an AI tell. This is the substrate the design system reads from, so the violations propagate into generated work.
+- Markdown: 491 across 34 files.
+- Non-markdown: 5 across 3 files. `devneural.jsonc` (3, in comments), `owner-brand/tokens/personal-site.css` (1), `owner-brand/tokens/mhw.css` (1). These fall inside the rule because it covers config and string literals, and an earlier framing of this bug as markdown-only wrongly excluded them.
 
-**Fix:** not yet applied. Needs a mechanical pass replacing each with a context-appropriate colon, comma, parenthesis, or hyphen. Blind replacement to hyphen is safe but degrades some headings; a per-file pass reads better. Deferred from the skill-build commit so the diff stays reviewable.
+Worst offenders: `references/INDEX.md` (52), `HANDOVER.md` (49), `PROCESS.md` (47), `APP-ADAPTATION.md` (45), `analyzer/extract-prompt.md` (35), `skill/SKILL.md` (32, including the YAML `description` field that Claude Code reads on every session).
+
+The 4 en dashes sit in `ANTI-SLOP.md` (1, inside the rule 22 example), `guides/seo-crawlability.md` (1), and `guides/seo-how-to.md` (2). The two guides files store external material verbatim, so decide explicitly whether re-pulled guides are exempt; otherwise this count drifts upward on every re-pull.
+
+The violation was first identified and partly fixed on 2026-05-03 by commit `89a9b93` ("readme: rewrite for cohesion, surface done signals, kill em dashes"), which took `README.md` from 6 to 0 and left the rest of the repo untouched. It resurfaced during the `anti-ai-writing` skill build, which lists em dash overuse as an AI tell. So this is a partially applied fix, not a fresh discovery. This is the substrate the design system reads from, so the violations propagate into generated work.
+
+**Fix:** RESOLVED 2026-07-20. A per-file remediation pass ran one agent per file, replacing each dash with a context-appropriate colon, comma, parenthesis, or hyphen rather than blind-substituting a hyphen, then a second agent verified each file by codepoint. A scripted recount now reports **0 dashes in every repo-authored file**, down from 496.
+
+**Explicit exemption, decided 2026-07-20:** the seven files under `guides/` are stored verbatim from external authors and carry a "do not edit the bodies, re-pull from the source" header. They keep their 19 dashes. Editing them would break the verbatim contract and the provenance claim, and the dashes are the original authors' punctuation, not ours. The rule governs what this repo *produces*, not what it *quotes*. `guides/INDEX.md`, which is repo-authored, is held to the rule and is clean.
+
+The recount is scripted, not hand-tallied, so the figures cannot drift again:
+
+```bash
+python -c "
+import io,glob
+t=0
+for p in glob.glob('**/*.md',recursive=True)+glob.glob('**/*.jsonc',recursive=True)+glob.glob('**/*.css',recursive=True):
+    if p.startswith('guides') and not p.endswith('INDEX.md'): continue
+    s=io.open(p,encoding='utf-8').read(); n=s.count(chr(0x2014))+s.count(chr(0x2013))
+    if n: print(n,p); t+=n
+print('TOTAL:',t)"
+```
 
 ---
 
@@ -124,6 +151,58 @@ Found during the `anti-ai-writing` skill build, which lists em dash overuse as a
 `claude mcp list` returned none of the three MCPs the system depends on (`chrome-devtools` for Step 2 analysis, `playwright` for Step 5 verification, `context7` for Steps 3-4 docs). `~/.claude.json` user-scope `mcpServers` was empty. HANDOVER.md still claimed all three installed and connected, so a fresh session would have discovered the breakage mid-project at Step 2, not at setup. Cause unknown; likely lost in a config reset or Claude Code update since the 2026-06-02 handover.
 
 **Fix:** Reinstalled all three per HANDOVER's own "If something is broken" table (`claude mcp add --scope user ...`). Verified: all three report Connected. Lesson: HANDOVER's verification commands are worth actually running at session start; the doc asserting state is not the state.
+
+---
+
+## BUG-009: Inline-JS page tripped a carrier reputation filter and blocked the live domain
+
+**Status:** RESOLVED
+**Found:** 2026-07 (live production site)
+**Fixed:** commit `86821b0` (codified in STACK-DECISIONS "Shipping hygiene (reputation-safe)")
+**Area:** shipping hygiene, delivered page structure
+
+A page shipped as roughly 73% one inline `<script>` blob, a JS engine plus a large dataset inlined into the HTML. A major mobile carrier reputation filter flagged and blocked the whole domain. Google Safe Browsing and Norton stayed clean the entire time, so it was a heuristic category flag rather than a malware detection, which made it hard to diagnose from the usual reputation checkers. A real user was blocked from the live site.
+
+**Fix:** STACK-DECISIONS.md gained a "Shipping hygiene (reputation-safe)" section: keep JS and large data external and content-hash versioned, never inline a large engine or dataset into page HTML (acceptable only for a deliberately offline self-contained artifact), force HTTPS with a loop-safe proxy-aware redirect plus HSTS and the standard security headers, and version data URLs on any shell or data-contract change. A reputation-safe shipping gate plus a returning-user check were added to the skill's Verify step. Durable fix is the rule, not the one page.
+
+---
+
+## BUG-010: Cloudflare migration left a dead email-decoder script
+
+**Status:** RESOLVED
+**Found:** 2026-07 (surfaced alongside BUG-009)
+**Fixed:** commit `86821b0` (codified in STACK-DECISIONS "Shipping hygiene (reputation-safe)")
+**Area:** host migration, delivered page markup
+
+Moving a site off Cloudflare leaves behind `__cf_email__` spans and `/cdn-cgi/l/email-protection#HEX` links whose decoder script is no longer served. Two failures at once: the email addresses render as broken obfuscated text for every visitor, and the 404 on the decoder script trips security scanners, which compounds the reputation problem in BUG-009.
+
+**Fix:** Decode `data-cfemail` back to real `mailto:` links (first hex byte is the XOR key, remaining bytes are XORed with it) and delete the dead `cdn-cgi/.../email-decode.min.js` reference. Recorded as the Cloudflare-migration gotcha in the STACK-DECISIONS shipping hygiene section so any future migration checks for it.
+
+---
+
+## BUG-011: Emoji used as iconography
+
+**Status:** RESOLVED
+**Found:** 2026-05-03
+**Fixed:** commit `ccf68a1` (codified as ANTI-SLOP rule 21)
+**Area:** design output (omnibomber-site analysis)
+
+The omnibomber-site analysis found emoji standing in for icons across `tool-card-icon`, `lc-icon`, `dl-icon`, and `proj-card-vis .emo`. Emoji glyphs render differently on Apple, Google, Windows, and fallback fonts, cannot be brand-controlled, and read as template filler.
+
+**Fix:** ANTI-SLOP rule 21 bans emoji as iconography outright. Use SVG icons (custom, Lucide, Phosphor, or Heroicons per rule 11), typographic glyphs, or no icon at all.
+
+---
+
+## BUG-012: Label text below the 12px legibility floor
+
+**Status:** RESOLVED
+**Found:** 2026-05-03
+**Fixed:** commit `ccf68a1` (codified as ANTI-SLOP rule 22)
+**Area:** design output (omnibomber-site analysis)
+
+The omnibomber-site analysis found labels set at 8 to 9.6px (`0.5rem` to `0.6rem`). Sub-12px text fails legibility on retina at normal viewing distance, and WCAG 1.4.4 expects users to scale to 200% without loss, which breaks well before that target.
+
+**Fix:** ANTI-SLOP rule 22 sets the floors: body content at 14px or above, labels and supporting text at 12px or above. Smaller is acceptable only for ornamental elements that carry no comprehension load. App UI may run 11-13px labels with appropriate weight and contrast per APP-ADAPTATION rule 22.
 
 <!-- DETAILS END -->
 

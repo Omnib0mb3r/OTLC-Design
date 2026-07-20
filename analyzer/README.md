@@ -1,6 +1,6 @@
 # analyzer/
 
-> Procedures and prompts for **Step 2 of PROCESS.md** — extracting design data from reference URLs using Chrome DevTools MCP.
+> Procedures and prompts for **Step 2 of PROCESS.md**: extracting design data from reference URLs using Chrome DevTools MCP.
 
 ## Files
 
@@ -31,12 +31,14 @@ Without a structured extraction procedure, "look at this site and tell me what's
 If Chrome DevTools MCP cannot extract clean data from a reference (heavy JS, geo-blocked, login-walled, etc.):
 
 1. Try Playwright MCP as a fallback (different rendering)
-2. If still blocked, fall back to manual visual inspection — flag the reduced confidence in the analysis output
+2. If still blocked, fall back to manual visual inspection; flag the reduced confidence in the analysis output
 3. Consider whether the reference is actually appropriate for the project; references that can't be analyzed are also references the client probably can't access easily
 
 ## Output location
 
-All reference analyses live in the **client project**, not this repo:
+An analysis can land in one of two places, depending on which job you are doing.
+
+**Step 2 of a client build** writes to the client project, not this repo:
 
 ```
 C:\dev\Projects\[client-name]\references\
@@ -45,4 +47,8 @@ C:\dev\Projects\[client-name]\references\
 └── [domain3].md
 ```
 
-This repo's `references/INDEX.md` catalogs *known-good sites* generally. Per-project deep analyses belong with the project.
+These are scoped to one brief. They capture what mattered for that project and stay with it.
+
+**Curating the shared vault** writes here instead. When a site is worth keeping across projects (usually promoted during a post-mortem), add a one-line entry to this repo's [`references/INDEX.md`](../references/INDEX.md) and, if the site earns it, a full analysis at `references/[slug].md` using the same structure from [`extract-prompt.md`](extract-prompt.md). Commit message: `references: add [domain]`.
+
+`references/INDEX.md` catalogs *known-good sites* generally. A one-off deep analysis belongs with the project that needed it; a durable one belongs in the vault.

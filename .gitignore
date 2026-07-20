@@ -5,8 +5,8 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Claude / IDE caches
-.claude/local/
+# Claude local settings / IDE caches
+.claude/settings.local.json
 .vscode/
 .idea/
 
@@ -18,3 +18,11 @@ project-template/*/.next/
 
 # Local cleanup archives (not substrate)
 *-cleanup.zip
+
+# Owner-brand profile: personal brand identity, deliberately local-only.
+# This repo is public; the owner's brand guide, voice rules, and tokens are not.
+# Files remain on disk and the OTLC-Design skill reads them in internal mode.
+# Back this directory up separately: it is NOT recoverable from git history.
+# See owner-brand/README.md (the only tracked file in here) for the expected shape.
+owner-brand/*
+!owner-brand/README.md

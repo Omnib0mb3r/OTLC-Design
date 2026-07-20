@@ -1,82 +1,75 @@
-# DevNeural Template — Workflow Guide
+# WORKFLOW.md: maintaining the design-system repo
 
-Starter template for all projects in the DevNeural ecosystem. Cloning this gives you the full session intelligence and brainstorming pipeline out of the box.
+This is the human-readable guide to working *on* this repo. It is not the client-project workflow: that lives in [`PROCESS.md`](PROCESS.md), which is canonical for the 6 build steps. [`CLAUDE.md`](CLAUDE.md) is the machine-readable authority when this repo is the working directory. Where this file and CLAUDE.md ever disagree, CLAUDE.md wins.
 
-## Prerequisites
+## Two ways this repo gets used
 
-The **DevNeural API server** must be running for ecosystem context to load during sessions:
+| You are | Working directory | What happens |
+|---------|-------------------|--------------|
+| Maintaining the system | `C:\dev\Projects\design-system\` | You add references, patterns, rules, guides, or process changes. This file applies. |
+| Building a client site or app | `C:\dev\Projects\[client]\` | You invoke the `OTLC-Design` skill. It reads this repo as its knowledge base. [`PROCESS.md`](PROCESS.md) applies. |
 
-```bash
-node /path/to/DevNeural/02-api-server/dist/server.js
-```
+You do not build client work in this repo. Nothing here deploys or runs a server.
 
-Runs on port `3747`. If the server is offline, sessions still work — you just get no graph context from the hook. All DevNeural hooks are non-blocking and always exit cleanly, so they will never stall or interfere with a Claude session.
+## Session start
 
-## What is included
+If the first message is anything more than a trivial question, read in order:
 
-| File | Purpose |
-|------|---------|
-| `devneural.jsonc` | Registers the project in the DevNeural graph. Most fields are auto-filled on first session start. |
-| `OTLC-Brainstorm.MD` | Living project memory — Vision, Architecture, Tools, Feature Workflow, Decisions, Open Questions, Session Log. |
-| `CLAUDE.md` | Project-level Claude instructions: PRE/RUN/POST/END brainstorm flow, monday.com sync rules. |
-| `README.md` | Placeholder stub — overwrite with the real project README. |
-| `WORKFLOW.md` | This file — the human-readable template workflow guide. |
+1. [`INIT.md`](INIT.md) for the fresh-session entry point
+2. [`HANDOVER.md`](HANDOVER.md) for what is set up and what is pending
+3. [`PROCESS.md`](PROCESS.md) for the 6-step workflow the skill enforces
+4. [`ANTI-SLOP.md`](ANTI-SLOP.md) for the durable visual rules
+5. [`STACK-DECISIONS.md`](STACK-DECISIONS.md) for stack selection
 
-## First session workflow
+Then scan the index block in [`BUGS.md`](BUGS.md) for OPEN or SMOKE-TESTING entries touching whatever you are about to change.
 
-1. Create a new repo from this template via GitHub's **"Use this template"** button
-2. Clone the new repo locally
-3. Start a Claude session — the SessionStart hook auto-fills `devneural.jsonc` with `localPath`, `githubUrl`, `name`, and `description`
-4. Add your `tags` and `stage` to `devneural.jsonc`
-5. Tell Claude what you want to build — Claude will run the augmented brainstorming flow (see below) which populates `OTLC-Brainstorm.MD` and feeds straight into the superpowers execution pipeline
-6. Ask Claude to write the real `README.md` when the project is ready (the template's `README.md` is a placeholder)
+## The two skills
 
-## Feature workflow
+Both skills are sourced from inside this repo and loaded through a Windows directory junction, so the git-tracked file is the one Claude Code reads:
 
-Every feature, bug, or improvement runs through the **superpowers pipeline wrapped with OTLC layers**. This is what Claude does on every session:
+| Skill | Source in repo | Junction |
+|-------|----------------|----------|
+| `OTLC-Design` | [`skill/`](skill/) | `~/.claude/skills/OTLC-Design` |
+| `anti-ai-writing` | [`skill-writing/`](skill-writing/) | `~/.claude/skills/anti-ai-writing` |
 
-### PRE — context load
-1. Read `OTLC-Brainstorm.MD` (Vision, Architecture, prior Decisions, Open Questions)
-2. **Vision check** — if blank, Claude asks you to define it before brainstorming starts
-3. **Visual Companion offer** — for layout, mockup, design, or diagram work, Claude offers to launch the Visual Companion
+Because both `SKILL.md` files resolve relative paths against `~/.claude/skills/`, every repo file they reference must be written as an absolute path starting `C:\dev\Projects\design-system\`. Relative links inside the other repo docs are fine.
 
-### RUN — superpowers pipeline
-1. **Brainstorm** — `superpowers:brainstorming` produces a spec in `docs/superpowers/specs/`
-2. **Plan** — `superpowers:writing-plans` (auto-invoked) produces a plan in `docs/superpowers/plans/`
-3. **Execute** — `superpowers:subagent-driven-development` runs the plan task-by-task with review
-4. **Finish** — `superpowers:finishing-a-development-branch` (auto-invoked) merges, opens a PR, or discards
+## The maintenance loop
 
-### POST — log decisions (before plan phase)
-- Append to `Decisions Made` in `OTLC-Brainstorm.MD`
-- Append/resolve `Open Questions`
-- Update `Architecture` if structure changed
+The repo grows from finished projects, not from speculation. Step 6 of [`PROCESS.md`](PROCESS.md) hard-gates every project on a post-mortem: 6 universal questions, plus a 7th about the owner-brand profile on internal-mode work only. Whatever those answers produce gets committed back here.
 
-### END — close the session
-- Append a dated `Session Log` entry: participants, what happened, what was built, next steps
+| Addition type | Goes to | Commit message |
+|---------------|---------|----------------|
+| Anti-slop rule | `ANTI-SLOP.md` | `anti-slop: <short rule summary>` |
+| Pattern (marketing) | `patterns/marketing/[name].md` | `patterns: add marketing/<name>` |
+| Pattern (app) | `patterns/app/[name].md` | `patterns: add app/<name>` |
+| Reference | `references/INDEX.md` (+ optional deep analysis at `references/[slug].md`) | `references: add <domain>` |
+| Process change | `PROCESS.md` (bump the version line) | `process: <what changed>` |
+| Stack decision | `STACK-DECISIONS.md` | `stack: <what changed>` |
+| Skill change (OTLC-Design) | `skill/SKILL.md` | `skill: <what changed>` |
+| Prose rule (anti-ai-writing) | `skill-writing/SKILL.md` + `skill-writing/references/tells.md` | `skill-writing: <what changed>` |
+| Owner-brand change | `owner-brand/source/<BrandGuide>.docx` + derived markdown | `owner-brand: <what changed>` |
+| Handover update | `HANDOVER.md` | `handover: <what changed>` |
 
-The full rules live in [`CLAUDE.md`](CLAUDE.md) and [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD).
+Commits stay small and topical: one addition, one commit. Never amend, never force-push. The remote is `https://github.com/Omnib0mb3r/OTLC-Design` (private); push after each work session.
+
+`patterns/` is subdivided into `marketing/` and `app/`. Patterns land only after a real project earns them: `app/` currently holds one (`two-band-type-scale.md`), `marketing/` is still empty.
+
+## Anti-slop applies here too
+
+Sample code, token examples, and pattern sketches written in this repo follow [`ANTI-SLOP.md`](ANTI-SLOP.md). Prose written here follows the `anti-ai-writing` skill. Do not seed slop into the system built to prevent it.
+
+## Changing the system itself
+
+For a structural change (reworking the process, adding a subsystem), run the brainstorm pipeline:
+
+1. Read [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD) for Vision, Architecture, prior Decisions, Open Questions
+2. Run `superpowers:brainstorming`
+3. Flow into `superpowers:writing-plans`, then `superpowers:subagent-driven-development`
+4. Append to Decisions Made and the Session Log in `OTLC-Brainstorm.MD`
+
+For routine additions (a reference, a pattern, a rule), skip the pipeline and just do the work.
 
 ## devneural.jsonc
 
-```jsonc
-{
-  "name": "REPLACE_ME",        // auto-filled from folder name
-  "localPath": "REPLACE_ME",   // auto-filled from cwd
-  "githubUrl": "REPLACE_ME",   // auto-filled from git remote origin
-  "stage": "alpha",            // alpha | beta | deployed | archived
-  "tags": [],                  // YOU fill these in — drives ecosystem connections
-  "description": "REPLACE_ME" // auto-filled from README first line
-}
-```
-
-Tags are the primary driver of cross-project connections in the DevNeural graph. Use them to describe the domain, tooling, and patterns in the project (e.g. `"autolisp"`, `"api"`, `"claude"`, `"conveyor"`).
-
-## Stage sync
-
-When `stage` changes, Claude will call the monday.com MCP `move_project` tool automatically. For new projects with no board card yet, `register_project` is called first.
-
-To manually reconcile all projects against the monday.com board:
-
-```
-sync devneural
-```
+[`devneural.jsonc`](devneural.jsonc) registers this repo in the DevNeural graph. It is metadata only and has no effect on the skill workflow or on anything in this file.

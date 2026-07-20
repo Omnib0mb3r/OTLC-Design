@@ -1,6 +1,6 @@
 # Color Systems
 
-> Author colors in **OKLCH**, not hex or HSL. OKLCH is perceptually uniform — equal lightness numbers look equally bright across all hues, which makes building a coherent palette mathematically tractable.
+> Author colors in **OKLCH**, not hex or HSL. OKLCH is perceptually uniform: equal lightness numbers look equally bright across all hues, which makes building a coherent palette mathematically tractable.
 
 ## OKLCH basics
 
@@ -16,9 +16,9 @@ Browser support: all evergreen browsers since 2023. Safe to use without fallback
 
 ## Building a neutral ramp
 
-Pick a hue (often slightly cool or warm — *never* pure 0). Build 9-12 lightness steps with low chroma.
+Pick a hue (often slightly cool or warm, *never* pure 0). Build 9-12 lightness steps with low chroma.
 
-### Recipe — slightly warm neutral (cream/off-white background)
+### Recipe: slightly warm neutral (cream/off-white background)
 
 ```css
 :root {
@@ -36,7 +36,7 @@ Pick a hue (often slightly cool or warm — *never* pure 0). Build 9-12 lightnes
 }
 ```
 
-### Recipe — slightly cool neutral (modern product feel)
+### Recipe: slightly cool neutral (modern product feel)
 
 ```css
 :root {
@@ -54,7 +54,7 @@ Pick a hue (often slightly cool or warm — *never* pure 0). Build 9-12 lightnes
 }
 ```
 
-### Recipe — true neutral (gray)
+### Recipe: true neutral (gray)
 
 ```css
 :root {
@@ -75,7 +75,7 @@ Pick a hue (often slightly cool or warm — *never* pure 0). Build 9-12 lightnes
 
 Pick 1-2 accents max. Each accent should have its own ramp at the same lightness steps as neutrals (for hover/active/disabled states).
 
-### Recipe — single accent ramp
+### Recipe: single accent ramp
 
 ```css
 :root {
@@ -146,14 +146,14 @@ For OKLCH, the rule of thumb: a lightness difference of ≥40 percentage points 
 
 ## Anti-patterns
 
-- Pure white (`oklch(100% 0 0)`) and pure black (`oklch(0% 0 0)`) as defaults — too harsh, signals "unconsidered". Use 98% and 15% instead.
-- Tailwind `slate` / `gray` / `zinc` defaults — instantly recognizable as slop.
-- More than 2 accent hues — palette becomes incoherent.
-- Same lightness across hues — fails for color-blind users; use chroma + lightness together.
-- Generic gradients (purple → pink, blue → cyan) — see ANTI-SLOP rule 5.
+- Pure white (`oklch(100% 0 0)`) and pure black (`oklch(0% 0 0)`) as defaults: too harsh, signals "unconsidered". Use 98% and 15% instead.
+- Tailwind `slate` / `gray` / `zinc` defaults: instantly recognizable as slop.
+- More than 2 accent hues: palette becomes incoherent.
+- Same lightness across hues: fails for color-blind users; use chroma + lightness together.
+- Generic gradients (purple → pink, blue → cyan): see ANTI-SLOP rule 5.
 
 ## Tools
 
-- [oklch.com](https://oklch.com) — interactive picker, see hue wheel at constant lightness
-- [huetone.ardov.me](https://huetone.ardov.me) — palette + contrast verification
-- [APCA contrast](https://www.myndex.com/APCA/) — modern contrast tool
+- [oklch.com](https://oklch.com): interactive picker, see hue wheel at constant lightness
+- [huetone.ardov.me](https://huetone.ardov.me): palette + contrast verification
+- [APCA contrast](https://www.myndex.com/APCA/): modern contrast tool

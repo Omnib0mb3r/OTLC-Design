@@ -1,6 +1,6 @@
 # Motion
 
-Motion is personality. Default `ease-in-out 200ms` reads as "I didn't tune this." A small motion vocabulary — 2-3 easings + 3-4 durations — applied consistently, signals craft.
+Motion is personality. Default `ease-in-out 200ms` reads as "I didn't tune this." A small motion vocabulary (2-3 easings plus 3-4 durations), applied consistently, signals craft.
 
 ## Easing curves
 
@@ -61,33 +61,33 @@ A site's motion vocabulary is the *kinds of movement* it uses. Pick from:
 
 ### Hover / interactive
 
-- **Color shift** — fg/bg/border state change, fast (200-300ms)
-- **Translate** — element shifts up/down on hover (`translateY(-2px)`), fast
-- **Underline draw** — text-decoration animates in, fast
-- **Reveal** — secondary content appears on hover, base
-- **Scale** — element grows slightly (`scale(1.02)`), fast
+- **Color shift**: fg/bg/border state change, fast (200-300ms)
+- **Translate**: element shifts up/down on hover (`translateY(-2px)`), fast
+- **Underline draw**: text-decoration animates in, fast
+- **Reveal**: secondary content appears on hover, base
+- **Scale**: element grows slightly (`scale(1.02)`), fast
 
 ### Scroll-driven
 
-- **Fade-in on enter viewport** — base duration, ease-out
-- **Slide-in from below** (`translateY(40px) → 0`) — base duration
-- **Parallax** — background or hero moves slower than scroll (subtle, 0.3-0.5x)
-- **Sticky reveal** — section sticks while content scrolls underneath
-- **Scrub** — animation tied directly to scroll position
-- **Pin** — element pins, animation plays, then unpins (GSAP ScrollTrigger)
+- **Fade-in on enter viewport**: base duration, ease-out
+- **Slide-in from below** (`translateY(40px) → 0`): base duration
+- **Parallax**: background or hero moves slower than scroll (subtle, 0.3-0.5x)
+- **Sticky reveal**: section sticks while content scrolls underneath
+- **Scrub**: animation tied directly to scroll position
+- **Pin**: element pins, animation plays, then unpins (GSAP ScrollTrigger)
 
 ### Page transitions
 
-- **View Transitions API** — modern, native, works in Chrome/Edge/Safari (in progress in Firefox)
-- **Astro built-in** — `<ViewTransitions />` component
-- **Cross-fade** — opacity transition between page states
-- **Shared element** — element morphs between pages
+- **View Transitions API**: modern, native, works in Chrome/Edge/Safari (in progress in Firefox)
+- **Astro built-in**: `<ViewTransitions />` component
+- **Cross-fade**: opacity transition between page states
+- **Shared element**: element morphs between pages
 
 ### Cursor
 
-- **Custom cursor** — replaces native cursor with styled element
-- **Cursor follow** — element trails cursor with delay
-- **Cursor magnetic** — cursor pulled toward interactive elements
+- **Custom cursor**: replaces native cursor with styled element
+- **Cursor follow**: element trails cursor with delay
+- **Cursor magnetic**: cursor pulled toward interactive elements
 
 ## Reduced motion
 
@@ -115,13 +115,13 @@ Or more granular: keep functional motion (state changes), kill decorative motion
 | **Motion One** | Vanilla JS, lightweight, modern API |
 | **GSAP** | Complex sequences, ScrollTrigger, premium polish (commercial license for client work) |
 | **Framer Motion** | React-only, declarative, ergonomic for React projects |
-| **Lenis** | Smooth scroll (use sparingly — not every site needs it) |
+| **Lenis** | Smooth scroll (use sparingly; not every site needs it) |
 | **Lottie** | Designer-authored animations |
 
 ## Anti-patterns
 
-- `transition: all 200ms ease-in-out` — generic, no brand voice
-- Same duration for every transition — no rhythm
+- `transition: all 200ms ease-in-out` (generic, no brand voice)
+- Same duration for every transition (no rhythm)
 - Motion on everything (over-animated reads as juvenile)
 - No motion at all (reads as static template)
 - Smooth scroll forced on every page (annoys users with scroll-heavy reading)

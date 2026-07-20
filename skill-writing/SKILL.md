@@ -1,11 +1,24 @@
 ---
 name: anti-ai-writing
-description: Use whenever producing or reviewing prose of any kind: website and marketing copy, README and docs, commit messages, PR descriptions, emails, proposals, blog posts, UI strings, release notes, reports. Strips the ~60 documented tells that mark text as LLM-generated (AI vocabulary like "delve" and "showcasing", negative parallelism "not just X but Y", rule of three, copulative avoidance "serves as" instead of "is", puffery about broader significance, vague attribution, title-case headings, inline-header bold lists, em dashes, curly quotes, chatbot artifacts, fabricated citations). Also runs as an audit: given existing text, report which tells fire and rewrite. Invoked by "/anti-ai-writing", "does this sound like AI", "make this not sound AI-generated", "de-slop this copy", "audit this writing", or automatically before delivering any substantial prose. Companion to ANTI-SLOP.md, which covers visual slop; this covers prose slop.
+description: >-
+  Use whenever producing or reviewing prose of any kind, including website and
+  marketing copy, README and docs, commit messages, PR descriptions, emails,
+  proposals, blog posts, UI strings, release notes, and reports. Strips the ~60
+  documented tells that mark text as LLM-generated, covering AI vocabulary such
+  as "delve" and "showcasing", negative parallelism ("not just X but Y"), rule of
+  three, copulative avoidance ("serves as" instead of "is"), puffery about
+  broader significance, vague attribution, title-case headings, inline-header
+  bold lists, em dashes, curly quotes, chatbot artifacts, and fabricated
+  citations. Also runs as an audit, reporting which tells fire in existing text
+  and rewriting it. Invoked by "/anti-ai-writing", "does this sound like AI",
+  "make this not sound AI-generated", "de-slop this copy", "audit this writing",
+  or automatically before delivering any substantial prose. Companion to
+  ANTI-SLOP.md, which covers visual slop; this covers prose slop.
 ---
 
 # anti-ai-writing
 
-Prose counterpart to [`ANTI-SLOP.md`](../ANTI-SLOP.md). That file stops a page from *looking* AI-generated. This one stops the words on it from *reading* AI-generated.
+Prose counterpart to `C:\dev\Projects\design-system\ANTI-SLOP.md`. That file stops a page from *looking* AI-generated. This one stops the words on it from *reading* AI-generated.
 
 Source: the English Wikipedia project page [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), the most rigorously maintained catalogue of LLM text tells in existence, built from thousands of confirmed cases and cited to published studies. Distilled here into rules you apply, not trivia you know.
 
@@ -105,7 +118,7 @@ Cut everything after the comma. If the efficiency claim matters, make it its own
 
 Banned: `boasts a`, `vibrant`, `rich`, `profound`, `enhancing`, `showcasing`, `exemplifies`, `commitment to`, `natural beauty`, `nestled`, `in the heart of`, `groundbreaking`, `renowned`, `featuring`, `diverse array`.
 
-LLMs drift into travel-brochure and press-release tone even when told to be neutral. This overlaps heavily with [`ANTI-SLOP.md`](../ANTI-SLOP.md) rule 18 and extends it well past the banned-phrase list there.
+LLMs drift into travel-brochure and press-release tone even when told to be neutral. This overlaps heavily with `C:\dev\Projects\design-system\ANTI-SLOP.md` rule 18 and extends it well past the banned-phrase list there.
 
 ### 3.4 Never attribute vaguely
 
@@ -126,7 +139,7 @@ Also banned as closers: `In summary`, `In conclusion`, `Overall`, and the per-se
 - **Inline-header vertical lists.** The `• **Thing**: description` shape, repeated down the page. Inherited from readmes and sales decks. Use prose or a real table.
 - **Em dashes.** Already banned outright by the global rule, and independently one of the loudest tells. En dashes too. Applies everywhere, including string literals, YAML, JSON, commit messages, and generated SVG.
 - **Curly quotes and apostrophes.** Use straight ASCII `'` and `"` unless the target medium is typeset copy where curly is correct. Weak tell on its own (Word does it too), strong in combination.
-- **Emoji as formatting.** As list markers, separators, or section decoration. Overlaps [`ANTI-SLOP.md`](../ANTI-SLOP.md) rule 21.
+- **Emoji as formatting.** As list markers, separators, or section decoration. Overlaps `C:\dev\Projects\design-system\ANTI-SLOP.md` rule 21.
 - **Skipped heading levels.** Jumping H2 to H4. Accessibility failure and a tell at once.
 - **Thematic breaks before every heading.** The `---` above each section is a Markdown-to-wikitext conversion artifact.
 - **Markdown leaking into a non-Markdown medium.** `**bold**` in plain-text email, wikitext, or a UI string.
@@ -172,6 +185,6 @@ Load these when you need the full taxonomy; the rules above are the working subs
 
 ## 8. Relationship to the rest of the system
 
-- [`ANTI-SLOP.md`](../ANTI-SLOP.md) rules 18 and 19 are the visual system's copy rules. This skill is their expansion. When `OTLC-Design` reaches Step 4 (Build) and writes any user-facing string, this skill applies.
-- Additions follow the same closing-loop mechanic as the rest of the repo. When a new tell slips through into delivered work, add it here and commit `skill-writing: <what changed>`. See [`HANDOVER.md`](../HANDOVER.md).
+- `C:\dev\Projects\design-system\ANTI-SLOP.md` rules 18 and 19 are the visual system's copy rules. This skill is their expansion. When `OTLC-Design` reaches Step 4 (Build) and writes any user-facing string, this skill applies.
+- Additions follow the same closing-loop mechanic as the rest of the repo. When a new tell slips through into delivered work, add it here and commit `skill-writing: <what changed>`. See `C:\dev\Projects\design-system\HANDOVER.md`.
 - This skill is source-extensible. New sources beyond the Wikipedia page get distilled into the same rule shape (ban, why, how to apply) and folded into §1 to §4, with provenance noted in [`references/tells.md`](references/tells.md).

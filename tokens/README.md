@@ -1,6 +1,6 @@
 # tokens/
 
-> Templates and procedures for building project-specific design tokens. **Tokens are synthesized per project from references — never copied from here as defaults.** This folder holds the *systems* (modular type scales, OKLCH palette construction, spacing scales), not the values.
+> Templates and procedures for building project-specific design tokens. **Tokens are synthesized per project from references, never copied from here as defaults.** This folder holds the *systems* (modular type scales, OKLCH palette construction, spacing scales), not the values.
 
 When the `OTLC-Design` skill runs Step 3 (Synthesis), it reads these files to choose which scale to apply, then computes specific token values for the project at hand and writes them to `[client-project]/tokens.css`.
 
@@ -57,7 +57,7 @@ A `tokens.css` file in the client project root, structured roughly:
     --duration-base: 280ms;
     --duration-slow: 600ms;
 
-    /* radius — opinionated, single value */
+    /* radius: opinionated, single value */
     --radius: 4px;
   }
 }

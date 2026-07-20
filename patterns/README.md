@@ -2,14 +2,14 @@
 
 > Hand-built layout primitives. **The vocabulary of how *this practice* solves recurring layout problems.** Not a component library to install. A growing collection of structural ideas worth reusing.
 
-This folder starts empty (or near-empty). It fills as you build real projects and identify structures worth lifting.
+This folder grows from real work only and is never pre-populated. It fills as you build real projects and identify structures worth lifting.
 
 ## Subdivision
 
 Patterns split by mode:
 
-- [`marketing/`](marketing/) — patterns for marketing/showcase sites (heroes, type-led sections, scroll narratives, footer statements, navigation patterns)
-- [`app/`](app/) — patterns for app/product UI (data tables, command palettes, multi-step forms, empty states, settings layouts, side nav)
+- [`marketing/`](marketing/): patterns for marketing/showcase sites (heroes, type-led sections, scroll narratives, footer statements, navigation patterns)
+- [`app/`](app/): patterns for app/product UI (data tables, command palettes, multi-step forms, empty states, settings layouts, side nav)
 
 A pattern lives in one folder. If a pattern genuinely applies to both modes (rare), put it in the more-applicable folder and cross-reference from the other.
 
@@ -22,7 +22,7 @@ A pattern is **structural**, not visual. The styling will differ per project (di
 ## What does NOT go in here
 
 - One-off components specific to a single project
-- Generic patterns (Hero, FeatureCard, FAQ accordion) — see ANTI-SLOP.md
+- Generic patterns (Hero, FeatureCard, FAQ accordion): see ANTI-SLOP.md
 - Components from third-party libraries
 - Components that are just shadcn primitives renamed
 
@@ -56,8 +56,8 @@ How the same structure can be styled differently across projects.
 
 ## Reference uses
 
-- [project-1] — link or note
-- [reference-site-from-vault] — note
+- [project-1]: link or note
+- [reference-site-from-vault]: note
 
 ## Code reference
 
@@ -73,13 +73,13 @@ Commit message when adding: `patterns: add [mode]/[pattern-name]`.
 ## Examples of patterns worth capturing (when you build them)
 
 ### Marketing patterns
-- **Type-led hero with no image** — when the headline IS the hero
-- **Asymmetric two-column with breakout** — narrower text left, wide image breaking right margin
-- **Sticky sidebar with scroll-narrative content** — long-form essay layout
-- **Project deep-dive single-page** — case study format
-- **Marquee + dense info row** — motion above a tight client list
-- **Footer-as-statement** — full-bleed display type instead of utility links
-- **Contact-as-form-letter** — inline-blank form letter, not stacked label/input
+- **Type-led hero with no image**: when the headline IS the hero
+- **Asymmetric two-column with breakout**: narrower text left, wide image breaking right margin
+- **Sticky sidebar with scroll-narrative content**: long-form essay layout
+- **Project deep-dive single-page**: case study format
+- **Marquee + dense info row**: motion above a tight client list
+- **Footer-as-statement**: full-bleed display type instead of utility links
+- **Contact-as-form-letter**: inline-blank form letter, not stacked label/input
 
 ### App patterns
 - **Command palette** (Cmd-K)
@@ -97,4 +97,4 @@ When you build one and like it, lift it here.
 
 ## Anti-pattern
 
-Do not pre-populate this folder with hypothetical patterns. Patterns earn their place by being *used and proven* in real projects first. An empty folder that grows with real work is more valuable than a full folder of templates that nobody reaches for.
+Do not pre-populate this folder with hypothetical patterns. Patterns earn their place by being *used and proven* in real projects first. An empty folder that grows with real work is more useful than a full folder of templates that nobody reaches for.

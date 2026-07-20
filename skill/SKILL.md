@@ -1,6 +1,6 @@
 ---
 name: OTLC-Design
-description: Use when the user is starting any design or build project — websites, web apps, internal tools, customer-facing apps. Triggered by phrases like "let's build a site for X", "new client website", "design a website for Y", "build an app for Z", "internal tool for W", "/design", "/OTLC-Design", or any project-kickoff context that involves design work. Reads the design-system substrate at C:\dev\Projects\design-system\ as knowledge base. Asks one branch question (Customer site / Customer app / Internal site / Internal app) and adapts the workflow accordingly. For internal projects, pulls from owner-brand profile (no brand-discovery needed). Walks a 6-step workflow (Intake, Reference Analysis, Synthesis, Build, Verify, Iterate) using Chrome DevTools MCP for analysis, Playwright MCP for verification, Context7 MCP for current docs. Enforces ANTI-SLOP rules and hard-gates the post-mortem.
+description: Use when the user is starting any design or build project (websites, web apps, internal tools, customer-facing apps). Triggered by phrases like "let's build a site for X", "new client website", "design a website for Y", "build an app for Z", "internal tool for W", "/design", "/OTLC-Design", or any project-kickoff context that involves design work. Reads the design-system substrate at C:\dev\Projects\design-system\ as knowledge base. Asks one branch question (Customer site / Customer app / Internal site / Internal app) and adapts the workflow accordingly. For internal projects, pulls from owner-brand profile (no brand-discovery needed). Walks a 6-step workflow (Intake, Reference Analysis, Synthesis, Build, Verify, Iterate) using Chrome DevTools MCP for analysis, Playwright MCP for verification, Context7 MCP for current docs. Enforces ANTI-SLOP rules and hard-gates the post-mortem.
 ---
 
 # OTLC-Design
@@ -30,16 +30,18 @@ If the user is mid-project and says "let's add a feature" or "iterate on the her
 
 The design-system repo at `C:\dev\Projects\design-system\` is your knowledge base. Read these files in order **before** asking the user for their first input:
 
-1. `C:\dev\Projects\design-system\PROCESS.md` — the 6-step workflow you enforce
-2. `C:\dev\Projects\design-system\ANTI-SLOP.md` — universal durable rules
-3. `C:\dev\Projects\design-system\STACK-DECISIONS.md` — stack picks per project type
-4. `C:\dev\Projects\design-system\analyzer\extract-prompt.md` — reference extraction procedure
-5. `C:\dev\Projects\design-system\references\INDEX.md` — the reference vault
-6. `C:\dev\Projects\design-system\tokens\README.md` and the four scale files — token systems
-7. `C:\dev\Projects\design-system\skill-writing\SKILL.md` — the `anti-ai-writing` prose rules (ANTI-SLOP for words)
+1. `C:\dev\Projects\design-system\PROCESS.md`: the 6-step workflow you enforce
+2. `C:\dev\Projects\design-system\ANTI-SLOP.md`: universal durable rules
+3. `C:\dev\Projects\design-system\STACK-DECISIONS.md`: stack picks per project type
+4. `C:\dev\Projects\design-system\analyzer\extract-prompt.md`: reference extraction procedure
+5. `C:\dev\Projects\design-system\references\INDEX.md`: the reference vault
+6. `C:\dev\Projects\design-system\tokens\README.md` and the four scale files: token systems
+7. `C:\dev\Projects\design-system\skill-writing\SKILL.md`: the `anti-ai-writing` prose rules (ANTI-SLOP for words)
+8. `C:\dev\Projects\design-system\guides\INDEX.md`: technical guides (SEO, AEO, structured data, GA4, browser-aware design). Pull the individual guide at Build/Verify when the project touches that surface.
+9. `C:\dev\Projects\design-system\legal\INDEX.md` and `C:\dev\Projects\design-system\legal\CHECKLIST.md`: what a site must have to be lawful. The checklist's intake block goes into `BRIEF.md` at Step 1 and gates at Step 5.
 
 Then **conditionally** based on the branch question (see next section), also read:
-- If internal: `C:\dev\Projects\design-system\MODE-INTERNAL.md` and `owner-brand/profile.md` (which routes to brand-specific files)
+- If internal: `C:\dev\Projects\design-system\MODE-INTERNAL.md` and `C:\dev\Projects\design-system\owner-brand\profile.md` (which routes to brand-specific files)
 - If app (customer or internal): `C:\dev\Projects\design-system\APP-ADAPTATION.md`
 
 These files are authoritative. Do not deviate from them without explicit user approval.
@@ -48,15 +50,15 @@ These files are authoritative. Do not deviate from them without explicit user ap
 
 The skill assumes three Claude Code MCP servers are installed at user scope. Verify with `claude mcp list` if uncertain.
 
-- **chrome-devtools** — Step 2 (Reference Analysis). Mandatory.
-- **playwright** — Step 5 (Verify). Mandatory.
-- **context7** — Steps 3-4 (Synthesize/Build) for current docs. Mandatory.
+- **chrome-devtools**: Step 2 (Reference Analysis). Mandatory.
+- **playwright**: Step 5 (Verify). Mandatory.
+- **context7**: Steps 3-4 (Synthesize/Build) for current docs. Mandatory.
 
 If any MCP is missing, stop and tell the user. Do not proceed with manual fallbacks unless the user explicitly approves.
 
 ### MCP surface check (run at the top of Step 2)
 
-`claude mcp list` reporting `Connected` is necessary but not sufficient — an MCP can be configured at the harness level but not surfaced into the model's tool space for the current session (typically because the session was started before the MCP was registered). Before extracting the first reference, run:
+`claude mcp list` reporting `Connected` is necessary but not sufficient. An MCP can be configured at the harness level but not surfaced into the model's tool space for the current session (typically because the session was started before the MCP was registered). Before extracting the first reference, run:
 
 ```
 ToolSearch query="+chrome-devtools" max_results=5
@@ -64,26 +66,26 @@ ToolSearch query="+playwright"      max_results=5
 ToolSearch query="+context7"        max_results=5
 ```
 
-If any query returns empty, the tool schemas are not callable in this session. Stop, tell the user "MCPs configured but not surfaced — restart Claude Code to pick them up", and do not proceed. Do **not** fall back to WebFetch/WebSearch as a substitute unless the user explicitly authorizes the degraded path. This failure mode caused a multi-session pause on the DevNeural Hub run on 2026-05-03; the surface-check catches it on the same session.
+If any query returns empty, the tool schemas are not callable in this session. Stop, tell the user "MCPs configured but not surfaced, restart Claude Code to pick them up", and do not proceed. Do **not** fall back to WebFetch/WebSearch as a substitute unless the user explicitly authorizes the degraded path. This failure mode caused a multi-session pause on the DevNeural Hub run on 2026-05-03; the surface-check catches it on the same session.
 
 ## The branch question (always first)
 
 Before any other intake, ask exactly:
 
 > *"What are we building?*
-> *1. **Customer site** — marketing/showcase site for an external client*
-> *2. **Customer app** — product/app interface for paying customers (B2B SaaS, customer portal, web app)*
-> *3. **Internal site** — your own marketing/showcase site (your portfolio, MHW, project landing pages)*
-> *4. **Internal app** — your own tools, dashboards, admin panels"*
+> *1. **Customer site**: marketing/showcase site for an external client*
+> *2. **Customer app**: product/app interface for paying customers (B2B SaaS, customer portal, web app)*
+> *3. **Internal site**: your own marketing/showcase site (portfolio, publications, project landing pages)*
+> *4. **Internal app**: your own tools, dashboards, admin panels"*
 
 Based on the answer, set context:
 
 | Branch | Adaptations to load | Brand source |
 |--------|---------------------|--------------|
-| 1. Customer site | (default — none) | Discovered from client brief + references |
-| 2. Customer app | APP-ADAPTATION.md (with customer-app tightening) | Discovered from client brief + references |
-| 3. Internal site | MODE-INTERNAL.md | Owner-brand profile (ask which: personal-site, MHW, or new) |
-| 4. Internal app | MODE-INTERNAL.md + APP-ADAPTATION.md | Owner-brand profile (ask which) |
+| 1. Customer site | (default: none) | Discovered from client brief + references |
+| 2. Customer app | `C:\dev\Projects\design-system\APP-ADAPTATION.md` (with customer-app tightening) | Discovered from client brief + references |
+| 3. Internal site | `C:\dev\Projects\design-system\MODE-INTERNAL.md` | Owner-brand profile (ask which surface, per `owner-brand/profile.md`) |
+| 4. Internal app | `C:\dev\Projects\design-system\MODE-INTERNAL.md` + `C:\dev\Projects\design-system\APP-ADAPTATION.md` | Owner-brand profile (ask which) |
 
 State the resolved context in writing before proceeding:
 
@@ -91,13 +93,13 @@ State the resolved context in writing before proceeding:
 
 ## Workflow
 
-Follow `PROCESS.md` exactly. The summary below is for orientation; the canonical steps live in the file.
+Follow `C:\dev\Projects\design-system\PROCESS.md` exactly. The summary below is for orientation; the canonical steps live in the file. Where a step has mode-specific thresholds (the Step 5 verification gates), `C:\dev\Projects\design-system\APP-ADAPTATION.md` is the authority for the app columns and PROCESS.md states the marketing-site baseline.
 
-### Step 1 — INTAKE
+### Step 1: INTAKE
 
 **Always ask the branch question first** (above), then proceed to mode-appropriate intake.
 
-**Customer site intake** (default — full):
+**Customer site intake** (default, full):
 1. Client name + domain
 2. Industry / domain context
 3. Audience
@@ -109,7 +111,7 @@ Follow `PROCESS.md` exactly. The summary below is for orientation; the canonical
 9. Deadline / budget signals
 10. Hosting / deploy preference
 
-**Customer app intake** (extends customer site intake with app-specific questions per APP-ADAPTATION.md):
+**Customer app intake** (extends customer site intake with app-specific questions per `C:\dev\Projects\design-system\APP-ADAPTATION.md`):
 - All of the above, plus:
 - Primary user roles + usage frequency
 - Core workflows / tasks supported
@@ -120,15 +122,15 @@ Follow `PROCESS.md` exactly. The summary below is for orientation; the canonical
 - Browser/device targets
 - (Customer-app tightening) onboarding model, help architecture, mobile required, notification model, billing surface
 
-**Internal site intake** (per MODE-INTERNAL.md — much lighter):
+**Internal site intake** (per `C:\dev\Projects\design-system\MODE-INTERNAL.md`, much lighter):
 - Project name + folder
 - Project goals
 - Scope
 - Optional references
 - Hosting / deploy preference
-- (Brand discovery skipped — read from owner-brand profile)
+- (Brand discovery skipped: read from owner-brand profile)
 
-**Internal app intake** (per MODE-INTERNAL.md + APP-ADAPTATION.md):
+**Internal app intake** (per `C:\dev\Projects\design-system\MODE-INTERNAL.md` + `C:\dev\Projects\design-system\APP-ADAPTATION.md`):
 - Project name + folder
 - Project goals
 - Scope
@@ -146,29 +148,31 @@ Create the project folder:
 
 Write `BRIEF.md` capturing all of the above.
 
+**Also copy the legal scope block** from `C:\dev\Projects\design-system\legal\CHECKLIST.md` §0 into `BRIEF.md` and fill it in now: audience jurisdictions, personal data collected, minors, third-party tags, commerce, email marketing, client industry, and who reviews compliance. Answering it late is how a cookie banner becomes a retrofit. This is not legal advice and neither is the checklist; the client (or the client's counsel) owns the compliance call, and the brief records which.
+
 References are required for customer work, optional for internal work.
 
-### Step 2 — REFERENCE ANALYSIS
+### Step 2: REFERENCE ANALYSIS
 
-For each reference URL provided (zero is fine for internal work), use Chrome DevTools MCP per `analyzer/extract-prompt.md`. Output to `[project]/references/[domain].md`.
+For each reference URL provided (zero is fine for internal work), use Chrome DevTools MCP per `C:\dev\Projects\design-system\analyzer\extract-prompt.md`. Output to `[project]/references/[domain].md`.
 
-For internal work with no references, skip Step 2 — but still walk Step 3 synthesis using the owner-brand tokens as the basis.
+For internal work with no references, skip Step 2, but still walk Step 3 synthesis using the owner-brand tokens as the basis.
 
-### Step 3 — SYNTHESIS
+### Step 3: SYNTHESIS
 
 Build project tokens.
 
 For **customer work**: synthesized from references using the token-system templates.
 
-For **internal work**: start from `owner-brand/tokens/[brand].css` — the project tokens are the brand tokens, with project-specific overrides only where the brief justifies them.
+For **internal work**: start from `C:\dev\Projects\design-system\owner-brand\tokens\[brand].css`. The project tokens are the brand tokens, with project-specific overrides only where the brief justifies them.
 
-Pick a stack per `STACK-DECISIONS.md`. Apps default to Next.js + React + TypeScript per APP-ADAPTATION.md. Sites default to plain HTML/CSS/JS + Vite or Astro.
+Pick a stack per `C:\dev\Projects\design-system\STACK-DECISIONS.md`. Apps default to Next.js + React + TypeScript per `C:\dev\Projects\design-system\APP-ADAPTATION.md`. Sites default to plain HTML/CSS/JS + Vite or Astro.
 
 Propose sitemap + section structure.
 
-**Operational design** (consumes the intake deploy-preference answer — otherwise captured and never used). Decide how the thing runs outside the laptop before any build:
+**Operational design** (consumes the intake deploy-preference answer, otherwise captured and never used). Decide how the thing runs outside the laptop before any build:
 - **Sites**: one-line confirmation (static host + any build-time env).
-- **Apps (customer or internal)**: a real plan per APP-ADAPTATION.md §"Operational readiness" — where it runs, how config and secrets are provided, how it updates, how it rolls back, which production failures must be observable. Write `[project]/OPERATIONS.md`.
+- **Apps (customer or internal)**: a real plan per `C:\dev\Projects\design-system\APP-ADAPTATION.md` §"Operational readiness": where it runs, how config and secrets are provided, how it updates, how it rolls back, which production failures must be observable. Write `[project]/OPERATIONS.md`.
 
 Write:
 - `[project]/tokens.css`
@@ -177,17 +181,17 @@ Write:
 
 **Show this to the user. Do not start building until they confirm.** For apps, the operational plan is part of what they confirm.
 
-### Step 4 — BUILD
+### Step 4: BUILD
 
-Scaffold per stack pick. Apply ANTI-SLOP.md universally. Apply MODE-INTERNAL / APP-ADAPTATION rules per branch. For internal work, apply owner-brand voice rules from `owner-brand/voice.md`.
+Scaffold per stack pick. Apply `C:\dev\Projects\design-system\ANTI-SLOP.md` universally. Apply `C:\dev\Projects\design-system\MODE-INTERNAL.md` / `C:\dev\Projects\design-system\APP-ADAPTATION.md` rules per branch. For internal work, apply owner-brand voice rules from `C:\dev\Projects\design-system\owner-brand\voice.md`. When the project touches SEO, AEO, structured data, analytics, or page-weight decisions, pull the matching guide from `C:\dev\Projects\design-system\guides\INDEX.md`.
 
-**Every user-facing string you write in this step goes through the `anti-ai-writing` skill** (`skill-writing/SKILL.md`): headlines, body copy, button labels, form labels, error messages, empty states, meta descriptions, alt text. ANTI-SLOP.md governs how the page looks; anti-ai-writing governs how it reads. Copy that trips those rules is as much of a slop signal as a default Tailwind palette, and it is the tell a client notices first.
+**Every user-facing string you write in this step goes through the `anti-ai-writing` skill** (`C:\dev\Projects\design-system\skill-writing\SKILL.md`): headlines, body copy, button labels, form labels, error messages, empty states, meta descriptions, alt text. ANTI-SLOP.md governs how the page looks; anti-ai-writing governs how it reads. Copy that trips those rules is as much of a slop signal as a default Tailwind palette, and it is the tell a client notices first.
 
-### Step 5 — VERIFY
+### Step 5: VERIFY
 
 Use Playwright MCP for multi-browser screenshots. Use Chrome DevTools MCP for Lighthouse.
 
-Verification gates differ by mode (full table in APP-ADAPTATION.md):
+Verification gates differ by mode. `C:\dev\Projects\design-system\PROCESS.md` Step 5 states the marketing-site baseline; `C:\dev\Projects\design-system\APP-ADAPTATION.md` §"Verification gate adjustments (app)" is the authority for the app columns and carries the full table. The summary below is the same numbers, reproduced for orientation only. If it ever disagrees with APP-ADAPTATION.md, APP-ADAPTATION.md wins.
 
 | Gate | Site | App (internal) | App (customer) |
 |------|------|---------------|----------------|
@@ -197,44 +201,48 @@ Verification gates differ by mode (full table in APP-ADAPTATION.md):
 | SEO | ≥ 90 | skip | skip |
 | Mobile responsive | required | optional | required |
 | Empty/loading/error states | n/a | designed | designed |
-| Cross-browser | Chrome | Chrome enough | Chrome + Safari iOS + Firefox |
+| Cross-browser | Chrome enough | Chrome enough | Chrome + Safari iOS + Firefox |
 
-For apps, also gate on operational readiness (full table in APP-ADAPTATION.md §"Operational readiness gates"): `.env.example` + README runtime section present, no secrets in repo or client bundle (grep verified), `OPERATIONS.md` deploy + rollback path documented, error observability wired. These gate at delivery alongside Lighthouse/axe.
+For apps, also gate on operational readiness (full table in `C:\dev\Projects\design-system\APP-ADAPTATION.md` §"Operational readiness gates"): `.env.example` + README runtime section present, no secrets in repo or client bundle (grep verified), `OPERATIONS.md` deploy + rollback path documented, error observability wired. These gate at delivery alongside Lighthouse/axe.
 
-**Reputation-safe shipping (every live site or app).** Before delivery, confirm per STACK-DECISIONS.md §"Shipping hygiene": no page ships as a mostly-inline-JS blob (scripts and datasets stay external, content-hash versioned); HTTPS is forced and the security headers are set (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy). A carrier/reputation filter blocking a live domain because of a giant inline-JS page is a real, observed failure mode, not hypothetical, and it takes a re-crawl or a vendor reclassification to undo. Also verify as a *returning* user (primed cache + existing localStorage), not only a fresh profile.
+**Legal gate (every live site or app).** Run `C:\dev\Projects\design-system\legal\CHECKLIST.md` before delivery, alongside Lighthouse and axe. It fails the same way an accessibility gate fails: the project does not ship until the failures are fixed or the client accepts them in writing. Check that the required documents exist and describe the real build (a privacy policy claiming data flows the site does not have is a dated misrepresentation, worse than none), that consent is collected before any non-essential tag fires, and that the compliance-review line in `BRIEF.md` is filled in. Neither you nor the checklist gives legal advice; where the answer is a lawyer, say so and stop.
+
+**Reputation-safe shipping (every live site or app).** Before delivery, confirm per `C:\dev\Projects\design-system\STACK-DECISIONS.md` §"Shipping hygiene": no page ships as a mostly-inline-JS blob (scripts and datasets stay external, content-hash versioned); HTTPS is forced and the security headers are set (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy). A carrier/reputation filter blocking a live domain because of a giant inline-JS page is a real, observed failure mode, not hypothetical, and it takes a re-crawl or a vendor reclassification to undo. Also verify as a *returning* user (primed cache + existing localStorage), not only a fresh profile.
 
 Write `[project]/VERIFICATION.md` with screenshots, scores, results, verdict.
 
-### Step 6 — ITERATE + POST-MORTEM (hard-enforced)
+### Step 6: ITERATE + POST-MORTEM (hard-enforced)
 
-Iterate with user feedback. When user gives a done signal, enter post-mortem enforcement mode per PROCESS.md Step 6.
+Iterate with user feedback. When user gives a done signal, enter post-mortem enforcement mode per `C:\dev\Projects\design-system\PROCESS.md` Step 6.
 
-Walk the 6 questions one at a time. Each requires a substantive answer (concrete addition OR explicit "intentionally nothing this round, because [reason]"). Non-answers get pushed back. Write `[project]/POSTMORTEM.md`. Do not mark complete until all 6 are answered.
+There are **6 universal questions** (asked on every project, whatever the branch) and **one internal-mode-only 7th**. Walk them one at a time. Each requires a substantive answer (concrete addition OR explicit "intentionally nothing this round, because [reason]"). Non-answers get pushed back. Write `[project]/POSTMORTEM.md`. Do not mark complete until all 6 universal questions are answered, plus the 7th on internal work.
 
-Question 6 is the prose counterpart to question 1:
-6. **New anti-ai-writing rule?** Did any copy ship that read generated? A phrase you had to strike, a construction you kept correcting, a tell not yet on the list? Additions go to `skill-writing/SKILL.md` and `skill-writing/references/tells.md`, committed `skill-writing: [summary]`.
+The 6 questions are defined in PROCESS.md Step 6. Question 6 is the prose counterpart to question 1:
+6. **New anti-ai-writing rule?** Did any copy ship that read generated? A phrase you had to strike, a construction you kept correcting, a tell not yet on the list? Additions go to `C:\dev\Projects\design-system\skill-writing\SKILL.md` and `C:\dev\Projects\design-system\skill-writing\references\tells.md`, committed `skill-writing: [summary]`.
 
-If internal mode, add a 7th post-mortem question:
+**Internal mode only**, add a 7th question (it does not apply to customer work):
 7. **Did anything from this project deserve to go into your owner-brand profile?** (New brand surface? New token? New voice rule? New design rule that should evolve into the brand guide?)
 
 Same enforcement: substantive answer or explicit skip with reason.
 
+Patterns harvested in the post-mortem go to `C:\dev\Projects\design-system\patterns\marketing\[name].md` or `C:\dev\Projects\design-system\patterns\app\[name].md` depending on mode, committed `patterns: add marketing/<name>` or `patterns: add app/<name>`.
+
 ## Hard rules (universal)
 
-These apply on every project regardless of branch. Inherited from `ANTI-SLOP.md`:
+These apply on every project regardless of branch. Inherited from `C:\dev\Projects\design-system\ANTI-SLOP.md`:
 
 - Never use the default Tailwind palette (without custom theme)
 - Never use a single typeface (minimum: display + body OR body + mono)
 - Never use the centered hero + two pill button default layout (marketing only)
-- Never use Lucide / Heroicons in feature bullets (marketing only — apps invert this)
+- Never use Lucide / Heroicons in feature bullets (marketing only; apps invert this)
 - Never use generic gradients (purple-pink, blue-cyan, sunset)
 - Never use shadcn/ui for marketing/showcase sites (apps invert)
 - Never ship lorem ipsum in delivered work
 - Never ship without verification gates passing
-- Never use AI buzzwords (see owner-brand/voice.md banned list)
+- Never use AI buzzwords (see `C:\dev\Projects\design-system\owner-brand\voice.md` banned list)
 - Never use em dashes in any artifact (global owner rule)
 
-The full list (currently 26 rules, growing) is in `ANTI-SLOP.md`. Read it at start.
+The full list (currently 26 rules, growing) is in `C:\dev\Projects\design-system\ANTI-SLOP.md`. Read it at start.
 
 ## What this skill does NOT do
 
@@ -257,5 +265,5 @@ If the user explicitly stops the workflow mid-project (without signaling done), 
 - **Do not over-ask.** Intake captures enough; do not pepper the user with micro-decisions during build. Make calls and surface them at verification.
 - **No mid-workflow pace prompts.** Once intake is complete and the user has authorized the run (explicitly or by saying "go" / "do it" / "all of it" / "I want this done"), do not insert "want me to continue?", "should I pause after step N?", or "1/2/3 to choose pace" prompts. Execute end-to-end through the two real gates (Step 3 synthesis, Step 5 verification) and stop only at those, plus Step 6 post-mortem. Real blockers (missing tools, ambiguous spec, contradictory references) still warrant stopping. Confirmation menus during an authorized run are forbidden.
 - **Show your work at synthesis (Step 3) and verification (Step 5).** Those are the two gates.
-- **For internal work, do not re-discover the brand.** Read `owner-brand/profile.md`. Ask only which brand surface applies if ambiguous.
+- **For internal work, do not re-discover the brand.** Read `C:\dev\Projects\design-system\owner-brand\profile.md`. Ask only which brand surface applies if ambiguous.
 - **For customer work, do not impose owner-brand defaults.** The owner-brand profile may inform your defaults internally (font pairing instincts, anti-slop instincts) but never overrides client direction.

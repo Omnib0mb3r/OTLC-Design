@@ -14,10 +14,10 @@ Open the URL in Chrome via Chrome DevTools MCP. Wait for full load (network idle
 
 Capture full-page screenshots at four widths:
 
-- **375px** — mobile
-- **768px** — tablet
-- **1280px** — desktop standard
-- **1920px** — large desktop
+- **375px**: mobile
+- **768px**: tablet
+- **1280px**: desktop standard
+- **1920px**: large desktop
 
 Save to `[client-project]/references/[domain]/screens/[width].png`.
 
@@ -69,19 +69,19 @@ Identify the **base unit** if evident. Marketing sites commonly use 4 or 8 px ba
 
 **Pick the rubric first.** Compare `document.documentElement.scrollHeight` to `window.innerHeight`:
 
-- If `docHeight > viewport * 1.5` → **scrolling-document** rubric (default — use the section list below).
-- If `docHeight ≈ viewport` → **experience-style** rubric (page is a fixed stage, not a scrolling doc — use the experience-style block below instead).
+- If `docHeight > viewport * 1.5` → **scrolling-document** rubric (default: use the section list below).
+- If `docHeight ≈ viewport` → **experience-style** rubric (page is a fixed stage, not a scrolling doc; use the experience-style block below instead).
 
 #### Scrolling-document rubric
 
 For each major section type observed:
 
-- **Hero** — Centered? Left? Asymmetric? Image-led? Type-only? Full-bleed? Overlapping content?
-- **"What we do"** — Three-up cards? List? Numbered paragraphs? Interactive? Type-led?
-- **"Showcase / Work"** — Grid? List? Carousel? Sticky sidebar with scroll narrative?
-- **"About / Team"** — Photos? Type? Story-told?
-- **"Contact"** — Form? Inline letter? Email link only?
-- **"Footer"** — Utility? Statement? Full-bleed display type? Column-based?
+- **Hero**: Centered? Left? Asymmetric? Image-led? Type-only? Full-bleed? Overlapping content?
+- **"What we do"**: Three-up cards? List? Numbered paragraphs? Interactive? Type-led?
+- **"Showcase / Work"**: Grid? List? Carousel? Sticky sidebar with scroll narrative?
+- **"About / Team"**: Photos? Type? Story-told?
+- **"Contact"**: Form? Inline letter? Email link only?
+- **"Footer"**: Utility? Statement? Full-bleed display type? Column-based?
 
 Note column counts (12-col grid? 6-col? bespoke?) and whether breakouts beyond the main column happen.
 
@@ -89,12 +89,12 @@ Note column counts (12-col grid? 6-col? bespoke?) and whether breakouts beyond t
 
 When the page is a fixed-viewport interactive (e.g. a Svelte/Three.js stage with no scroll), the section-by-section model does not apply. Capture instead:
 
-- **Page model** — Fixed stage? Pannable canvas? Click-to-progress scenes? Multi-route experience?
-- **Navigation model** — Implicit (hitzones / proximity) or explicit (menu overlay / keyboard)? Look for class names like `hitzone`, `MENU`, `wrapper`, `overAll`.
-- **Scene / act progression** — Does the page reveal more content over time or interaction? Cross-reference with Font Loading API status (Step 8) — lazy-loaded faces often correspond to later scenes.
-- **Stage anatomy** — Foreground actors (custom cursor, moon, jet, etc.), middle layer (interactive hitzones), background (canvas/WebGL/video).
-- **Aspect handling** — How does the experience adapt across the 4 breakpoints? Does it letterbox, recompose, or break?
-- **Sound / motion / haptics** — Site may explicitly opt in or out (e.g. "experience without sound"). Note the choice.
+- **Page model**: Fixed stage? Pannable canvas? Click-to-progress scenes? Multi-route experience?
+- **Navigation model**: Implicit (hitzones / proximity) or explicit (menu overlay / keyboard)? Look for class names like `hitzone`, `MENU`, `wrapper`, `overAll`.
+- **Scene / act progression**: Does the page reveal more content over time or interaction? Cross-reference with Font Loading API status (Step 8); lazy-loaded faces often correspond to later scenes.
+- **Stage anatomy**: Foreground actors (custom cursor, moon, jet, etc.), middle layer (interactive hitzones), background (canvas/WebGL/video).
+- **Aspect handling**: How does the experience adapt across the 4 breakpoints? Does it letterbox, recompose, or break?
+- **Sound / motion / haptics**: Site may explicitly opt in or out (e.g. "experience without sound"). Note the choice.
 
 Skip the conventional Hero/About/Contact/Footer section walk; it does not apply.
 
@@ -111,23 +111,23 @@ If `true`, use Chrome DevTools MCP `emulate` to override CSS media features and 
 
 Then observe the page over 30 seconds with cursor movement and scroll:
 
-- **Hover states** — Subtle? Exaggerated? Color? Translate? Reveal?
-- **Scroll motion** — Parallax? Fades? Reveals? Sticky? Scrub? Pin?
-- **Page transitions** — Hard load? Cross-fade? View transitions?
-- **Cursor effects** — Custom cursor? Magnetic? Trail?
-- **Loading state** — Skeleton? Loader? Snap?
+- **Hover states**: Subtle? Exaggerated? Color? Translate? Reveal?
+- **Scroll motion**: Parallax? Fades? Reveals? Sticky? Scrub? Pin?
+- **Page transitions**: Hard load? Cross-fade? View transitions?
+- **Cursor effects**: Custom cursor? Magnetic? Trail?
+- **Loading state**: Skeleton? Loader? Snap?
 
-Note easing feel (snappy? smooth? mechanical?) — guess at cubic-bezier curve or describe.
+Note easing feel (snappy? smooth? mechanical?). Guess at a cubic-bezier curve or describe it.
 
 ### 8. Note unusual / signature choices
 
-**Run the programmatic checks first** (these are cheap and consistently high-signal — promote them ahead of visual hunting):
+**Run the programmatic checks first** (these are cheap and consistently high-signal; promote them ahead of visual hunting):
 
-- **Font Loading API** — `Array.from(document.fonts).map(f => ({ family: f.family, weight: f.weight, style: f.style, status: f.status }))`. Mixed `loaded` / `unloaded` faces imply a multi-act type system where new faces appear as the user progresses. Self-hosted custom WOFFs (vs Google/Adobe) is itself a signal of taste.
-- **Custom cursor** — `getComputedStyle(document.body).cursor === 'none'`. If true, the site is hiding the system cursor and rendering its own (look for a `.cursor` element or class).
-- **Custom selection** — Stylesheet rule scan for `::selection`. Presence indicates the site brand-matches the highlight color.
-- **Stack signal** — Class-name patterns on top-level wrappers reveal the framework cheaply: `lazyblock-*` / `wp-block-*` (WordPress + Lazy Blocks), `svelte-[hash]` (Svelte), `Component_name__[hash]` (Next.js CSS modules), `_a1b2c3` (CSS-in-JS like styled-components / Emotion). Capture once and note.
-- **Fluid sizing** — Any sub-pixel computed font sizes (e.g. `53.4275px`) almost always indicate `clamp()` / `vw` fluid type. Look at h1/h2 sizes; if they are not whole pixels, the system is fluid.
+- **Font Loading API**: `Array.from(document.fonts).map(f => ({ family: f.family, weight: f.weight, style: f.style, status: f.status }))`. Mixed `loaded` / `unloaded` faces imply a multi-act type system where new faces appear as the user progresses. Self-hosted custom WOFFs (vs Google/Adobe) is itself a signal of taste.
+- **Custom cursor**: `getComputedStyle(document.body).cursor === 'none'`. If true, the site is hiding the system cursor and rendering its own (look for a `.cursor` element or class).
+- **Custom selection**: Stylesheet rule scan for `::selection`. Presence indicates the site brand-matches the highlight color.
+- **Stack signal**: Class-name patterns on top-level wrappers reveal the framework cheaply: `lazyblock-*` / `wp-block-*` (WordPress + Lazy Blocks), `svelte-[hash]` (Svelte), `Component_name__[hash]` (Next.js CSS modules), `_a1b2c3` (CSS-in-JS like styled-components / Emotion). Capture once and note.
+- **Fluid sizing**: Any sub-pixel computed font sizes (e.g. `53.4275px`) almost always indicate `clamp()` / `vw` fluid type. Look at h1/h2 sizes; if they are not whole pixels, the system is fluid.
 
 Then visually scan for anything that signals deliberate design choice:
 
@@ -149,7 +149,7 @@ Capture performance baseline of the reference. Often the reference's actual perf
 
 ## Canonical extractor
 
-Paste the script below verbatim into Chrome DevTools MCP `evaluate_script` after navigating + resizing to 1280×900. It returns one JSON blob covering Steps 3, 4, 5, 6 (page model), and 8 (programmatic checks). Steps 7 (motion) and 9 (Lighthouse) still require their own observation. **Do not reimplement the OKLCH math per session** — keep the canonical version below as the source of truth.
+Paste the script below verbatim into Chrome DevTools MCP `evaluate_script` after navigating + resizing to 1280×900. It returns one JSON blob covering Steps 3, 4, 5, 6 (page model), and 8 (programmatic checks). Steps 7 (motion) and 9 (Lighthouse) still require their own observation. **Do not reimplement the OKLCH math per session**: keep the canonical version below as the source of truth.
 
 ```js
 () => {
@@ -330,11 +330,11 @@ One paragraph describing the aesthetic in design terms (not vibes). E.g., "Edito
 
 ## Color palette
 
-**Background:** oklch(98% 0.005 70) — warm cream
-**Foreground:** oklch(15% 0.02 250) — near-black, slightly cool
+**Background:** oklch(98% 0.005 70), warm cream
+**Foreground:** oklch(15% 0.02 250), near-black and slightly cool
 **Muted:** oklch(50% 0.02 250)
 **Border:** oklch(85% 0.01 250)
-**Accent:** oklch(58% 0.18 240) — saturated blue
+**Accent:** oklch(58% 0.18 240), saturated blue
 **Notes:** [unusual choices, hue stories, etc.]
 
 ## Spacing

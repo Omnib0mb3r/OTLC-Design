@@ -1,19 +1,19 @@
 // DevNeural Project Metadata
 //
-// stage — accepted values:
+// stage: accepted values
 //   "alpha"     → R&D / early development
 //   "beta"      → feature complete, in testing
 //   "deployed"  → live / released
 //   "archived"  → inactive
-//   NOTE: "pre-release" is a manual promotion on monday.com only — never set it here
+//   NOTE: "pre-release" is a manual promotion on monday.com only, never set it here
 //
-// tags — free-form strings, e.g.:
+// tags: free-form strings, e.g.
 //   "autocad", "autolisp", "claude", "skill", "conveyor", "website", "api", "tool", "design"
 {
   "name": "design-system",
   "localPath": "C:\\dev\\Projects\\design-system",
-  "githubUrl": "",
-  "stage": "alpha",
-  "tags": ["design", "website", "skill", "claude", "system", "mcp"],
-  "description": "Repeatable methodology and skill for building non-slop, professional client websites. Substrate for the OTLC-Design skill."
+  "githubUrl": "https://github.com/Omnib0mb3r/OTLC-Design",
+  "stage": "beta",
+  "tags": ["design", "website", "app", "skill", "claude", "system", "mcp", "legal", "seo", "accessibility"],
+  "description": "Substrate for two Claude Code skills: OTLC-Design (non-slop site and app build workflow, customer and internal) and anti-ai-writing (prose rules that strip LLM tells). Carries anti-slop rules, owner-brand profile, reference vault, pattern library, technical guides, and a per-law compliance library."
 }

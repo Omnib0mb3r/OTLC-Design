@@ -1,4 +1,4 @@
-# skill/ — canonical OTLC-Design skill source
+# skill/ (canonical OTLC-Design skill source)
 
 `SKILL.md` here is the **single source of truth** for the OTLC-Design skill.
 

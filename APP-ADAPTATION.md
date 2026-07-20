@@ -1,8 +1,8 @@
-# APP-ADAPTATION.md — Adaptation for Apps (vs Marketing Sites)
+# APP-ADAPTATION.md: Adaptation for Apps (vs Marketing Sites)
 
 > Loaded by the `OTLC-Design` skill when the intake branch resolves to **Customer app** or **Internal app**. Adapts intake, anti-slop rules, stack defaults, and verification gates to the app context (where users do tasks, not read content).
 >
-> A subsection at the bottom — **Customer-app tightening** — applies additional rules when the app is for paying customers (vs internal employees).
+> A subsection at the bottom (**Customer-app tightening**) applies additional rules when the app is for paying customers (vs internal employees).
 
 ## When this applies
 
@@ -29,15 +29,15 @@ Most marketing anti-slop rules **invert** for apps. The full inversion table is 
 
 Adds these questions to the relevant intake:
 
-1. **Primary user role(s) and usage frequency** — daily power user, weekly viewer, occasional admin?
-2. **Core workflows / tasks supported** — top 3 verbs the app enables (create, configure, monitor, etc.)
-3. **Data volume / scale** — 10 records or 10 million? Affects table design, pagination, search.
-4. **Auth model** — none / password / magic link / SSO / OAuth?
-5. **Permissions model** — single user / RBAC / per-org / per-resource?
-6. **Required states** — loading, empty, error, partial-data, offline. Each must be designed.
-7. **Browser/device targets** — desktop-only fine, mobile required, specific OS?
-8. **Existing system consistency** — does it sit alongside other internal tools? Match a design system?
-9. **Locked stack** — list any framework, library, or platform choices that are non-negotiable upstream of design synthesis (e.g., "Next.js 15 locked by spec", "Tailwind v4 + shadcn locked", "must run inside existing .NET WPF host"). When all values are locked, **skip Step 3.5 stack pick** in PROCESS.md and consume the locked stack directly. Capture the lock source (spec section, prior decision, integration constraint) so future-you knows why each value cannot move.
+1. **Primary user role(s) and usage frequency**: daily power user, weekly viewer, occasional admin?
+2. **Core workflows / tasks supported**: top 3 verbs the app enables (create, configure, monitor, etc.)
+3. **Data volume / scale**: 10 records or 10 million? Affects table design, pagination, search.
+4. **Auth model**: none / password / magic link / SSO / OAuth?
+5. **Permissions model**: single user / RBAC / per-org / per-resource?
+6. **Required states**: loading, empty, error, partial-data, offline. Each must be designed.
+7. **Browser/device targets**: desktop-only fine, mobile required, specific OS?
+8. **Existing system consistency**: does it sit alongside other internal tools? Match a design system?
+9. **Locked stack**: list any framework, library, or platform choices that are non-negotiable upstream of design synthesis (e.g., "Next.js 15 locked by spec", "Tailwind v4 + shadcn locked", "must run inside existing .NET WPF host"). When all values are locked, **skip the stack pick** (PROCESS.md Step 3, item 5) and consume the locked stack directly. Capture the lock source (spec section, prior decision, integration constraint) so future-you knows why each value cannot move.
 
 ## Intake removals / relaxations
 
@@ -53,30 +53,32 @@ The big one. Most marketing rules invert because apps need *consistency and lear
 
 | # | Marketing rule | App version |
 |---|---|---|
-| 1 | Never use default modular type scale | **Still applies** — type hierarchy still matters in app UI |
-| 2 | Never single typeface | **Relaxed** — single sans-serif (Inter / Geist) is fine for apps |
-| 3 | Never Inter as only typeface | **Relaxed** — Inter is the right default for app UI |
-| 4 | Never default Tailwind palette | **Inverted** — Tailwind/shadcn defaults are fine; consistency > distinction |
-| 5 | Never generic gradients | **Still applies** — no decorative gradients in apps |
-| 6 | Never pure white/black | **Relaxed** — system whites/blacks are fine |
-| 7 | Never centered hero + 2 pill buttons | **Irrelevant** — no marketing hero |
-| 8 | Never symmetric 3-up cards | **Inverted** — dense grids/cards are correct for dashboards |
-| 9 | Never perfect symmetry | **Inverted** — predictability matters |
-| 10 | Never same radius everywhere | **Relaxed** — single consistent radius is fine |
-| 11 | Never Lucide bullets | **Inverted** — Lucide/Heroicons are correct for app affordances |
-| 12 | Never shadcn/ui | **Inverted** — shadcn is the right default for internal/B2B apps |
+| 1 | Never use default modular type scale | **Still applies**: type hierarchy still matters in app UI |
+| 2 | Never single typeface | **Relaxed**: single sans-serif (Inter / Geist) is fine for apps |
+| 3 | Never Inter as only typeface | **Relaxed**: Inter is the right default for app UI |
+| 4 | Never default Tailwind palette | **Inverted**: Tailwind/shadcn defaults are fine; consistency > distinction |
+| 5 | Never generic gradients | **Still applies**: no decorative gradients in apps |
+| 6 | Never pure white/black | **Relaxed**: system whites/blacks are fine |
+| 7 | Never centered hero + 2 pill buttons | **Irrelevant**: no marketing hero |
+| 8 | Never symmetric 3-up cards | **Inverted**: dense grids/cards are correct for dashboards |
+| 9 | Never perfect symmetry | **Inverted**: predictability matters |
+| 10 | Never same radius everywhere | **Relaxed**: single consistent radius is fine |
+| 11 | Never Lucide bullets | **Inverted**: Lucide/Heroicons are correct for app affordances |
+| 12 | Never shadcn/ui | **Inverted**: shadcn is the right default for internal/B2B apps |
 | 13 | Never generic FAQ/pricing | **Irrelevant** for apps |
-| 14 | Never icon-only nav | **Still applies** — apps need labels too, especially for new users |
-| 15 | Never zero motion | **Functional motion only** — state transitions, loading, success/error feedback. Decorative motion is bad in apps. |
-| 16 | Never generic easing | **Relaxed** — system defaults are fine |
+| 14 | Never icon-only nav | **Still applies**: apps need labels too, especially for new users |
+| 15 | Never zero motion | **Functional motion only**: state transitions, loading, success/error feedback. Decorative motion is bad in apps. |
+| 16 | Never generic easing | **Relaxed**: system defaults are fine |
 | 17 | Never glassmorphism | **Still applies** |
-| 18 | Never generic AI copy | **Still applies** — but means "clear and helpful" not "expressive" |
-| 19 | Never lorem in delivered | **Stronger** — use realistic data fixtures, not "test test" or "Lorem ipsum" |
+| 18 | Never generic AI copy | **Still applies**: but means "clear and helpful" not "expressive" |
+| 19 | Never lorem in delivered | **Stronger**: use realistic data fixtures, not "test test" or "Lorem ipsum" |
 | 20 | Never ship without verification | **Still applies, gates change** (see §5) |
 | 21 | No emoji as iconography | **Still applies** |
-| 22 | No sub-12px label text | **Relaxed** — app UI commonly uses 11-13px labels with appropriate weight/contrast |
+| 22 | No sub-12px label text | **Relaxed**: app UI commonly uses 11-13px labels with appropriate weight/contrast |
 | 23 | No personal-aesthetic chrome on client work | **Still applies** |
-| 24 | Custom cursor only when deliberate | **Stronger** — apps almost never benefit from custom cursors; default OS cursor wins |
+| 24 | Custom cursor only when deliberate | **Stronger**: apps almost never benefit from custom cursors; default OS cursor wins |
+| 25 | Never copy a reference's muted-text lightness unchecked | **Still applies**: authored for app canvases; the a11y = 100 gate depends on it |
+| 26 | Never spawn a Windows child process without `windowsHide: true` | **Still applies** |
 
 ## App-specific anti-slop rules (added)
 
@@ -90,9 +92,9 @@ Apply only in app mode:
 - **Never use `alert()` or browser-native confirm dialogs.** Build inline confirmations or modal patterns. Native dialogs feel cheap.
 - **Never expose technical errors to end users.** "500 Internal Server Error" → "Something went wrong on our end. Try again or contact support."
 
-## Operational readiness (added — app mode)
+## Operational readiness (added, app mode)
 
-> From the "DevOps for vibe coders" lesson: building software fast is half the job; operating it reliably is the other half. AI-assisted apps grow operational complexity faster than the builder's understanding of it. These rules force the operational decisions to happen at design time, not at 2am during an incident. Siblings to ANTI-SLOP rule 26 (runtime hygiene): invisible in a demo, very visible in real use. "Reliability is a feature" — downtime, failed requests, and slow responses are bugs from the user's point of view.
+> From the "DevOps for vibe coders" lesson: building software fast is half the job; operating it reliably is the other half. AI-assisted apps grow operational complexity faster than the builder's understanding of it. These rules force the operational decisions to happen at design time, not at 2am during an incident. Siblings to ANTI-SLOP rule 26 (runtime hygiene): invisible in a demo, very visible in real use. "Reliability is a feature": downtime, failed requests, and slow responses are bugs from the user's point of view.
 
 Apply only in app mode (customer or internal app):
 
@@ -117,11 +119,11 @@ Stack defaults flip vs marketing:
 | ORM/data | n/a | Prisma + Postgres typical |
 | Testing | Playwright | **Playwright + Vitest** for component tests |
 
-For **internal apps**, the stack is more permissive — desktop-native (.NET WPF as in stream-deck) is fine if it serves the use case better than web. The branch question's resolution determines the platform; this section is about web app defaults specifically.
+For **internal apps**, the stack is more permissive: desktop-native (.NET WPF as in stream-deck) is fine if it serves the use case better than web. The branch question's resolution determines the platform; this section is about web app defaults specifically.
 
 ## Verification gate adjustments (app)
 
-| Gate | Marketing | App (internal) | App (customer — see tightening below) |
+| Gate | Marketing | App (internal) | App (customer, see tightening below) |
 |------|-----------|----------------|----------------------------------------|
 | Lighthouse Performance | ≥ 90 | ≥ 80 | ≥ 90 |
 | Lighthouse Accessibility | ≥ 95 | **= 100** | = 100 |
@@ -149,7 +151,7 @@ From the operational-readiness rules above. These gate at delivery alongside the
 
 ## Patterns folder
 
-App patterns live in `patterns/app/`. Different vocabulary than marketing patterns. Examples that earn their place over time (none built yet — start empty, grow from real work):
+App patterns live in `patterns/app/`. Different vocabulary than marketing patterns. Examples that earn their place over time (grown from real work only, never pre-populated):
 
 - Command palette
 - Data table with filtering / sorting / pagination
@@ -175,16 +177,16 @@ App references live under "App / Product UI" in `references/INDEX.md`. Different
 ### Additional intake questions
 
 - **Mobile required?** (almost always yes for customer apps)
-- **Onboarding model** — first-run experience, empty product state, sample data?
-- **Help architecture** — in-app docs, tooltips, chat support, knowledge base?
-- **Notification model** — email, in-app, push?
+- **Onboarding model**: first-run experience, empty product state, sample data?
+- **Help architecture**: in-app docs, tooltips, chat support, knowledge base?
+- **Notification model**: email, in-app, push?
 - **Subscription/billing exposed in UI?** (Stripe customer portal pattern)
-- **i18n requirements** — single locale or multi?
+- **i18n requirements**: single locale or multi?
 
 ### Additional anti-slop rules
 
 - **Never leave dead-end error states.** Always offer a next action ("retry", "contact support", "go back").
-- **Never use system fonts only.** Customer apps still need brand presence — pick a brand-consistent type pairing even if the body font is system-ish.
+- **Never use system fonts only.** Customer apps still need brand presence: pick a brand-consistent type pairing even if the body font is system-ish.
 - **Never use stock-feeling empty state illustrations.** Custom or none.
 - **Never ship without an onboarding decision documented.** Even "no onboarding needed" with rationale.
 - **Never assume desktop.** Mobile-first verification on customer apps.
@@ -206,10 +208,10 @@ App references live under "App / Product UI" in `references/INDEX.md`. Different
 ### Stack tweaks for customer apps
 
 - **Email layer** becomes important (Resend, Postmark, Loops)
-- **Auth becomes more sophisticated** — multi-factor, password reset, magic link, social
-- **Analytics integration** — Plausible, PostHog, custom
-- **Support tooling** — Crisp, Intercom, Plain
-- **Billing** — Stripe Checkout / Customer Portal if subscription
+- **Auth becomes more sophisticated**: multi-factor, password reset, magic link, social
+- **Analytics integration**: Plausible, PostHog, custom
+- **Support tooling**: Crisp, Intercom, Plain
+- **Billing**: Stripe Checkout / Customer Portal if subscription
 - **i18n** if international users likely
 
 ---

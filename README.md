@@ -1,4 +1,4 @@
-# design-system
+# design-system (GitHub: OTLC-Design)
 
 A repeatable methodology for building **non-slop, professional sites and apps** for clients and for owned work, marketing and product. The substrate that powers two Claude Code skills:
 
@@ -8,6 +8,10 @@ A repeatable methodology for building **non-slop, professional sites and apps** 
 The two cover the same defect in different media. `ANTI-SLOP.md` stops a page from *looking* AI-generated; `skill-writing/` stops it from *reading* AI-generated.
 
 This repo is not a website or app. It is the system that produces them: process, anti-slop rules, prose rules, reference vault, pattern library, token templates, mode adaptations, owner-brand profile, and analyzer prompts that Claude reads at the start of every project.
+
+**Scope, before you read further.** This is single-operator personal tooling. Windows 11 only (both skills load through directory junctions), Claude Code only, and built around one person's brand profile in [`owner-brand/`](owner-brand/). It is published as reference, not as a product. To run it yourself you would replace `owner-brand/` wholesale (profile, voice rules, per-brand files, token CSS, source `.docx`), translate the PowerShell junction commands to `ln -s` on macOS or Linux, and rewrite the hardcoded paths in `skill/SKILL.md` and `skill-writing/SKILL.md` if you put the repo anywhere other than the required location.
+
+The GitHub repo is named `OTLC-Design` after the skill it was built for. On disk the folder is `design-system`, and that name is load-bearing because both skills resolve their file reads against it. See [Setup](#setup).
 
 ---
 
@@ -49,7 +53,7 @@ The skill asks one question at intake to set context for the whole workflow:
 > *"What are we building?*
 > *1. **Customer site**: marketing/showcase site for an external client*
 > *2. **Customer app**: product/app interface for paying customers (B2B SaaS, customer portal, web app)*
-> *3. **Internal site**: your own marketing/showcase site (your portfolio, MHW, project landing pages)*
+> *3. **Internal site**: your own marketing/showcase site (portfolio, publications, project landing pages)*
 > *4. **Internal app**: your own tools, dashboards, admin panels"*
 
 The answer determines which adaptation docs load, which brand source applies, which stack defaults are used, and which verification gates are enforced.
@@ -137,14 +141,15 @@ The repo is a flywheel. Each project makes the next one start higher.
 | [`STACK-DECISIONS.md`](STACK-DECISIONS.md) | When to use plain HTML / Astro / Next.js / native. |
 | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Adaptation for internal/owned work. Skips brand discovery, pulls owner-brand profile. |
 | [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Adaptation for app/product UI. Anti-slop inversion, app stack defaults, app verification gates, operational-readiness rules + gates (config/secrets/deploy/rollback/observability). Includes customer-app tightening subsection. |
-| [`owner-brand/`](owner-brand/) | Standing brand profile (personal-site, MHW), voice rules, drop-in tokens, source `.docx`. |
+| [`owner-brand/`](owner-brand/) | Standing brand profile, voice rules, drop-in tokens. **Local-only and gitignored**: the repo is public, the brand is not. See [`owner-brand/README.md`](owner-brand/README.md) for the shape it expects. |
 | [`references/`](references/) | Curated vault of sites worth studying. Catalog in [`references/INDEX.md`](references/INDEX.md). |
-| [`patterns/`](patterns/) | Hand-built layout primitives. Subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/). Empty by design; grow from real work. |
+| [`patterns/`](patterns/) | Hand-built layout primitives. Subdivided into [`marketing/`](patterns/marketing/) and [`app/`](patterns/app/). Grown from real work only, never pre-populated. |
+| [`legal/`](legal/INDEX.md) | Compliance library. One file per law under [`laws/`](legal/laws/), a triage table in [`INDEX.md`](legal/INDEX.md), and a delivery gate in [`CHECKLIST.md`](legal/CHECKLIST.md). Not legal advice. |
 | [`tokens/`](tokens/) | Type scale, color, spacing, motion *templates*. Synthesized per project, not copied from here. |
 | [`analyzer/`](analyzer/) | Prompts and procedures Claude uses to extract design data from references via Chrome DevTools MCP. |
 | [`guides/`](guides/) | Verbatim-stored external guides (SEO, AEO, structured data, GA4, browser-aware design). Provenance headers inline; re-pull from source rather than editing. Not yet wired into PROCESS steps. |
 | [`skill/`](skill/) | Canonical source of the `OTLC-Design` skill (`SKILL.md`). `~/.claude/skills/OTLC-Design` is a directory junction to here, so Claude Code loads the git-tracked file. See [`skill/README.md`](skill/README.md). Same junction pattern as `skill-writing/`. |
-| [`project-template/`](project-template/) | Starter scaffolds copied out when a new project begins. |
+| [`project-template/`](project-template/) | Placeholders recording which scaffold command the skill runs per stack (`npm create vite@latest`, `npm create astro@latest`). Kept empty on purpose so the repo carries no stale dependencies. |
 | [`INIT.md`](INIT.md) | What a fresh Claude session reads first when this repo is opened. |
 | [`HANDOVER.md`](HANDOVER.md) | Live status: what is set up, what is pending, the closing loop conventions. |
 | [`CLAUDE.md`](CLAUDE.md) | Repo-specific Claude behavior rules. |
@@ -168,7 +173,7 @@ Three Claude Code MCP servers must be installed at user scope:
 - **playwright**: multi-browser verification, screenshots, automation
 - **context7**: current documentation for any library or web spec
 
-Install commands and verification steps live in [`HANDOVER.md`](HANDOVER.md).
+Install commands are in [Setup](#setup) below. Troubleshooting steps live in [`HANDOVER.md`](HANDOVER.md).
 
 ---
 
@@ -194,14 +199,60 @@ What this does NOT do:
 
 ---
 
+## Setup
+
+### Prerequisites
+
+- Windows 11. Both skills load through directory junctions (`New-Item -ItemType Junction`), which has no drop-in equivalent elsewhere without rewriting the commands as symlinks.
+- Claude Code, signed in.
+- Node and npm, for the `npx`-based MCP servers in step 3.
+
+### 1. Clone to the required path
+
+```powershell
+git clone https://github.com/Omnib0mb3r/OTLC-Design.git C:\dev\Projects\design-system
+```
+
+The path is not a preference. `skill/SKILL.md` hardcodes `C:\dev\Projects\design-system\` for every substrate file it reads, because it is loaded through a junction and a relative path would resolve against `~/.claude/skills/` instead of this repo. Clone anywhere else and the skill still loads and still triggers, but reads nothing: no process, no anti-slop rules, no references, no owner-brand. It fails quietly, which makes it worth stating up front. If the repo must live elsewhere, rewrite every `C:\dev\Projects\design-system\` path inside `skill/SKILL.md` and `skill-writing/SKILL.md` to match.
+
+### 2. Create both skill junctions
+
+PowerShell, no admin needed:
+
+```powershell
+Remove-Item -LiteralPath "$env:USERPROFILE\.claude\skills\OTLC-Design" -Force -Recurse -ErrorAction SilentlyContinue
+New-Item -ItemType Junction `
+  -Path "$env:USERPROFILE\.claude\skills\OTLC-Design" `
+  -Target "C:\dev\Projects\design-system\skill"
+
+Remove-Item -LiteralPath "$env:USERPROFILE\.claude\skills\anti-ai-writing" -Force -Recurse -ErrorAction SilentlyContinue
+New-Item -ItemType Junction `
+  -Path "$env:USERPROFILE\.claude\skills\anti-ai-writing" `
+  -Target "C:\dev\Projects\design-system\skill-writing"
+```
+
+Junctions rather than copies, so each skill has one git-tracked source and no second copy to drift. Detail in [`skill/README.md`](skill/README.md) and [`skill-writing/README.md`](skill-writing/README.md).
+
+### 3. Install the three MCP servers
+
+```powershell
+claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp@latest
+claude mcp add --scope user playwright -- npx -y @playwright/mcp@latest
+claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp
+```
+
+User scope, so every project directory picks them up. What each one is for is in [Required tooling](#required-tooling) above.
+
+---
+
 ## Where to start
 
-If you've just set this up:
+Once setup is done:
 
 1. Verify the three MCPs are connected: `claude mcp list`
-2. Verify both skill junctions resolve (`skill/README.md` and `skill-writing/README.md` have the commands)
+2. Verify both junctions resolve: `Get-Item "$env:USERPROFILE\.claude\skills\OTLC-Design" | Select-Object LinkType,Target` and the same for `anti-ai-writing`. `LinkType` should read `Junction`.
 3. Start a real project in `C:\dev\Projects\[project-name]\` and invoke `/OTLC-Design`
 
-The smoke test already passed (2026-05-03, three reference sites; see [`HANDOVER.md`](HANDOVER.md)). The next milestone is the first real project end-to-end.
+The smoke test passed 2026-05-03 (three reference sites; see [`HANDOVER.md`](HANDOVER.md)). Real projects have since run the loop and fed it: the devneural-hub design pass produced `patterns/app/two-band-type-scale.md` and ANTI-SLOP rule 25, and a 2026-07 carrier-block incident produced the shipping-hygiene section in [`STACK-DECISIONS.md`](STACK-DECISIONS.md).
 
 The skills are the entry points. The repo is the substrate. All of it is git-versioned and evolves together through the closing loop.

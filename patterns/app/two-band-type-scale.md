@@ -15,7 +15,7 @@ Solves the "everything-flat" problem of one-ratio scales (which give either flat
 
 ## When NOT to use
 
-- Pure data tools where every cell needs the same density (use a single tight ratio instead — OpenStatus-style)
+- Pure data tools where every cell needs the same density (use a single tight ratio instead, OpenStatus-style)
 - Marketing sites (the display band's job is already done by hero+section structure; one continuous ratio plus structural rhythm carries it)
 - Customer-app surfaces where consistency is the goal and individual moments shouldn't stand out (use a single ratio with weight/color carrying hierarchy)
 
@@ -33,10 +33,10 @@ body band, ratio ~1.143-1.222 (tight):
 
 display band, custom jumps (no continuous ratio):
 
-  --fs-22  ┐ h3 panel heading        — 1.222× from 18
-  --fs-28  │ h2 section heading      — 1.273× from 22
-  --fs-40  │ h1 page / brief headline — 1.429× from 28  ← display jump starts here
-  --fs-56  ┘ display / hero only     — 1.4×    from 40
+  --fs-22  ┐ h3 panel heading        (1.222× from 18)
+  --fs-28  │ h2 section heading      (1.273× from 22)
+  --fs-40  │ h1 page / brief headline (1.429× from 28)  ← display jump starts here
+  --fs-56  ┘ display / hero only     (1.4×    from 40)
 ```
 
 Letter-spacing scales with size:
@@ -52,9 +52,9 @@ Letter-spacing scales with size:
 
 ## Reference uses
 
-- [linear.app](https://linear.app) — body band ~1.143 (13/15/20), display jump 40 → 64. Weight 510 across.
-- [DevNeural Hub](../../) — body band 11/12/13/14/16/18 (~1.143 average), display band 22/28/40/56 with custom jumps. Weight 560 (between Linear's 510 and Vercel's 600).
-- [vercel.com/docs](https://vercel.com/docs) — wider variant (1.5 ratio) but same two-band structure: 14 body / 24 h2 / 40 h1.
+- [linear.app](https://linear.app): body band ~1.143 (13/15/20), display jump 40 → 64. Weight 510 across.
+- [DevNeural Hub](../../): body band 11/12/13/14/16/18 (~1.143 average), display band 22/28/40/56 with custom jumps. Weight 560 (between Linear's 510 and Vercel's 600).
+- [vercel.com/docs](https://vercel.com/docs): wider variant (1.5 ratio) but same two-band structure: 14 body / 24 h2 / 40 h1.
 
 ## Code reference
 

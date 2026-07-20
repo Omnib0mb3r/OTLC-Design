@@ -1,6 +1,6 @@
-# ANTI-SLOP.md — Durable Rules
+# ANTI-SLOP.md: durable rules
 
-> The 20 starting rules. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
+> 26 rules and growing. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
 
 These rules apply to every client project automatically. The `OTLC-Design` skill reads them at the start of work and enforces them throughout. They override defaults from any framework (Tailwind, shadcn, Next.js templates, etc.).
 
@@ -51,7 +51,7 @@ Purple-to-pink, blue-to-cyan, the "sunset" gradient. These are 2020 SaaS default
 
 ### 6. Never use pure white (#FFF) and pure black (#000) by default.
 
-Cream, off-white, near-black, dark navy, near-charcoal — choose a specific neutral story. Pure white and pure black are harsh defaults.
+Cream, off-white, near-black, dark navy, near-charcoal: choose a specific neutral story. Pure white and pure black are harsh defaults.
 
 **Why:** Real designers tune their neutrals. Pure values look unconsidered.
 **How to apply:** Pull background and foreground from references. Convert to OKLCH. Use ~98% L for "white" backgrounds and ~12-18% L for "black" foregrounds unless deliberately contrasty.
@@ -115,7 +115,7 @@ These exist in every template. They get reached for as filler. If a section is a
 
 ### 14. Never use mystery-meat icon-only navigation on marketing sites.
 
-Hamburger-only on desktop, icon-only nav without labels — these are app patterns, not marketing patterns.
+Hamburger-only on desktop, icon-only nav without labels: these are app patterns, not marketing patterns.
 
 **Why:** Marketing sites need labels for SEO and clarity.
 **How to apply:** Text labels for primary nav. Icons can supplement, never replace.
@@ -181,7 +181,7 @@ Real copy with names, dates, prices, jokes, locations. Placeholder text is for t
 Lighthouse Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90. Zero critical/serious axe violations. WCAG AA contrast minimum on body text (AAA preferred).
 
 **Why:** Bad performance and a11y *feel* worse than they audit. Slow sites read as cheap. Inaccessible sites are unprofessional and legally risky.
-**How to apply:** Step 5 of `PROCESS.md` is non-optional. Run the audits. Fix the failures. Then deliver. App-mode gates differ — see `APP-ADAPTATION.md` §5.
+**How to apply:** Step 5 of `PROCESS.md` is non-optional. Run the audits. Fix the failures. Then deliver. App-mode gates differ; see `APP-ADAPTATION.md` §5.
 
 ---
 
@@ -191,7 +191,7 @@ Lighthouse Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO 
 
 Emoji glyphs in feature lists, palette icons, button labels, or as primary affordances. They render inconsistently across platforms (Apple vs. Google vs. Windows vs. fallback fonts), drift from the brand's visual language, and read as filler.
 
-**Why:** Inconsistent rendering, no brand control, looks like template padding. The omnibomber-site analysis surfaced this — emoji used as `tool-card-icon`, `lc-icon`, `dl-icon`, `proj-card-vis .emo`. Cannot be brand-controlled and reads as default.
+**Why:** Inconsistent rendering, no brand control, looks like template padding. The omnibomber-site analysis surfaced this: emoji used as `tool-card-icon`, `lc-icon`, `dl-icon`, `proj-card-vis .emo`. Cannot be brand-controlled and reads as default.
 **How to apply:** Use SVG icons (custom, Lucide, Phosphor, Heroicons depending on context per ANTI-SLOP rule 11). Use typographic glyphs (numbers, letters, mono characters). Use no icon at all. Never emoji.
 
 ---
@@ -200,10 +200,10 @@ Emoji glyphs in feature lists, palette icons, button labels, or as primary affor
 
 ### 22. Never set body or label content below 12px.
 
-Sub-12px text in body content fails legibility on retina at normal viewing distance and is an accessibility risk. The omnibomber-site analysis surfaced this — labels at 8-9.6px (`0.5rem`–`0.6rem`).
+Sub-12px text in body content fails legibility on retina at normal viewing distance and is an accessibility risk. The omnibomber-site analysis surfaced this: labels at 8-9.6px (`0.5rem` to `0.6rem`).
 
 **Why:** Below the legibility floor for body text. WCAG 1.4.4 expects users to scale to 200% without loss; sub-12px breaks before that target.
-**How to apply:** Body content: ≥ 14px. Labels and supporting text: ≥ 12px. Smaller is acceptable only for ornamental display elements that are not load-bearing for comprehension (e.g., a tiny version number in a footer corner). App UI may use 11-13px labels with appropriate weight/contrast — see APP-ADAPTATION rule 22.
+**How to apply:** Body content: ≥ 14px. Labels and supporting text: ≥ 12px. Smaller is acceptable only for ornamental display elements that are not load-bearing for comprehension (e.g., a tiny version number in a footer corner). App UI may use 11-13px labels with appropriate weight/contrast; see APP-ADAPTATION rule 22.
 
 ---
 
@@ -214,7 +214,7 @@ Sub-12px text in body content fails legibility on retina at normal viewing dista
 Personal-brand decorative chrome (cyberpunk telemetry panels, custom cursor with `cursor: none`, glitch effects, terminal/operator panels, animated bars labeled CPU/MEM, etc.) belongs on the owner's projects only. Importing it into a client project means delivering the wrong brand.
 
 **Why:** A client paid for *their* brand. Decorative chrome from the developer's personal aesthetic is the developer leaking through.
-**How to apply:** When in customer mode, do not pull patterns from the owner-brand profile. Owner-brand may inform the developer's instincts (font pairing, anti-slop reflexes) but never overrides client direction. If a client deliberately wants an aesthetic that overlaps with the owner's personal brand, they get a derivative — not a copy.
+**How to apply:** When in customer mode, do not pull patterns from the owner-brand profile. Owner-brand may inform the developer's instincts (font pairing, anti-slop reflexes) but never overrides client direction. If a client deliberately wants an aesthetic that overlaps with the owner's personal brand, they get a derivative, not a copy.
 
 ---
 
@@ -222,10 +222,10 @@ Personal-brand decorative chrome (cyberpunk telemetry panels, custom cursor with
 
 ### 24. Never replace the OS cursor as a default.
 
-`cursor: none` plus a custom cursor (dot + lagging ring, etc.) is a deliberate use only — never a default. It breaks accessibility (resize handles, text caret, link cues), increases motion load, and is the most common "designer portfolio template" trick of the last few years.
+`cursor: none` plus a custom cursor (dot + lagging ring, etc.) is a deliberate use only, never a default. It breaks accessibility (resize handles, text caret, link cues), increases motion load, and is the most common "designer portfolio template" trick of the last few years.
 
 **Why:** Breaks OS expectations and accessibility affordances. Reads as template-default when overused.
-**How to apply:** Custom cursor is allowed when the project's voice genuinely calls for it (the owner's personal site qualifies — it's a brand signature). Never on customer work unless explicitly briefed. Never on apps. When using, always preserve native cursor functionality on inputs and resize handles.
+**How to apply:** Custom cursor is allowed when the project's voice genuinely calls for it (the owner's personal site qualifies; it's a brand signature). Never on customer work unless explicitly briefed. Never on apps. When using, always preserve native cursor functionality on inputs and resize handles.
 
 ---
 
@@ -256,7 +256,7 @@ Every Node `child_process.spawn` / `spawnSync` / `execSync` / `exec` call on Win
 **Why:** DevNeural dashboard polling spawned `powershell -NoProfile ...` every 4 seconds (drive enumeration in `system-metrics.ts`) and `execSync` per monitored service every 8 seconds (`services.ts`), both without `windowsHide`. With the dashboard tab open, the user saw roughly **15 powershell window flashes per minute** while sitting idle. Took multiple wrong diagnoses (blamed unrelated plugins) before the user pushed back hard enough to find the actual cause. The symptom was subtle (windows opened and closed faster than the user could see what they were) and dismissed as someone else's problem.
 
 **How to apply:**
-- Every `child_process.spawn(...)`, `spawnSync(...)`, `execSync(...)`, `exec(...)` call site: include `windowsHide: true` in the options object. There are no exceptions for "but it's just one call" — call counts compound (4s polling × 15min/dashboard-session × 5 sessions/day = thousands).
+- Every `child_process.spawn(...)`, `spawnSync(...)`, `execSync(...)`, `exec(...)` call site: include `windowsHide: true` in the options object. There are no exceptions for "but it's just one call"; call counts compound (4s polling × 15min/dashboard-session × 5 sessions/day = thousands).
 - Long-running detached processes: combine `windowsHide: true` + `detached: true` + redirected `stdio`. `detached: true` alone allocates a fresh console; `windowsHide` is what hides it.
 - Scheduled tasks (Windows Task Scheduler): action args must include `-WindowStyle Hidden` AND `-NonInteractive` for PowerShell scripts. Without `-WindowStyle Hidden`, the task host briefly shows the console.
 - Hooks where a parent harness controls spawn (e.g., Claude Code hooks): wrap the command in a `wscript.exe` + VBS shim. `WshShell.Run cmd, 0, False` reliably hides whatever the parent passes through. Defense in depth is appropriate here because the parent's spawn behavior is not under your control.
@@ -271,8 +271,8 @@ When a slop pattern slips through (you noticed it in delivered work, or the user
 
 1. Find the right category above.
 2. Append a new numbered rule. Title it as "Never X" or "Always Y".
-3. Include `**Why:**` (the reason — typically a specific incident or aesthetic principle).
+3. Include `**Why:**` (the reason, typically a specific incident or aesthetic principle).
 4. Include `**How to apply:**` (the tactical implementation).
 5. Commit with message `anti-slop: <short rule summary>`.
 
-The list will outgrow 20 over time. That's the point.
+The list keeps growing. That's the point.

@@ -1,12 +1,12 @@
-# PROCESS.md — The 6-Step Workflow
+# PROCESS.md: the 6-step workflow
 
-> Version 1.3 (2026-07-20)
+> Version 1.4 (2026-07-20)
 
 The methodology the `OTLC-Design` skill enforces on every client project. Each step has explicit inputs, outputs, and a tool dependency. Skipping steps produces slop.
 
 ---
 
-## Step 1 — INTAKE
+## Step 1: INTAKE
 
 **Goal:** Understand the project well enough that the rest of the workflow has correct constraints.
 
@@ -15,18 +15,18 @@ The methodology the `OTLC-Design` skill enforces on every client project. Each s
 Before any other intake, ask exactly:
 
 > *"What are we building?*
-> *1. **Customer site** — marketing/showcase site for an external client*
-> *2. **Customer app** — product/app interface for paying customers (B2B SaaS, customer portal, web app)*
-> *3. **Internal site** — your own marketing/showcase site (your portfolio, MHW, project landing pages)*
-> *4. **Internal app** — your own tools, dashboards, admin panels"*
+> *1. **Customer site**: marketing/showcase site for an external client*
+> *2. **Customer app**: product/app interface for paying customers (B2B SaaS, customer portal, web app)*
+> *3. **Internal site**: your own marketing/showcase site (portfolio, publications, project landing pages)*
+> *4. **Internal app**: your own tools, dashboards, admin panels"*
 
 Based on the answer, load adaptation docs and set context:
 
 | Branch | Adaptations to load | Brand source |
 |--------|---------------------|--------------|
-| 1. Customer site | (default — none extra) | Discovered from client brief + references |
+| 1. Customer site | (default, none extra) | Discovered from client brief + references |
 | 2. Customer app | [`APP-ADAPTATION.md`](APP-ADAPTATION.md) (with customer-app tightening subsection) | Discovered from client brief + references |
-| 3. Internal site | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Owner-brand profile (ask which: personal-site, MHW, or new) |
+| 3. Internal site | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) | Owner-brand profile (ask which surface, per `owner-brand/profile.md`) |
 | 4. Internal app | [`MODE-INTERNAL.md`](MODE-INTERNAL.md) + [`APP-ADAPTATION.md`](APP-ADAPTATION.md) | Owner-brand profile (ask which) |
 
 State the resolved context in writing before proceeding:
@@ -40,12 +40,12 @@ Based on the branch answer, ask the appropriate question set:
 **Customer site (full intake):**
 1. Client name, domain (if known), industry
 2. Audience (who visits this site)
-3. Project goals — sell something, inform, showcase work, drive contact, convert to signup, etc. Pick 1-2 primary, 0-1 secondary
-4. Scope — one-pager, multi-page marketing, blog/content site
+3. Project goals: sell something, inform, show work, drive contact, convert to signup, etc. Pick 1-2 primary, 0-1 secondary
+4. Scope: one-pager, multi-page marketing, blog/content site
 5. **1 to 3 reference URLs** the client liked or that match the brief aesthetically
-6. Brand constraints — existing logo, mandated colors, mandated fonts, voice/tone
-7. Content state — does the client have copy and imagery, or do we generate/source it
-8. Deadline / budget signals — affects how aggressive we get
+6. Brand constraints: existing logo, mandated colors, mandated fonts, voice/tone
+7. Content state: does the client have copy and imagery, or do we generate/source it
+8. Deadline / budget signals: affects how aggressive we get
 9. Hosting / deploy preference (Vercel, Netlify, Cloudflare, custom, doesn't matter)
 
 **Customer app (extends customer site with app questions per APP-ADAPTATION.md):**
@@ -58,14 +58,21 @@ Based on the branch answer, ask the appropriate question set:
 3. Scope
 4. Optional references (only if you want a deliberate aesthetic deviation from owner-brand)
 5. Hosting / deploy preference
-6. Brand surface — personal-site, MHW, or new (ask per MODE-INTERNAL.md)
+6. Brand surface: which surface from `owner-brand/profile.md`, or new (ask per MODE-INTERNAL.md)
 
 **Internal app (per MODE-INTERNAL.md + APP-ADAPTATION.md):**
 - Internal site intake questions, plus the app intake questions
 
-### 1c. Output
+### 1c. Legal triage
 
-`BRIEF.md` in the project root capturing all answers. Include the branch resolution at the top so future-Claude has context.
+Run the triage table in [`legal/INDEX.md`](legal/INDEX.md) with the user. Each "yes" pulls in
+the named law files, which name the artifacts the build has to carry. Also settle the
+compliance-review question now: the client's counsel reviews, or the client accepts in writing
+that no counsel reviewed it. Asking late is how a cookie banner becomes a retrofit.
+
+### 1d. Output
+
+`BRIEF.md` in the project root capturing all answers. Include the branch resolution at the top so future-Claude has context. Record the legal triage answers, the law files they pulled in, and the compliance-review decision as a block in `BRIEF.md` (the scope block at the top of [`legal/CHECKLIST.md`](legal/CHECKLIST.md) is the format).
 
 Project folder location:
 - Customer work → `C:\dev\Projects\[client-name]\`
@@ -73,11 +80,11 @@ Project folder location:
 
 **Tool:** None. Conversation only.
 
-**Anti-pattern:** Skipping intake because "we have references" or "it's just internal." References define aesthetic; brief defines everything else (structure, copy, scope, hosting). Internal mode skips brand-discovery questions specifically — not the rest of intake.
+**Anti-pattern:** Skipping intake because "we have references" or "it's just internal." References define aesthetic; brief defines everything else (structure, copy, scope, hosting). Internal mode skips brand-discovery questions specifically, not the rest of intake.
 
 ---
 
-## Step 2 — REFERENCE ANALYSIS
+## Step 2: REFERENCE ANALYSIS
 
 **Goal:** Extract the *aesthetic vocabulary* of each reference site into structured data we can synthesize from.
 
@@ -118,34 +125,34 @@ Project folder location:
 
 ---
 
-## Step 3 — SYNTHESIS
+## Step 3: SYNTHESIS
 
 **Goal:** Build a project-specific design token system informed by the references, plus a structural proposal.
 
 **Procedure:**
-1. **Type tokens** — pick one display family + one body family + (optionally) one mono. Pick a modular ratio (commonly 1.2 / 1.25 / 1.333 / 1.414 / 1.5 / 1.618 / 2.0). Compute the scale up and down from a base body size.
-2. **Color tokens** — author in OKLCH. Build a 9-step neutral ramp, 1-2 accents, semantic tokens (bg, fg, muted, border, accent, accent-fg). Verify WCAG AA contrast (AAA preferred for body).
-3. **Spacing tokens** — pick a base unit (commonly 4 or 8). Build a scale.
-4. **Radius / shadow / motion tokens** — minimal, opinionated. Sharp + 1 rounded option, or all rounded with one specific value. Motion: 2-3 easing curves and 3-4 duration steps.
-5. **Stack pick** — consult [`STACK-DECISIONS.md`](STACK-DECISIONS.md). Default to plain HTML/CSS/JS + Vite for one-pagers, Astro for content sites, Next.js only for genuine apps.
-6. **Sitemap** — list the pages (often just one).
-7. **Section structure** — for each page, list the sections in order (e.g. "Nav, hero, work selector, single project deep-dive, footer"). Use the structural vocabulary from references, not template defaults.
-8. **Operational design** — consume the intake deploy-preference answer (customer Q9 / internal Q5), which is otherwise captured and never used. Decide, before any build, how the thing runs outside the laptop. For **marketing sites** this is a one-line confirmation (static host + any build-time env). For **apps** (customer or internal) this is a real plan per [`APP-ADAPTATION.md`](APP-ADAPTATION.md) §"Operational readiness": where it runs, how config and secrets are provided, how it updates, how it rolls back, and which production failures must be observable. Operational design is part of software design, not an afterthought — deciding it here is the cheapest it will ever be.
+1. **Type tokens**: pick one display family + one body family + (optionally) one mono. Pick a modular ratio (commonly 1.2 / 1.25 / 1.333 / 1.414 / 1.5 / 1.618 / 2.0). Compute the scale up and down from a base body size.
+2. **Color tokens**: author in OKLCH. Build a 9-step neutral ramp, 1-2 accents, semantic tokens (bg, fg, muted, border, accent, accent-fg). Verify WCAG AA contrast (AAA preferred for body).
+3. **Spacing tokens**: pick a base unit (commonly 4 or 8). Build a scale.
+4. **Radius / shadow / motion tokens**: minimal, opinionated. Sharp + 1 rounded option, or all rounded with one specific value. Motion: 2-3 easing curves and 3-4 duration steps.
+5. **Stack pick**: consult [`STACK-DECISIONS.md`](STACK-DECISIONS.md). Default to plain HTML/CSS/JS + Vite for one-pagers, Astro for content sites, Next.js only for genuine apps.
+6. **Sitemap**: list the pages (often just one). Every artifact the Step 1 legal triage pulled in (privacy policy, cookie notice, terms, accessibility statement) becomes a real page here with a real route, not a footer link pointing at nothing.
+7. **Section structure**: for each page, list the sections in order (e.g. "Nav, hero, work selector, single project deep-dive, footer"). Use the structural vocabulary from references, not template defaults. Read [`guides/browser-aware-web-design.md`](guides/browser-aware-web-design.md) before committing to a layout: one clear LCP element, no reserved-space gaps that shift, no third-party script on the critical path. These are layout decisions, not optimizations you bolt on in Step 4.
+8. **Operational design**: consume the intake deploy-preference answer (customer Q9 / internal Q5), which is otherwise captured and never used. Decide, before any build, how the thing runs outside the laptop. For **marketing sites** this is a one-line confirmation (static host + any build-time env). For **apps** (customer or internal) this is a real plan per [`APP-ADAPTATION.md`](APP-ADAPTATION.md) §"Operational readiness": where it runs, how config and secrets are provided, how it updates, how it rolls back, and which production failures must be observable. Operational design is part of software design, not an afterthought. Deciding it here is the cheapest it will ever be.
 
 **Output:**
-- `[client-project]/tokens.css` — CSS custom properties
-- `[client-project]/SITEMAP.md` — pages + section structure proposal
-- `[client-project]/OPERATIONS.md` (app mode) — deploy target, runtime config + secrets handling, update + rollback path, failure-observability decisions
+- `[client-project]/tokens.css`: CSS custom properties
+- `[client-project]/SITEMAP.md`: pages + section structure proposal
+- `[client-project]/OPERATIONS.md` (app mode): deploy target, runtime config + secrets handling, update + rollback path, failure-observability decisions
 
 **Tool:** Context7 MCP for current docs on whatever stack is picked.
 
-**Gate:** **Show this to the user. Do not start building until they confirm.** Synthesis is the cheapest stage to iterate. For apps, the operational plan (`OPERATIONS.md`) is part of what they confirm — a deploy/rollback decision is far cheaper to change now than after the system is built around it.
+**Gate:** **Show this to the user. Do not start building until they confirm.** Synthesis is the cheapest stage to iterate. For apps, the operational plan (`OPERATIONS.md`) is part of what they confirm: a deploy/rollback decision is far cheaper to change now than after the system is built around it.
 
 **Anti-pattern:** Skipping synthesis and going straight from references to coding. Tokens enforce consistency. Without them, the build drifts toward defaults.
 
 ---
 
-## Step 4 — BUILD
+## Step 4: BUILD
 
 **Goal:** Implement the site using the synthesized tokens and structure, with [`ANTI-SLOP.md`](ANTI-SLOP.md) enforced automatically.
 
@@ -153,12 +160,13 @@ Project folder location:
 1. Scaffold the project (vanilla Vite, Astro, or Next per Step 3).
 2. Wire up `tokens.css` as the foundation. Nothing hardcoded; everything references tokens.
 3. Build the structural skeleton (semantic HTML, real grid, no divitis).
-4. Write **specific copy** — no lorem, no placeholder. Real names, real numbers, real dates. If client copy is missing, draft it in the client's voice and flag it.
+4. Write **specific copy**: no lorem, no placeholder. Real names, real numbers, real dates. If client copy is missing, draft it in the client's voice and flag it.
 5. Apply type system using the modular scale. No arbitrary sizes.
 6. Apply color system using semantic tokens.
-7. Implement motion — even subtle. Hover, focus, scroll-into-view at minimum.
-8. Add custom touches — at least one element that signals human consideration (custom cursor, custom selection color, unusual layout breakout, mixed-weight inline type, etc.).
-9. Cross-check against [`ANTI-SLOP.md`](ANTI-SLOP.md) — for each rule, confirm compliance.
+7. Implement motion, even subtle. Hover, focus, scroll-into-view at minimum.
+8. Add custom touches: at least one element that signals human consideration (custom cursor, custom selection color, unusual layout breakout, mixed-weight inline type, etc.).
+9. Wire the technical layer from [`guides/`](guides/INDEX.md): meta, robots, sitemap and crawlability per `seo-how-to.md` and `seo-crawlability.md`, JSON-LD per `seo-structured-data.md`, and analytics per `ga4-analytics.md`. Any tag that fires here has to match what the Step 1 triage recorded in `BRIEF.md`.
+10. Cross-check against [`ANTI-SLOP.md`](ANTI-SLOP.md), one rule at a time, confirming compliance.
 
 **Output:** Working site in `[client-project]/`.
 
@@ -168,20 +176,23 @@ Project folder location:
 
 ---
 
-## Step 5 — VERIFY
+## Step 5: VERIFY
 
 **Goal:** Confirm the build meets quality bars before showing the client.
 
 **Procedure (using Playwright MCP and Chrome DevTools MCP):**
-1. **Multi-browser screenshots** — Playwright MCP captures the site in Chromium, Firefox, WebKit at 4 breakpoints each.
-2. **Lighthouse** — Chrome DevTools MCP runs Lighthouse. Targets:
+1. **Screenshots** at 4 breakpoints via Playwright MCP. Which engines depends on the mode: Chromium alone clears a marketing site, apps add more. The gate tables in [`APP-ADAPTATION.md`](APP-ADAPTATION.md) and [`skill/SKILL.md`](skill/SKILL.md) are authoritative on which browsers this project owes.
+2. **Lighthouse** via Chrome DevTools MCP. Baseline targets:
    - Performance ≥ 90
    - Accessibility ≥ 95
    - Best Practices ≥ 90
    - SEO ≥ 90
-3. **Accessibility audit** — axe-core results via Playwright. Zero critical / serious violations.
-4. **Token compliance audit** — script (or manual scan) checking that no CSS values exist outside the token system. Hardcoded colors, sizes, spacings → fail.
-5. **Reference comparison** — side-by-side the verification screenshots with reference screenshots from Step 2. Does the *aesthetic vocabulary* match? Not pixel match. Vocabulary match: type rhythm, color story, spacing density, motion feel.
+
+   App modes raise some of these. Read the thresholds off the mode gate table in [`APP-ADAPTATION.md`](APP-ADAPTATION.md) rather than treating the numbers above as the whole bar.
+3. **Accessibility audit**: axe-core results via Playwright. Zero critical / serious violations.
+4. **Token compliance audit**: script (or manual scan) checking that no CSS values exist outside the token system. Hardcoded colors, sizes, spacings → fail.
+5. **Legal delivery gate**: run [`legal/CHECKLIST.md`](legal/CHECKLIST.md) against the build. It fails the same way an accessibility audit fails: the site does not ship until the failures are fixed or the client accepts them in writing.
+6. **Reference comparison**: side-by-side the verification screenshots with reference screenshots from Step 2. Does the *aesthetic vocabulary* match? Not pixel match. Vocabulary match: type rhythm, color story, spacing density, motion feel.
 
 **Output:** `[client-project]/VERIFICATION.md` with screenshots, scores, audit results, and a verdict (pass / fail / iterate).
 
@@ -193,14 +204,14 @@ Project folder location:
 
 ---
 
-## Step 6 — ITERATE + POST-MORTEM (hard-enforced)
+## Step 6: ITERATE + POST-MORTEM (hard-enforced)
 
 **Goal:** Incorporate user feedback through sign-off, then close the loop with a system-improvement post-mortem. The post-mortem is **hard-enforced**: the project does not complete until all 6 questions have substantive answers.
 
 ### Iteration phase
 
 1. Show the user the verification report and a live preview.
-2. Capture feedback — be specific (which section, what feeling, what change).
+2. Capture feedback, and be specific (which section, what feeling, what change).
 3. Triage feedback:
    - Token-level (font, color, spacing, scale) → edit tokens.css, full-site cascade
    - Structure-level (section order, layout) → edit HTML
@@ -227,28 +238,32 @@ Walk these 6 questions one at a time. Do not batch them. For each, the user must
 2. **New pattern for [`patterns/`](patterns/)?** Did we build a structural move (hero shape, layout primitive, section structure) you would reach for again on a different project?
 3. **New reference for [`references/INDEX.md`](references/INDEX.md)?** Did we encounter (or did the user bring) a site worth keeping in the curated vault?
 4. **Did `PROCESS.md` drag or lack a step?** Was any step too long, too short, missing, in the wrong order, or asking the wrong questions?
-5. **Did the skill itself need refinement?** Was Claude's behavior off — wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit the in-repo canonical `skill/SKILL.md` (the `~/.claude/skills/OTLC-Design` junction picks it up live).
+5. **Did the skill itself need refinement?** Was Claude's behavior off: wrong tone, wrong order, missing checkpoints, over-asking, under-asking? Edit the in-repo canonical `skill/SKILL.md` (the `~/.claude/skills/OTLC-Design` junction picks it up live).
 6. **New anti-ai-writing rule?** Question 1 covers how the work looked. This one covers how it read. Did any copy ship sounding generated? A phrase you struck, a construction you kept correcting, a tell not yet on the list? Edit [`skill-writing/SKILL.md`](skill-writing/SKILL.md) and [`skill-writing/references/tells.md`](skill-writing/references/tells.md).
+
+**Internal mode only**, ask a 7th (see [`MODE-INTERNAL.md`](MODE-INTERNAL.md)):
+
+7. **Did anything deserve to go into the owner-brand profile?** New brand surface, new token, new voice rule, or a design rule that should be lifted into the brand guide.
 
 ### What counts as a substantive answer
 
 | Answer type | Example | What you do |
 |-------------|---------|-------------|
 | Concrete addition (rule) | "Yes, add: never use scroll-snap on marketing landings unless the design earns it." | Write to [`ANTI-SLOP.md`](ANTI-SLOP.md). Commit `anti-slop: scroll-snap restriction`. Confirm. |
-| Concrete addition (pattern) | "Yes, lift the asymmetric hero with right breakout to patterns." | Write `patterns/asymmetric-hero-right-breakout.md`. Commit `patterns: add asymmetric-hero-right-breakout`. Confirm. |
+| Concrete addition (pattern) | "Yes, lift the asymmetric hero with right breakout to patterns." | Write `patterns/marketing/asymmetric-hero-right-breakout.md` (or `patterns/app/` for app work). Commit `patterns: add marketing/asymmetric-hero-right-breakout`. Confirm. |
 | Concrete addition (reference) | "Yes, add bbb.studio." | Add line to [`references/INDEX.md`](references/INDEX.md). Optionally write full analysis. Commit `references: add bbb.studio`. |
 | Concrete addition (process) | "Step 2 should also capture page transition timing." | Edit `PROCESS.md`. Bump version. Commit `process: capture page transition timing in step 2`. |
 | Concrete addition (skill) | "You over-asked during intake. Cut question 8." | Edit `SKILL.md`. Commit `skill: trim intake question 8`. |
 | Concrete addition (prose rule) | "You kept writing 'purpose-built for'. Ban it." | Add to `skill-writing/SKILL.md` §3 and `references/tells.md`. Commit `skill-writing: ban purpose-built for`. |
-| Intentional skip with reason | "Intentionally nothing this round — project was small enough nothing generalized." | Log in client `POSTMORTEM.md`. Move on. |
+| Intentional skip with reason | "Intentionally nothing this round: project was small enough nothing generalized." | Log in client `POSTMORTEM.md`. Move on. |
 | Non-answer (REJECT) | "Nah", "skip", silence | Push back. Re-ask. Do not advance. |
 
-### Output — required before completion
+### Output: required before completion
 
 Write `[client-project]/POSTMORTEM.md`:
 
 ```markdown
-# Post-mortem — [client-name]
+# Post-mortem: [client-name]
 
 **Date:** [date]
 **Project:** [path to client folder]
@@ -272,13 +287,21 @@ Write `[client-project]/POSTMORTEM.md`:
 ## 5. Skill change?
 [answer]
 [link to commit if added]
+
+## 6. New anti-ai-writing rule?
+[answer]
+[link to commit if added]
+
+## 7. Owner-brand addition? (internal mode only, omit for customer work)
+[answer]
+[link to commit if added]
 ```
 
 **Tool:** Playwright MCP for ongoing verification during iteration.
 
 **Project complete only when:** `POSTMORTEM.md` exists with substantive answers to all 6 questions, and any improvement commits to the design-system repo are pushed.
 
-**Anti-pattern:** Soft-quitting the post-mortem because the user is tired. The hard gate is the entire point — without it, the system stays static and every project starts from the same baseline.
+**Anti-pattern:** Soft-quitting the post-mortem because the user is tired. The hard gate is the entire point. Without it, the system stays static and every project starts from the same baseline.
 
 ---
 

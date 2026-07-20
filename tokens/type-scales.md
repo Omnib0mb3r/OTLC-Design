@@ -20,9 +20,9 @@ A modular type scale picks one ratio and derives all sizes from a base. Pick the
 
 Body text base is typically `1rem = 16px` (browser default) but consider:
 
-- **17-18px base** — better long-form readability, subtly more "considered"
-- **15-16px base** — denser, more "app-like" or "modern SaaS"
-- **20px+ base** — editorial, statement-led, high-contrast brands
+- **17-18px base**: better long-form readability, subtly more "considered"
+- **15-16px base**: denser, more "app-like" or "modern SaaS"
+- **20px+ base**: editorial, statement-led, high-contrast brands
 
 Author as `rem` so user font-size preferences cascade.
 
@@ -135,6 +135,6 @@ Free / open-source equivalents (via Fontshare, Google Fonts, Fontsource):
 - GT America → **Satoshi** (Fontshare)  
 - Tiempos → **Fraunces** (Google) or **Source Serif Pro**
 - Editorial New → **PP Editorial New** (Pangram, free for personal)
-- Migra → **Cormorant Garamond** (Google) — close enough
+- Migra → **Cormorant Garamond** (Google), close enough
 - Neue Haas Grotesk → **Inter** or **Geist** (Vercel)
-- Druk Wide → **Bricolage Grotesque** (Google) — wide variants
+- Druk Wide → **Bricolage Grotesque** (Google), wide variants

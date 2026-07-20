@@ -1,10 +1,10 @@
-# MODE-INTERNAL.md — Adaptation for Owned / Internal Work
+# MODE-INTERNAL.md: Adaptation for Owned / Internal Work
 
 > Loaded by the `OTLC-Design` skill when the intake branch resolves to **Internal site** or **Internal app**. Adapts intake (skips brand discovery), pulls the owner-brand profile as the brand source, and keeps everything else (anti-slop, verification, post-mortem) in full effect.
 
 ## When this applies
 
-- Internal site (your own portfolio, MHW, project landing pages, personal experiments)
+- Internal site (your own portfolio, publications, project landing pages, personal experiments)
 - Internal app (your own tools, dashboards, admin panels, CLI utilities with UI)
 
 For external client work, this file is **not loaded**. Client work uses the default workflow (full intake, references-driven, no owner-brand override).
@@ -31,22 +31,23 @@ These are answered by the owner-brand profile and should NOT be asked:
 ### Still asked
 
 - **Project name** (becomes folder name at `C:\dev\Projects\[name]\`)
-- **Project goals** — what should this thing accomplish?
-- **Scope** — one-pager, multi-page, full app, etc.
-- **Optional references** — if you want this project to deliberately deviate from the standing brand or lean into a specific aesthetic, give 1-3 refs. Otherwise skip.
-- **Hosting / deploy preference** — Vercel, Netlify, Cloudflare, self-host, doesn't matter
-- **Stack preference, if any** — defaults from STACK-DECISIONS.md and (for apps) APP-ADAPTATION.md, but you can override
+- **Project goals**: what should this thing accomplish?
+- **Scope**: one-pager, multi-page, full app, etc.
+- **Optional references**: if you want this project to deliberately deviate from the standing brand or lean into a specific aesthetic, give 1-3 refs. Otherwise skip.
+- **Hosting / deploy preference**: Vercel, Netlify, Cloudflare, self-host, doesn't matter
+- **Stack preference, if any**: defaults from STACK-DECISIONS.md and (for apps) APP-ADAPTATION.md, but you can override
 
 ### Brand surface question
 
 After basic intake, ask one disambiguation question:
 
-> *"Which brand surface for this project?*
-> *1. **Personal site** — the personal surface / cyan / Sora + JBMono*
-> *2. **a publication surface** — navy + gold / Archivo*
-> *3. **New brand** — this project earns its own brand identity"*
+**Read `owner-brand/profile.md` first and enumerate the surfaces it actually lists.** Do not hardcode them here; the profile is the source of truth and it changes. Then ask:
 
-Read `owner-brand/profile.md` to enumerate current brand surfaces. If a third brand has been added since this doc was written, include it as an option.
+> *"Which brand surface for this project?*
+> *1..N. [each surface from profile.md, with its one-line identity]*
+> *N+1. **New brand**: this project earns its own brand identity"*
+
+If `owner-brand/` is empty or missing (it is gitignored and local-only, see `owner-brand/README.md`), say so and fall back to customer-style brand discovery instead of guessing.
 
 For option 3, the project becomes a candidate for a future owner-brand entry. Ask the user to flag it for capture in the post-mortem.
 
@@ -56,10 +57,10 @@ Internal work has the same quality bar as customer work. The taste threshold doe
 
 - **All ANTI-SLOP rules** (read `ANTI-SLOP.md`). No relaxation.
 - **owner-brand/voice.md** rules (DO/DON'T list, banned phrases, brand-mark conventions).
-- **Verification gates** (Step 5) — full Lighthouse, full a11y, full cross-browser as appropriate to mode (site or app — see APP-ADAPTATION for app gates).
+- **Verification gates** (Step 5): full Lighthouse, full a11y, and the cross-browser bar set by the mode gate table (site or app; see `APP-ADAPTATION.md` for app gates).
 - **Post-mortem hard enforcement** (Step 6): all 6 universal questions, plus the internal-mode 7th question about owner-brand evolution.
-- **Stack decision tree** (STACK-DECISIONS.md) — apps still use Next.js + React, sites still use vanilla or Astro per the same logic.
-- **Pattern library** (patterns/) — same patterns apply, same growth flywheel.
+- **Stack decision tree** (STACK-DECISIONS.md): apps still use Next.js + React, sites still use vanilla or Astro per the same logic.
+- **Pattern library** (`patterns/marketing/` and `patterns/app/`): same patterns apply, same growth flywheel.
 
 ## What changes
 
@@ -67,7 +68,7 @@ Internal work has the same quality bar as customer work. The taste threshold doe
 
 Instead of building tokens from references, **start from `owner-brand/tokens/[brand].css`** as the project's `tokens.css`. Override only where the brief explicitly justifies a deviation.
 
-If the user said "new brand" in the brand-surface question, then synthesize from references the way customer work would — but flag the new brand as a post-mortem candidate.
+If the user said "new brand" in the brand-surface question, then synthesize from references the way customer work would, but flag the new brand as a post-mortem candidate.
 
 ### Reference analysis (Step 2)
 
@@ -75,7 +76,7 @@ Optional, not required. If the user provided references, analyze them per `analy
 
 ### Project location
 
-`C:\dev\Projects\[name]\` — no client wrapper, no `clients/` subdirectory.
+`C:\dev\Projects\[name]\`: no client wrapper, no `clients/` subdirectory.
 
 ### Voice
 
@@ -89,7 +90,7 @@ In addition to the 6 universal post-mortem questions in PROCESS.md Step 6:
 
 Same hard enforcement. Substantive answer required:
 - *"Yes, lift X to owner-brand"* → write the addition; commit `owner-brand: add X`
-- *"Intentionally nothing — this project stayed within the standing brand"* → log in POSTMORTEM.md
+- *"Intentionally nothing, this project stayed within the standing brand"* → log in POSTMORTEM.md
 - Non-answer ("nah", "skip") → push back
 
 ## What does NOT change
