@@ -14,6 +14,7 @@
 | BUG-005 | RESOLVED | Muted-text token lifted from reference failed WCAG 4.5:1 on dark app canvas |
 | BUG-006 | RESOLVED | Node `child_process` calls without `windowsHide: true` flashed console windows on Windows |
 | BUG-007 | OPEN | 444 em/en dashes across 29 markdown files violate the standing no-em-dash rule |
+| BUG-008 | RESOLVED | All three required MCP servers vanished from user scope; HANDOVER claimed them connected |
 
 <!-- INDEX END -->
 
@@ -110,6 +111,19 @@ Worst offenders: `references/INDEX.md` (52), `PROCESS.md` (47), `APP-ADAPTATION.
 Found during the `anti-ai-writing` skill build, which lists em dash overuse as an AI tell. This is the substrate the design system reads from, so the violations propagate into generated work.
 
 **Fix:** not yet applied. Needs a mechanical pass replacing each with a context-appropriate colon, comma, parenthesis, or hyphen. Blind replacement to hyphen is safe but degrades some headings; a per-file pass reads better. Deferred from the skill-build commit so the diff stays reviewable.
+
+---
+
+## BUG-008: Required MCP servers missing from user scope
+
+**Status:** RESOLVED
+**Found:** 2026-07-20
+**Fixed:** 2026-07-20
+**Area:** environment (user-scope MCP config in `~/.claude.json`), HANDOVER.md accuracy
+
+`claude mcp list` returned none of the three MCPs the system depends on (`chrome-devtools` for Step 2 analysis, `playwright` for Step 5 verification, `context7` for Steps 3-4 docs). `~/.claude.json` user-scope `mcpServers` was empty. HANDOVER.md still claimed all three installed and connected, so a fresh session would have discovered the breakage mid-project at Step 2, not at setup. Cause unknown; likely lost in a config reset or Claude Code update since the 2026-06-02 handover.
+
+**Fix:** Reinstalled all three per HANDOVER's own "If something is broken" table (`claude mcp add --scope user ...`). Verified: all three report Connected. Lesson: HANDOVER's verification commands are worth actually running at session start; the doc asserting state is not the state.
 
 <!-- DETAILS END -->
 
