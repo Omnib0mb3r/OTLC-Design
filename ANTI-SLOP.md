@@ -263,6 +263,19 @@ Every Node `child_process.spawn` / `spawnSync` / `execSync` / `exec` call on Win
 - Audit-before-merge: `grep -rn 'spawn\|execSync\|spawnSync' src/` and verify every result has the flag. Add a lint rule if the project has eslint.
 - Cross-platform code: the option is ignored on POSIX, so always include it; never gate behind `if (process.platform === 'win32')`.
 
+### 32. Always give a multi-page site real, separate pages, never one long scroll behind an inline-script blob.
+
+**Why:** onthelevelconcepts.com originally shipped as a single ~91KB HTML file with the entire site behavior inlined as one giant `<script>`. Reputation/AV crawlers (Microsoft SmartScreen / Edge) flagged the live domain as malware because a mostly-inline-JS page reads like an obfuscated payload. It also made the "back button" non-functional (fake in-page nav). The fix was a full Astro rebuild into real routes (`/projects`, `/lab`, `/media`, `/about`, `/contact`, `/privacy`, `/training`) with all behavior in an external, content-hashed `/scripts/site.js` and a CSP of `script-src 'self'` (zero inline script). After that: A11y 100, Perf ~99, SEO 100, and the malware flag cause removed.
+
+**How to apply:**
+- For any site with more than one section of content, build real pages (separate routes), not one long single-file scroll.
+- Use a static multi-page generator (Astro is the owner default) with View Transitions for the SPA feel without faking navigation.
+- Every script and dataset lives in an external file, content-hash versioned, referenced with a normal `<script src>`.
+- Target zero inline `<script>` and zero inline `on*` handlers so the page can ship a strict CSP (`script-src 'self'`).
+- One clear concern per page.
+- Real browser history (real `<a href>` to real routes) so Back/Forward work natively.
+- This is the professional structure a site developer ships; a single inline-JS blob is both a slop signal and a reputation-filter false-positive magnet. Cross-reference `STACK-DECISIONS.md` "Shipping hygiene (reputation-safe)".
+
 ---
 
 ## How to add to this file
