@@ -263,7 +263,7 @@ Every Node `child_process.spawn` / `spawnSync` / `execSync` / `exec` call on Win
 - Audit-before-merge: `grep -rn 'spawn\|execSync\|spawnSync' src/` and verify every result has the flag. Add a lint rule if the project has eslint.
 - Cross-platform code: the option is ignored on POSIX, so always include it; never gate behind `if (process.platform === 'win32')`.
 
-### 32. Always give a multi-page site real, separate pages, never one long scroll behind an inline-script blob.
+### 27. Always give a multi-page site real, separate pages, never one long scroll behind an inline-script blob.
 
 **Why:** onthelevelconcepts.com originally shipped as a single ~91KB HTML file with the entire site behavior inlined as one giant `<script>`. Reputation/AV crawlers (Microsoft SmartScreen / Edge) flagged the live domain as malware because a mostly-inline-JS page reads like an obfuscated payload. It also made the "back button" non-functional (fake in-page nav). The fix was a full Astro rebuild into real routes (`/projects`, `/lab`, `/media`, `/about`, `/contact`, `/privacy`, `/training`) with all behavior in an external, content-hashed `/scripts/site.js` and a CSP of `script-src 'self'` (zero inline script). After that: A11y 100, Perf ~99, SEO 100, and the malware flag cause removed.
 
@@ -275,6 +275,51 @@ Every Node `child_process.spawn` / `spawnSync` / `execSync` / `exec` call on Win
 - One clear concern per page.
 - Real browser history (real `<a href>` to real routes) so Back/Forward work natively.
 - This is the professional structure a site developer ships; a single inline-JS blob is both a slop signal and a reputation-filter false-positive magnet. Cross-reference `STACK-DECISIONS.md` "Shipping hygiene (reputation-safe)".
+
+---
+
+## Accessibility structure
+
+Rules about the document's semantic outline, not its visuals. Invisible on screen, loud to a screen reader and to Lighthouse/axe.
+
+### 28. Never skip a heading level; ship a sequential heading outline on every page.
+
+One `<h1>` per page, then `h2`, then `h3`, never jumping `h1` straight to `h3` or `h2` to `h4`. The visual size of a heading is a CSS decision; the tag is a structure decision, and they are set independently.
+
+**Why:** the onthelevelconcepts.com rebuild styled section labels and card titles by eye, so several pages jumped `h1` to `h3` (and the training page `h2` to `h4`). Lighthouse/axe `heading-order` failed and mobile accessibility dropped to 98 on those routes. A screen-reader user navigating by heading hits a gap where a level vanishes. The home page, which happened to nest correctly, scored 100; the difference was purely the outline.
+
+**How to apply:**
+- Exactly one `h1` per page (the page title).
+- The first content heading after the `h1` is an `h2`. Descend one level at a time.
+- A card grid with no visible section title still needs a heading in the tree: add a visually hidden one (`.sr-only { position:absolute; width:1px; height:1px; clip:rect(0 0 0 0); ... }`) so the outline is complete without changing the design.
+- Decouple size from level: if an `h2` must look small, set its `font-size` in CSS. Do not down-tag it to `h4` to make it small.
+- Verify against the BUILT HTML: extract the `<h1>`..`<h6>` sequence per page and confirm no level is skipped. Do this per route, not just the home page.
+
+## Assets and performance
+
+### 29. Never ship an image whose intrinsic size dwarfs its display size, and always declare `width`/`height` matching the true aspect ratio.
+
+The file's real pixels should be about the display size (at most ~2x for retina), and the `width`/`height` attributes must describe the image's actual proportions.
+
+**Why:** the onthelevelconcepts.com hero shipped `michael-collins.jpg` at **8179 x 6336 (9 MB)** to fill a 420px-wide slot, with `width="440" height="520"` attributes that did not match the real 1.29 ratio. Lighthouse flagged `image-aspect-ratio` (distortion / layout-shift risk) and it was a multi-megabyte download for a thumbnail. Re-encoding to 880 x 682 (~86 KB) with correct attributes cleared the flag and cut the transfer by 99%.
+
+**How to apply:**
+- Resize the source to roughly 2x the largest CSS display width, then compress (progressive JPEG or WebP/AVIF, quality ~80). A 400px slot does not need an 8000px file.
+- Set `width` and `height` attributes to the encoded image's true pixel ratio, and let CSS scale with `height: auto`. Correct attributes reserve the right box and prevent CLS.
+- Never let mismatched legacy attributes (a portrait `440x520` on a landscape file) survive a redesign.
+- Verify: Lighthouse `image-aspect-ratio` passes and no single image dominates the transfer size.
+
+### 30. Never let the bundler inline fonts (or other assets) as `data:` URIs under a strict CSP.
+
+Build tools inline small assets as `data:` URIs by default. A `data:font/woff2` violates a strict `font-src 'self'`, and the browser silently drops that font subset.
+
+**Why:** on onthelevelconcepts.com, Vite inlined a small `@fontsource` woff2 subset (under its 4 KB limit) as a `data:font/woff2` into one page's CSS. The site's CSP was `font-src 'self'`, so the browser blocked it and that subset never loaded, logging a console error that also dinged Best Practices. The fix was forcing every woff2 to stay an external, content-hashed file.
+
+**How to apply:**
+- Set the bundler's inline threshold to exclude fonts (Vite: `build.assetsInlineLimit` as a function returning `false` for `.woff2`/`.woff`), so fonts are always external and cacheable.
+- Keep the CSP strict (`font-src 'self'`) rather than widening it to `data:` to paper over inlining; external fonts are better for caching anyway.
+- If a `data:` asset is genuinely intended, the CSP must explicitly allow that scheme for that directive, decided deliberately, not by bundler default.
+- Verify: no `data:font` in the built output, and no CSP font/console errors on load.
 
 ---
 
