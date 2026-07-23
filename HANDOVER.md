@@ -2,7 +2,7 @@
 
 > Snapshot of what is set up, what is verified, what is pending. Update this whenever the system state changes meaningfully.
 
-**Last updated:** 2026-07-20
+**Last updated:** 2026-07-23
 **Set up by:** Initial bootstrap session
 **Smoke tested:** 2026-05-03 against rcarecords.com, curious.co/about, flyhyer.com: **PASS**, with five substrate fixes applied to [`analyzer/extract-prompt.md`](analyzer/extract-prompt.md). Outputs at `C:\tmp\design-system-smoke\` (kept ~1 week as regression baseline; see `SMOKE-TEST-RESULTS.md` there).
 
@@ -20,7 +20,7 @@
 - [x] [`OTLC-Brainstorm.MD`](OTLC-Brainstorm.MD): vision, architecture, decisions, open questions, session log
 - [x] [`WORKFLOW.md`](WORKFLOW.md): inherited from dev-template, kept as-is
 - [x] [`PROCESS.md`](PROCESS.md) v1.4: the 6-step workflow with branch question, hard-enforced post-mortem
-- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md): 26 universal rules (growable), visual slop
+- [x] [`ANTI-SLOP.md`](ANTI-SLOP.md): 31 universal rules (growable), visual slop. Rule 31 (composed OG link-preview card on every live site) added 2026-07-23 from the John Simms deck
 - [x] [`BUGS.md`](BUGS.md): persistent bug log, created 2026-07-20 with a 7-bug consolidation sweep
 - [x] [`STACK-DECISIONS.md`](STACK-DECISIONS.md): plain HTML / Astro / Next / native decision tree
 - [x] [`MODE-INTERNAL.md`](MODE-INTERNAL.md): adaptation for owned/internal work

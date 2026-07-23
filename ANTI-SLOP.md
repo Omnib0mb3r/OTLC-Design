@@ -1,6 +1,6 @@
 # ANTI-SLOP.md: durable rules
 
-> 26 rules and growing. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
+> 31 rules and growing. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
 
 These rules apply to every client project automatically. The `OTLC-Design` skill reads them at the start of work and enforces them throughout. They override defaults from any framework (Tailwind, shadcn, Next.js templates, etc.).
 
