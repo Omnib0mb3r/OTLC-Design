@@ -321,6 +321,18 @@ Build tools inline small assets as `data:` URIs by default. A `data:font/woff2` 
 - If a `data:` asset is genuinely intended, the CSP must explicitly allow that scheme for that directive, decided deliberately, not by bundler default.
 - Verify: no `data:font` in the built output, and no CSP font/console errors on load.
 
+### 31. Always ship link-preview metadata with a composed OG card on every live site.
+
+Every site that goes live gets Open Graph tags AND a purpose-composed preview image, not a raw photo or a missing card. Links get shared in text threads and group chats before anyone sees the site; the preview card IS the first impression.
+
+**Why:** the John Simms family deck (2026-07-23) shipped first with a raw hero photo as og:image. A composed 1200x630 card (hero image + scrim + display-type title + eyebrow + "Prepared by" byline, matching the site's tokens) reads as designed in the chat thread instead of accidental. Client-facing links live or die in iMessage/WhatsApp previews.
+
+**How to apply:**
+- Required tags: `og:title`, `og:description`, `og:type`, `og:url`, absolute-URL `og:image`, `og:image:width`/`og:image:height`/`og:image:alt`, `twitter:card: summary_large_image`, `twitter:image`.
+- Compose the card as a small HTML page using the project's own tokens and fonts (hero image, scrim, title, eyebrow, byline), screenshot it at 1200x630 (or proportional), ship the capture as a static asset. Do not ship the template page.
+- The og:image URL must be absolute, so it is set after the production URL exists; add it to the deploy checklist, not the build checklist.
+- Preview caches are sticky per chat thread: verify in a fresh thread or with a fresh recipient after changing the card.
+
 ---
 
 ## How to add to this file
