@@ -1,6 +1,6 @@
 # ANTI-SLOP.md: durable rules
 
-> 31 rules and growing. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
+> 32 rules and growing. Add to this list every time slop slips through. Never delete a rule without an explicit rationale logged in `OTLC-Brainstorm.MD`.
 
 These rules apply to every client project automatically. The `OTLC-Design` skill reads them at the start of work and enforces them throughout. They override defaults from any framework (Tailwind, shadcn, Next.js templates, etc.).
 
@@ -335,7 +335,18 @@ Every site that goes live gets Open Graph tags AND a purpose-composed preview im
 
 ---
 
-## How to add to this file
+## Section devices
+
+### 32. Never lean on numbered section eyebrows (01 / 02 / 03) as the default structure device.
+
+Mono-font "01 · SECTION" kickers and big numbered process rows are the current AI-era default for making a page look designed. They read as template the moment a client has seen two other AI-built sites.
+
+**Why:** Michael flagged it on the OTLC Design intake site (2026-07-26): the build passed every other gate and still read "a little AI sloppy" specifically because of the 01/02 numbering. Numbers are only earned when the sequence itself is information the reader needs AND no brand-native device can carry it.
+
+**How to apply:**
+- First choice: sequence with a brand-native device (on OTLC Design, the level-bubble filling toward center; elsewhere: a progress rail, a filled word, a changing verb).
+- If sequence truly needs labels, prefer words over digits ("First / Then / Leave with") set in the body face, not a mono eyebrow.
+- Numbered eyebrows over every section of a page are grammar you did not choose; one numbered artifact in a genuinely ordered flow (a checkout stepper) is fine.
 
 When a slop pattern slips through (you noticed it in delivered work, or the user flagged it):
 
