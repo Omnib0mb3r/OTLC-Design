@@ -244,6 +244,29 @@ These apply on every project regardless of branch. Inherited from `C:\dev\Projec
 
 The full list (currently 26 rules, growing) is in `C:\dev\Projects\design-system\ANTI-SLOP.md`. Read it at start.
 
+### Reputation-safe shipping (hosted sites)
+
+Learned twice the hard way (Material Handling Academy, BUG-002 2026-07-15 and
+BUG-011 2026-07-27): pages whose static shape pattern-matches malware get the
+whole domain blocklisted by AV reputation engines, the live site blocked for
+real users, and the undo is days of per-vendor delisting forms. On any site
+that deploys to a public host, these are hard rules:
+
+- Zero inline executable `<script>` in shipped HTML. All JS in external files
+  with content-hash `?v=` URLs. Inline `type="application/json"` data blocks
+  are fine (data, not code).
+- No static inline event handlers (`onclick=` etc.) and no `javascript:` URLs
+  in shipped markup. Wire listeners from the external JS.
+- No single-line data payloads. A generated JS/JSON file over a few hundred KB
+  on one line reads as packed/obfuscated; emit with newlines.
+- No large base64 blobs inside JS. Ship images and other assets as real files.
+- No network code in a site that promises it doesn't phone home. A dormant
+  fetch-POST of stored state reads as spyware-shaped; keep sync adapters out
+  of the shipped tree until a host actually configures them.
+- Enforce with a build gate that FAILS, not a doc. The Academy's reference
+  implementation: `C:\dev\Projects\Material-Handling-Academy\academy\tools\test_inline_js.py`.
+  The OTLC-Guardian audit carries matching REP-001..REP-005 rules.
+
 ## What this skill does NOT do
 
 - Does not replace the user's art direction. The skill produces non-slop work that needs the user's judgment on top.
