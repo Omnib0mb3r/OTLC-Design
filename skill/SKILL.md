@@ -227,6 +227,16 @@ Same enforcement: substantive answer or explicit skip with reason.
 
 Patterns harvested in the post-mortem go to `C:\dev\Projects\design-system\patterns\marketing\[name].md` or `C:\dev\Projects\design-system\patterns\app\[name].md` depending on mode, committed `patterns: add marketing/<name>` or `patterns: add app/<name>`.
 
+**Link preview card (every live site).** Every site ships an Open Graph card
+before delivery: a branded 1200x630 `og:image` (the "mini hero" that renders
+when the link is texted or posted), plus `og:title`, `og:description`,
+`og:image:width/height/alt`, and the Twitter Card variant tags, on at minimum
+the home page and every entry-point page people will share. The card uses the
+site's real palette and type, not a screenshot. Verify by pasting the URL into
+a preview debugger (opengraph.xyz or the platform's own) before calling the
+build done. Reference implementation: Material Handling Academy
+`academy/assets/og-academy.jpg` + the head tags in its `academy/index.html`.
+
 ## Hard rules (universal)
 
 These apply on every project regardless of branch. Inherited from `C:\dev\Projects\design-system\ANTI-SLOP.md`:
